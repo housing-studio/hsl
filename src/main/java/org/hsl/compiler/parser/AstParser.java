@@ -3,6 +3,17 @@ package org.hsl.compiler.parser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.hsl.compiler.ast.Node;
+import org.hsl.compiler.ast.impl.declaration.Method;
+import org.hsl.compiler.ast.impl.local.Variable;
+import org.hsl.compiler.ast.impl.scope.Scope;
+import org.hsl.compiler.ast.impl.value.Value;
+import org.hsl.compiler.parser.impl.declaration.MethodParser;
+import org.hsl.compiler.parser.impl.local.LocalParser;
+import org.hsl.compiler.parser.impl.scope.ScopeParser;
+import org.hsl.compiler.parser.impl.scope.StatementParser;
+import org.hsl.compiler.parser.impl.value.LiteralParser;
+import org.hsl.compiler.parser.impl.value.ValueParser;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,6 +30,30 @@ public class AstParser {
      * The context of the token stream parsing.
      */
     private final @NotNull ParserContext context;
+
+    public @NotNull Method nextMethod() {
+        return parse(MethodParser.class, Method.class);
+    }
+
+    public @NotNull Scope nextScope() {
+        return parse(ScopeParser.class, Scope.class);
+    }
+
+    public @NotNull Node nextStatement() {
+        return parse(StatementParser.class, Node.class);
+    }
+
+    public @NotNull Value nextLiteral() {
+        return parse(LiteralParser.class, Value.class);
+    }
+
+    public @NotNull Value nextValue() {
+        return parse(ValueParser.class, Value.class);
+    }
+
+    public @NotNull Variable nextLocalDeclaration() {
+        return parse(LocalParser.class, Variable.class);
+    }
 
     /**
      * Resolve the implementation of the specified {@param target} parser algorithm and parse the result as a

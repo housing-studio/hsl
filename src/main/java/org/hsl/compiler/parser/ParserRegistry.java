@@ -1,6 +1,12 @@
 package org.hsl.compiler.parser;
 
 import lombok.experimental.UtilityClass;
+import org.hsl.compiler.parser.impl.declaration.MethodParser;
+import org.hsl.compiler.parser.impl.local.LocalParser;
+import org.hsl.compiler.parser.impl.scope.ScopeParser;
+import org.hsl.compiler.parser.impl.scope.StatementParser;
+import org.hsl.compiler.parser.impl.value.LiteralParser;
+import org.hsl.compiler.parser.impl.value.ValueParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -19,7 +25,12 @@ public class ParserRegistry {
     // initialize the lookup table with the parser algorithms
     static {
         Class<?>[] parsers = {
-
+            MethodParser.class,
+            ScopeParser.class,
+            StatementParser.class,
+            LiteralParser.class,
+            ValueParser.class,
+            LocalParser.class,
         };
 
         for (Class<?> parser : parsers) {

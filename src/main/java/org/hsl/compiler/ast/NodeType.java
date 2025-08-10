@@ -10,8 +10,8 @@ public enum NodeType {
 
     LITERAL,
 
-    STAT_DECLARE,
-    STAT_DECLARE_ASSIGN,
+    LOCAL_DECLARE,
+    LOCAL_DECLARE_ASSIGN,
     LOCAL_ASSIGN,
 
     NAME_ACCESS,
