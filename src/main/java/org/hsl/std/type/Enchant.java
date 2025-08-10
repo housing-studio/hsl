@@ -1,0 +1,27 @@
+package org.hsl.std.type;
+
+public enum Enchant {
+    PROTECTION,
+    FIRE_PROTECTION,
+    FEATHER_FALLING,
+    BLAST_PROTECTION,
+    PROJECTILE_PROTECTION,
+    RESPIRATION,
+    AQUA_AFFINITY,
+    THORNS,
+    DEPTH_STRIDER,
+    SHARPNESS,
+    SMITE,
+    BANE_OF_ARTHROPODS,
+    KNOCKBACK,
+    FIRE_ASPECT,
+    LOOTING,
+    EFFICIENCY,
+    SILK_TOUCH,
+    UNBREAKING,
+    FORTUNE,
+    POWER,
+    PUNCH,
+    FLAME,
+    INFINITY
+}

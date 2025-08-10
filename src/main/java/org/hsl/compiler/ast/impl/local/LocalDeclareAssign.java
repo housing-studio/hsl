@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
-import org.hsl.compiler.ast.impl.type.Namespace;
+import org.hsl.std.type.Namespace;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.debug.Format;

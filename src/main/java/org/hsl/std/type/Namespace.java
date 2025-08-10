@@ -1,4 +1,4 @@
-package org.hsl.compiler.ast.impl.type;
+package org.hsl.std.type;
 
 public enum Namespace {
     PLAYER,
