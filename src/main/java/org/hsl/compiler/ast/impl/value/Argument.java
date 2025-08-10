@@ -6,23 +6,17 @@ import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
 import org.hsl.compiler.ast.impl.type.Type;
-import org.hsl.compiler.debug.Printable;
 import org.hsl.compiler.token.Token;
-import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/**
- * Represents a value node in the Abstract Syntax Tree, that holds a constant value.
- */
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-@NodeInfo(type = NodeType.LITERAL)
-public class ConstantLiteral extends Value implements Printable {
-    /**
-     * The held constant value of the literal.
-     */
-    private final @NotNull Token value;
+@NodeInfo(type = NodeType.ARGUMENT)
+public class Argument extends Value {
+    private final @Nullable Token name;
+    private final @NotNull Value value;
 
     /**
      * Retrieve the type of the held value. This result will be used to inter types for untyped variables.
@@ -31,13 +25,7 @@ public class ConstantLiteral extends Value implements Printable {
      */
     @Override
     public @NotNull Type getValueType() {
-        return switch (value.type()) {
-            case STRING -> Type.STRING;
-            case INT -> Type.INT;
-            case FLOAT -> Type.FLOAT;
-            case BOOL -> Type.BOOL;
-            default -> throw new IllegalStateException("Cannot resolve type of token: " + value);
-        };
+        return value.getValueType();
     }
 
     /**
@@ -47,9 +35,6 @@ public class ConstantLiteral extends Value implements Printable {
      */
     @Override
     public @NotNull String print() {
-        String str = value.value();
-        if (value.type() == TokenType.STRING)
-            str = "\"" + str + "\"";
-        return str;
+        return (name != null ? name.value() + " = " : "") + value.print();
     }
 }

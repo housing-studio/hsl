@@ -7,10 +7,7 @@ import org.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
 import org.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.hsl.compiler.parser.impl.scope.StatementParser;
-import org.hsl.compiler.parser.impl.value.BuiltinValueParser;
-import org.hsl.compiler.parser.impl.value.ConstantAccessParser;
-import org.hsl.compiler.parser.impl.value.LiteralParser;
-import org.hsl.compiler.parser.impl.value.ValueParser;
+import org.hsl.compiler.parser.impl.value.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -38,7 +35,9 @@ public class ParserRegistry {
             LocalAssignParser.class,
             ConstantParser.class,
             BuiltinValueParser.class,
-            ConstantAccessParser.class
+            ConstantAccessParser.class,
+            TypeParser.class,
+            ArgumentListParser.class,
         };
 
         for (Class<?> parser : parsers) {

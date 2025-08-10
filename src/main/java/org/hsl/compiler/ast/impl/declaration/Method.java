@@ -7,10 +7,13 @@ import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
 import org.hsl.compiler.ast.impl.scope.Scope;
+import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.debug.Format;
 import org.hsl.compiler.debug.Printable;
 import org.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -18,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @NodeInfo(type = NodeType.METHOD)
 public class Method extends Node implements Printable {
     private final @NotNull Token name;
+    private final @NotNull Type returnType;
+    private final List<Parameter> parameters;
     private final @NotNull Scope scope;
 
     /**
@@ -29,6 +34,9 @@ public class Method extends Node implements Printable {
     public @NotNull String print() {
         StringBuilder builder = new StringBuilder(Format.RED + "fn " + Format.BLUE + name.value());
         builder.append(Format.CYAN).append("()");
+
+        if (returnType != Type.VOID)
+            builder.append(" -> ").append(Format.RED).append(returnType.name().toLowerCase());
 
         builder.append(Format.LIGHT_GRAY).append(" {").append('\n');
 

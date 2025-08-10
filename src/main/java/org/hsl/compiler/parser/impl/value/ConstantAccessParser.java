@@ -1,5 +1,7 @@
 package org.hsl.compiler.parser.impl.value;
 
+import org.hsl.compiler.ast.impl.declaration.Method;
+import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.ast.impl.value.ConstantAccess;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.AstParser;
@@ -8,6 +10,8 @@ import org.hsl.compiler.parser.ParserContext;
 import org.hsl.compiler.token.Token;
 import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class ConstantAccessParser extends ParserAlgorithm<Value> {
     /**
@@ -29,6 +33,14 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
         ConstantAccess access = new ConstantAccess(first);
 
         // TODO handle operator after access
+
+        // handle method call
+        // chat("Hello, World!")
+        //     ^ the parentheses after an identifier indicates, that a method is being called
+        if (peek().is(TokenType.LPAREN)) {
+            List<Argument> arguments = parser.nextArgumentList();
+            return new MethodCall(first, arguments);
+        }
 
         return access;
     }

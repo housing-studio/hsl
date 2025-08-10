@@ -1,6 +1,7 @@
 package org.hsl.compiler.ast.impl.type;
 
 public enum Type {
+    VOID,
     INT,
     FLOAT,
     STRING,

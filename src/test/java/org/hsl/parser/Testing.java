@@ -20,6 +20,7 @@ public class Testing {
                 stat global kills: int
 
                 msg = "foo"
+                foo(123, param1=abc, param2=1)
             }
             """;
 

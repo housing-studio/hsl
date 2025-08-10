@@ -2,11 +2,16 @@ package org.hsl.compiler.parser.impl.scope;
 
 import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.impl.scope.Statement;
+import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.parser.AstParser;
 import org.hsl.compiler.parser.ParserAlgorithm;
 import org.hsl.compiler.parser.ParserContext;
+import org.hsl.compiler.parser.impl.value.MethodCall;
+import org.hsl.compiler.token.Token;
 import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Represents a parser algorithm that parses a statement node from the token stream.
@@ -37,6 +42,15 @@ public class StatementParser extends ParserAlgorithm<Node> {
             !at(cursor() + 2).is(TokenType.OPERATOR, "=")
         )
             return parser.nextLocalAssignment();
+
+        // handle method call
+        // chat("Hello, World!")
+        //     ^ the parentheses after an identifier indicates, that a method is being called
+        if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.LPAREN)) {
+            Token method = get();
+            List<Argument> arguments = parser.nextArgumentList();
+            return new MethodCall(method, arguments);
+        }
 
         context.syntaxError(peek(), "Invalid statement");
         throw new UnsupportedOperationException("Not implemented statement: " + peek());

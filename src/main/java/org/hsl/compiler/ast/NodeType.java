@@ -25,6 +25,7 @@ public enum NodeType {
     POSTFIX_UNARY_OPERATOR,
     TERNARY_OPERATOR,
 
+    ARGUMENT,
     METHOD,
     GAME,
 

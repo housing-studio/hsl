@@ -9,6 +9,8 @@ import org.hsl.compiler.ast.impl.declaration.Constant;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.local.Variable;
 import org.hsl.compiler.ast.impl.scope.Scope;
+import org.hsl.compiler.ast.impl.type.Type;
+import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
@@ -16,12 +18,11 @@ import org.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
 import org.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.hsl.compiler.parser.impl.scope.StatementParser;
-import org.hsl.compiler.parser.impl.value.BuiltinValueParser;
-import org.hsl.compiler.parser.impl.value.ConstantAccessParser;
-import org.hsl.compiler.parser.impl.value.LiteralParser;
-import org.hsl.compiler.parser.impl.value.ValueParser;
+import org.hsl.compiler.parser.impl.value.*;
 import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Represents a class that simplifies calls for specific parser algorithms.
@@ -76,6 +77,15 @@ public class AstParser {
 
     public @NotNull Value nextConstantAccess() {
         return parse(ConstantAccessParser.class, Value.class);
+    }
+
+    @SuppressWarnings("unchecked")
+    public @NotNull List<Argument> nextArgumentList() {
+        return parse(ArgumentListParser.class, List.class);
+    }
+
+    public @NotNull Type nextType() {
+        return parse(TypeParser.class, Type.class);
     }
 
     public void parseGame(@NotNull Game game) {

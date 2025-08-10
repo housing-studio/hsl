@@ -2,12 +2,15 @@ package org.hsl.compiler.parser.impl.declaration;
 
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.scope.Scope;
+import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.parser.AstParser;
 import org.hsl.compiler.parser.ParserAlgorithm;
 import org.hsl.compiler.parser.ParserContext;
 import org.hsl.compiler.token.Token;
 import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 /**
  * Represents the parser algorithm for parsing a {@link Method} node from the token stream.
@@ -48,8 +51,15 @@ public class MethodParser extends ParserAlgorithm<Method> {
         get(TokenType.LPAREN);
         get(TokenType.RPAREN);
 
+        Type returnType = Type.VOID;
+        if (peek().is(TokenType.OPERATOR, "-") && at(cursor() + 1).is(TokenType.OPERATOR, ">")) {
+            get();
+            get();
+            returnType = parser.nextType();
+        }
+
         Scope scope = parser.nextScope();
 
-        return new Method(name, scope);
+        return new Method(name, returnType, new ArrayList<>(), scope);
     }
 }
