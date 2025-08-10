@@ -722,7 +722,7 @@ public class Tokenizer {
         System.err.print(" " + tokenLineNumber + " | ");
 
         // get the line of the error
-        String line = data.split("\n")[tokenLineNumber - 1];
+        String line = Format.WHITE + data.split("\n")[tokenLineNumber - 1];
 
         // get the start and end index of the line
         int start = Math.max(0, tokenLineIndex - MAX_ERROR_LINE_LENGTH);
