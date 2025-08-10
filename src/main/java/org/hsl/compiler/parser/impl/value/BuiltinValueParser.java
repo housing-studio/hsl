@@ -53,6 +53,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case "Namespace" -> { return parseNamespace(context); }
             case "Effect" -> { return parseEffect(context); }
             case "Enchant" -> { return parseEnchant(context); }
+            case "Mode" -> { return parseMode(context); }
             default -> {
                 context.syntaxError(type, "Invalid builtin type");
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
@@ -214,5 +215,20 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         }
 
         return new EnchantValue(wrapped);
+    }
+
+    private @NotNull Value parseMode(@NotNull ParserContext context) {
+        Token mode = get(TokenType.IDENTIFIER);
+        Mode wrapped = Stream.of(Mode.values())
+            .filter(v -> v.format().equals(mode.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(mode, "Invalid mode type");
+            throw new UnsupportedOperationException("Invalid mode type: " + mode);
+        }
+
+        return new ModeValue(wrapped);
     }
 }

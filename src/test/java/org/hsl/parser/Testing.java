@@ -18,7 +18,7 @@ public class Testing {
 
             const ERROR = 10
 
-            const SPAWN_LOC = Location::Custom(X + ERROR, Y - ERROR, Z - ERROR)
+            const SPAWN_LOC = Location::Custom(X + 1, Y - ERROR, Z - ERROR)
 
             fn foo() {
                 stat player msg = "hello"
