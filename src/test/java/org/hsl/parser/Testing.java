@@ -12,6 +12,8 @@ public class Testing {
             fn foo() {
                 stat player msg = "hello"
                 stat global kills: int
+
+                msg = "foo"
             }
             """;
 

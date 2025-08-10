@@ -12,7 +12,7 @@ import org.hsl.compiler.parser.ParserContext;
 import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
-public class LocalParser extends ParserAlgorithm<Variable> {
+public class LocalDeclareParser extends ParserAlgorithm<Variable> {
     /**
      * Parse the next {@link Variable} node from the token stream.
      *
@@ -76,6 +76,10 @@ public class LocalParser extends ParserAlgorithm<Variable> {
             get();
             value = parser.nextValue();
         }
+
+        // skip the semicolon after the declaration
+        if (peek().is(TokenType.SEMICOLON))
+            get();
 
         // handle local declaration without assignment
         if (value == null) {

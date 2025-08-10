@@ -9,7 +9,8 @@ import org.hsl.compiler.ast.impl.local.Variable;
 import org.hsl.compiler.ast.impl.scope.Scope;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
-import org.hsl.compiler.parser.impl.local.LocalParser;
+import org.hsl.compiler.parser.impl.local.LocalAssignParser;
+import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
 import org.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.hsl.compiler.parser.impl.scope.StatementParser;
 import org.hsl.compiler.parser.impl.value.LiteralParser;
@@ -52,7 +53,11 @@ public class AstParser {
     }
 
     public @NotNull Variable nextLocalDeclaration() {
-        return parse(LocalParser.class, Variable.class);
+        return parse(LocalDeclareParser.class, Variable.class);
+    }
+
+    public @NotNull Node nextLocalAssignment() {
+        return parse(LocalAssignParser.class, Node.class);
     }
 
     /**
