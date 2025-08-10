@@ -9,8 +9,8 @@ import org.hsl.std.type.location.LocationType;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class LocationCustom implements Location {
-    private final LocationType type = LocationType.CURRENT;
+public class CustomLocation implements Location {
+    private final LocationType type = LocationType.CUSTOM;
 
     private final double x, y, z;
 }
