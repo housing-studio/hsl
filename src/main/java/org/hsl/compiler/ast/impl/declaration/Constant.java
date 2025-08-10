@@ -8,6 +8,7 @@ import org.hsl.compiler.ast.NodeType;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.debug.Format;
 import org.hsl.compiler.debug.Printable;
+import org.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @NodeInfo(type = NodeType.CONSTANT)
 public class Constant implements Printable {
-    private final @NotNull String name;
+    private final @NotNull Token name;
     private final @NotNull Value value;
 
     /**
@@ -25,6 +26,6 @@ public class Constant implements Printable {
      */
     @Override
     public @NotNull String print() {
-        return Format.RED + "const " + Format.WHITE + name + Format.YELLOW + " = " + Format.WHITE + value.print();
+        return Format.RED + "const " + Format.WHITE + name.value() + Format.YELLOW + " = " + Format.WHITE + value.print();
     }
 }

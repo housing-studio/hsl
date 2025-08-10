@@ -39,7 +39,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         get(TokenType.COLON);
 
         switch (type.value()) {
-            case "Location" -> { return parseLocation(context); }
+            case "Location" -> { return parseLocation(parser, context); }
             case "GameMode" -> { return parseGameMode(context); }
             case "Target" -> { return parseTarget(context); }
             case "Weather" -> { return parseWeather(context); }
@@ -54,7 +54,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         }
     }
 
-    private @NotNull Value parseLocation(@NotNull ParserContext context) {
+    private @NotNull Value parseLocation(@NotNull AstParser parser, @NotNull ParserContext context) {
         Token location = get(TokenType.IDENTIFIER);
         LocationType wrapped = Stream.of(LocationType.values())
             .filter(v -> v.format().equals(location.value()))
@@ -70,21 +70,17 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case SPAWN, INVOKER, CURRENT -> new StaticLocation(wrapped);
             case CUSTOM -> {
                 get(TokenType.LPAREN);
-                double x = getDouble();
+                Value x = parser.nextValue();
                 get(TokenType.COMMA);
-                double y = getDouble();
+                Value y = parser.nextValue();
                 get(TokenType.COMMA);
-                double z = getDouble();
+                Value z = parser.nextValue();
                 get(TokenType.RPAREN);
                 yield new CustomLocation(x, y, z);
             }
         };
 
         return new LocationValue(value);
-    }
-
-    private double getDouble() {
-        return Double.parseDouble(get(TokenType.INT, TokenType.FLOAT).value());
     }
 
     private @NotNull Value parseGameMode(@NotNull ParserContext context) {

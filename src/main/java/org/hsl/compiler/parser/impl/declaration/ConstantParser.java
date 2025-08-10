@@ -5,6 +5,7 @@ import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.AstParser;
 import org.hsl.compiler.parser.ParserAlgorithm;
 import org.hsl.compiler.parser.ParserContext;
+import org.hsl.compiler.token.Token;
 import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +23,7 @@ public class ConstantParser extends ParserAlgorithm<Constant> {
         get(TokenType.EXPRESSION, "const");
 
         // parse the constant name
-        String name = get(TokenType.IDENTIFIER).value();
+        Token name = get(TokenType.IDENTIFIER);
 
         // skip the assignment sign
         get(TokenType.OPERATOR, "=");

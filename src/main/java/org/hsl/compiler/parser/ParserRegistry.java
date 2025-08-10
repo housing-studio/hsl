@@ -8,6 +8,7 @@ import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
 import org.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.hsl.compiler.parser.impl.scope.StatementParser;
 import org.hsl.compiler.parser.impl.value.BuiltinValueParser;
+import org.hsl.compiler.parser.impl.value.ConstantAccessParser;
 import org.hsl.compiler.parser.impl.value.LiteralParser;
 import org.hsl.compiler.parser.impl.value.ValueParser;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,8 @@ public class ParserRegistry {
             LocalDeclareParser.class,
             LocalAssignParser.class,
             ConstantParser.class,
-            BuiltinValueParser.class
+            BuiltinValueParser.class,
+            ConstantAccessParser.class
         };
 
         for (Class<?> parser : parsers) {

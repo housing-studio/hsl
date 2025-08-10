@@ -1,22 +1,21 @@
-package org.hsl.compiler.ast.impl.value.builtin;
+package org.hsl.compiler.ast.impl.value;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
+import org.hsl.compiler.ast.impl.declaration.Constant;
 import org.hsl.compiler.ast.impl.type.Type;
-import org.hsl.compiler.ast.impl.value.Value;
-import org.hsl.std.type.location.Location;
-import org.hsl.std.type.location.impl.CustomLocation;
+import org.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-@NodeInfo(type = NodeType.BUILTIN)
-public class LocationValue extends Value {
-    private final @NotNull Location location;
+@NodeInfo(type = NodeType.CONSTANT_ACCESS)
+public class ConstantAccess extends Value {
+    private final @NotNull Token name;
 
     /**
      * Retrieve the type of the held value. This result will be used to inter types for untyped variables.
@@ -25,7 +24,17 @@ public class LocationValue extends Value {
      */
     @Override
     public @NotNull Type getValueType() {
-        return Type.LOCATION;
+        return load().getValueType();
+    }
+
+    public @NotNull Value load() {
+        Constant constant = game.constants().get(name.value());
+        if (constant == null) {
+            context.syntaxError(name, "Constant not found");
+            throw new UnsupportedOperationException("Cannot find constant: " + name.value());
+        }
+
+        return constant.value();
     }
 
     /**
@@ -35,12 +44,6 @@ public class LocationValue extends Value {
      */
     @Override
     public @NotNull String print() {
-        return switch (location.type()) {
-            case SPAWN, INVOKER, CURRENT -> "Location::" + location.type().name();
-            case CUSTOM -> {
-                CustomLocation loc = (CustomLocation) location;
-                yield "Location::Custom(%s, %s, %s)".formatted(loc.x().print(), loc.y().print(), loc.z().print());
-            }
-        };
+        return "load " + name.value();
     }
 }

@@ -16,7 +16,7 @@ public enum NodeType {
     LOCAL_DECLARE_ASSIGN,
     LOCAL_ASSIGN,
 
-    NAME_ACCESS,
+    CONSTANT_ACCESS,
 
     METHOD_CALL,
 
@@ -26,6 +26,7 @@ public enum NodeType {
     TERNARY_OPERATOR,
 
     METHOD,
+    GAME,
 
     EMPTY,
     ERROR,

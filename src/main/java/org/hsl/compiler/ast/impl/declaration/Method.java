@@ -9,6 +9,7 @@ import org.hsl.compiler.ast.NodeType;
 import org.hsl.compiler.ast.impl.scope.Scope;
 import org.hsl.compiler.debug.Format;
 import org.hsl.compiler.debug.Printable;
+import org.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @NodeInfo(type = NodeType.METHOD)
 public class Method extends Node implements Printable {
-    private final @NotNull String name;
+    private final @NotNull Token name;
     private final @NotNull Scope scope;
 
     /**
@@ -26,7 +27,7 @@ public class Method extends Node implements Printable {
      */
     @Override
     public @NotNull String print() {
-        StringBuilder builder = new StringBuilder(Format.RED + "fn " + Format.BLUE + name);
+        StringBuilder builder = new StringBuilder(Format.RED + "fn " + Format.BLUE + name.value());
         builder.append(Format.CYAN).append("()");
 
         builder.append(Format.LIGHT_GRAY).append(" {").append('\n');

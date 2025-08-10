@@ -5,6 +5,7 @@ import org.hsl.compiler.ast.impl.scope.Scope;
 import org.hsl.compiler.parser.AstParser;
 import org.hsl.compiler.parser.ParserAlgorithm;
 import org.hsl.compiler.parser.ParserContext;
+import org.hsl.compiler.token.Token;
 import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +42,7 @@ public class MethodParser extends ParserAlgorithm<Method> {
         get(TokenType.EXPRESSION, "fn");
 
         // parse the method name
-        String name = context.get(TokenType.IDENTIFIER).value();
+        Token name = context.get(TokenType.IDENTIFIER);
 
         // skip the parameter list
         get(TokenType.LPAREN);

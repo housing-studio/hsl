@@ -3,6 +3,7 @@ package org.hsl.compiler.parser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.impl.declaration.Constant;
 import org.hsl.compiler.ast.impl.declaration.Method;
@@ -16,8 +17,10 @@ import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
 import org.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.hsl.compiler.parser.impl.scope.StatementParser;
 import org.hsl.compiler.parser.impl.value.BuiltinValueParser;
+import org.hsl.compiler.parser.impl.value.ConstantAccessParser;
 import org.hsl.compiler.parser.impl.value.LiteralParser;
 import org.hsl.compiler.parser.impl.value.ValueParser;
+import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -69,6 +72,36 @@ public class AstParser {
 
     public @NotNull Node nextLocalAssignment() {
         return parse(LocalAssignParser.class, Node.class);
+    }
+
+    public @NotNull Value nextConstantAccess() {
+        return parse(ConstantAccessParser.class, Value.class);
+    }
+
+    public void parseGame(@NotNull Game game) {
+        while (context.peek().hasNext()) {
+            if (context.peek().is(TokenType.EXPRESSION, "fn")) {
+                Method method = nextMethod();
+
+                if (game.methods().containsKey(method.name().value())) {
+                    context.syntaxError(method.name(), "Method name is already in use");
+                    throw new UnsupportedOperationException("Method name is already in use: " + method.name().value());
+                }
+
+                game.methods().put(method.name().value(), method);
+            }
+
+            if (context.peek().is(TokenType.EXPRESSION, "const")) {
+                Constant constant = nextConstant();
+
+                if (game.constants().containsKey(constant.name().value())) {
+                    context.syntaxError(constant.name(), "Constant name is already in use");
+                    throw new UnsupportedOperationException("Constant name is already in use: " + constant.name().value());
+                }
+
+                game.constants().put(constant.name().value(), constant);
+            }
+        }
     }
 
     /**

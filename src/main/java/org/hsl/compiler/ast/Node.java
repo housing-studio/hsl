@@ -1,11 +1,13 @@
 package org.hsl.compiler.ast;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.hierarchy.Children;
 import org.hsl.compiler.ast.hierarchy.NodeVisitor;
 import org.hsl.compiler.ast.hierarchy.Parent;
 import org.hsl.compiler.debug.SoftOverride;
+import org.hsl.compiler.parser.ParserContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +28,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Accessors(fluent = true)
 @Getter
 public abstract class Node {
+    @Setter
+    protected static Game game;
+
+    @Setter
+    protected ParserContext context;
+
     /**
      * The type of the node.
      */

@@ -38,17 +38,14 @@ public class ValueParser extends ParserAlgorithm<Value> {
         )
             return parser.nextBuiltinValue();
 
-        /*
+
         // handle variable access
         // let name = otherName
         //            ^^^^^^^^^ the identifier token indicates, that a value is expected
-        // let value = outer.inner
-        //                  ^ identifiers may be chained to access nested values
         // foo()
         //    ^^ function calls have a similar signature, except there are parentheses at the end
         else if (peek().is(TokenType.IDENTIFIER))
-            return parser.nextAccess();
-         */
+            return parser.nextConstantAccess();
 
         context.syntaxError(peek(), "Invalid value");
         throw new UnsupportedOperationException("Unsupported value type: " + peek());
