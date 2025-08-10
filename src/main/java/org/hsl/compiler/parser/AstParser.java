@@ -5,9 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.Node;
-import org.hsl.compiler.ast.impl.declaration.Constant;
+import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.local.Variable;
+import org.hsl.compiler.ast.impl.operator.Operator;
 import org.hsl.compiler.ast.impl.scope.Scope;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.ast.impl.value.Argument;
@@ -16,6 +17,8 @@ import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
 import org.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
+import org.hsl.compiler.parser.impl.operator.BinaryOperatorTree;
+import org.hsl.compiler.parser.impl.operator.OperatorParser;
 import org.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.hsl.compiler.parser.impl.scope.StatementParser;
 import org.hsl.compiler.parser.impl.value.*;
@@ -39,8 +42,8 @@ public class AstParser {
      */
     private final @NotNull ParserContext context;
 
-    public @NotNull Constant nextConstant() {
-        return parse(ConstantParser.class, Constant.class);
+    public @NotNull ConstantDeclare nextConstant() {
+        return parse(ConstantParser.class, ConstantDeclare.class);
     }
 
     public @NotNull Method nextMethod() {
@@ -88,6 +91,14 @@ public class AstParser {
         return parse(TypeParser.class, Type.class);
     }
 
+    public @NotNull Operator nextOperator() {
+        return parse(OperatorParser.class, Operator.class);
+    }
+
+    public @NotNull Value nextBinaryOperation(@NotNull Value lhs, @NotNull Operator operator, @NotNull Value rhs) {
+        return BinaryOperatorTree.makeBinaryOperator(lhs, operator, rhs);
+    }
+
     public void parseGame(@NotNull Game game) {
         while (context.peek().hasNext()) {
             if (context.peek().is(TokenType.EXPRESSION, "fn")) {
@@ -102,7 +113,7 @@ public class AstParser {
             }
 
             if (context.peek().is(TokenType.EXPRESSION, "const")) {
-                Constant constant = nextConstant();
+                ConstantDeclare constant = nextConstant();
 
                 if (game.constants().containsKey(constant.name().value())) {
                     context.syntaxError(constant.name(), "Constant name is already in use");

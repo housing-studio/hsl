@@ -1,10 +1,8 @@
-package org.hsl.std.type.slot.impl;
+package org.hsl.compiler.debug;
 
-import org.hsl.std.type.slot.Slot;
-import org.hsl.std.type.slot.SlotType;
 import org.jetbrains.annotations.NotNull;
 
-public record StaticSlot(@NotNull SlotType type) implements Slot {
+public interface Constant {
     /**
      * Get the constant string representation of the value.
      * <p>
@@ -12,8 +10,5 @@ public record StaticSlot(@NotNull SlotType type) implements Slot {
      *
      * @return the final string value
      */
-    @Override
-    public @NotNull String asConstantValue() {
-        return type.format();
-    }
+    @NotNull String asConstantValue();
 }

@@ -48,6 +48,19 @@ public class MethodCall extends Value {
     }
 
     /**
+     * Get the constant string representation of the value.
+     * <p>
+     * Housing variables are handled as string by default, this format is the input for housing variables.
+     *
+     * @return the final string value
+     */
+    @Override
+    public @NotNull String asConstantValue() {
+        context.syntaxError(name, "Cannot use method call as an expression");
+        throw new UnsupportedOperationException("Cannot use method call as an expression: " + name.value());
+    }
+
+    /**
      * Returns a string representation of the implementing class.
      *
      * @return the class debug information

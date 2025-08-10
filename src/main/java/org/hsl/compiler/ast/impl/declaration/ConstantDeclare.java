@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.CONSTANT)
-public class Constant implements Printable {
+public class ConstantDeclare implements Printable {
     private final @NotNull Token name;
     private final @NotNull Value value;
 

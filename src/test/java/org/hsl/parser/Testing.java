@@ -2,7 +2,7 @@ package org.hsl.parser;
 
 import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.Node;
-import org.hsl.compiler.ast.impl.declaration.Constant;
+import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.parser.AstParser;
 
@@ -12,8 +12,13 @@ public class Testing {
     public static void main(String[] args) {
         String source =
             """
-            const FOO = 1337
-            const SPAWN_LOC = Location::Custom(FOO, 2.7, 3.0)
+            const X = 100
+            const Y = 200
+            const Z = 300
+
+            const ERROR = 10
+
+            const SPAWN_LOC = Location::Custom(X + ERROR, Y - ERROR, Z - ERROR)
 
             fn foo() {
                 stat player msg = "hello"
@@ -30,10 +35,13 @@ public class Testing {
         Node.game(game);
         assertDoesNotThrow(() -> parser.parseGame(game));
 
-        for (Constant constant : game.constants().values())
+        for (ConstantDeclare constant : game.constants().values())
             System.out.println(constant.print());
 
         for (Method method : game.methods().values())
             System.out.println(method.print());
+
+        String spawnLoc = game.constants().get("SPAWN_LOC").value().asConstantValue();
+        System.out.println(spawnLoc);
     }
 }

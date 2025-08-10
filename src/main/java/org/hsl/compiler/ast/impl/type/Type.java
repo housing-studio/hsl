@@ -16,5 +16,9 @@ public enum Type {
     TIME,
     NAMESPACE,
     EFFECT,
-    ENCHANT
+    ENCHANT;
+
+    public boolean isNumber() {
+        return this == INT || this == FLOAT;
+    }
 }

@@ -35,7 +35,10 @@ public class ArgumentListParser extends ParserAlgorithm<List<Argument>> {
                 namedArgsStarted = true;
                 name = get(TokenType.IDENTIFIER);
                 get(TokenType.OPERATOR, "=");
-            } else if (namedArgsStarted) {
+            }
+
+            // handle misuse of named arguments
+            else if (namedArgsStarted) {
                 context.syntaxError(peek(), "Positional argument after named argument");
                 throw new UnsupportedOperationException("Positional argument after named argument");
             }

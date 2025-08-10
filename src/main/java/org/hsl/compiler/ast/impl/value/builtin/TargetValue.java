@@ -36,4 +36,16 @@ public class TargetValue extends Value {
     public @NotNull String print() {
         return "Target::" + target.format();
     }
+
+    /**
+     * Get the constant string representation of the value.
+     * <p>
+     * Housing variables are handled as string by default, this format is the input for housing variables.
+     *
+     * @return the final string value
+     */
+    @Override
+    public @NotNull String asConstantValue() {
+        return target.format();
+    }
 }

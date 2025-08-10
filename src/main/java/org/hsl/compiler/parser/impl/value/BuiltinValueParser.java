@@ -12,9 +12,14 @@ import org.hsl.std.type.location.Location;
 import org.hsl.std.type.location.LocationType;
 import org.hsl.std.type.location.impl.CustomLocation;
 import org.hsl.std.type.location.impl.StaticLocation;
+import org.hsl.std.type.slot.Slot;
+import org.hsl.std.type.slot.SlotType;
+import org.hsl.std.type.slot.impl.CustomSlot;
+import org.hsl.std.type.slot.impl.HotbarSlot;
+import org.hsl.std.type.slot.impl.InventorySlot;
+import org.hsl.std.type.slot.impl.StaticSlot;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Currency;
 import java.util.stream.Stream;
 
 public class BuiltinValueParser extends ParserAlgorithm<Value> {
@@ -40,6 +45,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         switch (type.value()) {
             case "Location" -> { return parseLocation(parser, context); }
+            case "Slot" -> { return parseSlot(parser, context); }
             case "GameMode" -> { return parseGameMode(context); }
             case "Target" -> { return parseTarget(context); }
             case "Weather" -> { return parseWeather(context); }
@@ -52,6 +58,28 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
             }
         }
+    }
+
+    private @NotNull Value parseSlot(@NotNull AstParser parser, @NotNull ParserContext context) {
+        Token slot = get(TokenType.IDENTIFIER);
+        SlotType wrapped = Stream.of(SlotType.values())
+            .filter(v -> v.format().equals(slot.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(slot, "Invalid slot type");
+            throw new UnsupportedOperationException("Invalid slot type: " + slot);
+        }
+
+        Slot value = switch (wrapped) {
+            case HELMET, CHESTPLATE, LEGGINGS, BOOTS, FIRST_AVAILABLE, HAND_SLOT -> new StaticSlot(wrapped);
+            case CUSTOM -> new CustomSlot(parser.nextValue());
+            case INVENTORY -> new InventorySlot(parser.nextValue());
+            case HOTBAR -> new HotbarSlot(parser.nextValue());
+        };
+
+        return new SlotValue(value);
     }
 
     private @NotNull Value parseLocation(@NotNull AstParser parser, @NotNull ParserContext context) {

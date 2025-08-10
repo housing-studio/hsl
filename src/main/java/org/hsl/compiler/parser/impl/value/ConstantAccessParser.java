@@ -1,6 +1,7 @@
 package org.hsl.compiler.parser.impl.value;
 
-import org.hsl.compiler.ast.impl.declaration.Method;
+import org.hsl.compiler.ast.impl.operator.BinaryOperator;
+import org.hsl.compiler.ast.impl.operator.Operator;
 import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.ast.impl.value.ConstantAccess;
 import org.hsl.compiler.ast.impl.value.Value;
@@ -40,6 +41,37 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
         if (peek().is(TokenType.LPAREN)) {
             List<Argument> arguments = parser.nextArgumentList();
             return new MethodCall(first, arguments);
+        }
+
+        // handle operation between two expressions
+        // stat player var = 100 +
+        //                       ^ the operator after a literal indicates, that there are more expressions to be parsed
+        //                         the two operands are grouped together by an Operation node
+        if (peek().is(TokenType.OPERATOR)) {
+            // parse the target operator of the operation
+            Operator operator = parser.nextOperator();
+
+            // TODO handle non-binary operators
+            Value rhs = parser.nextValue();
+
+            if (access.getValueType() != rhs.getValueType()) {
+                context.syntaxError(first, "Operator type mismatch");
+                throw new UnsupportedOperationException(
+                    "Operator type mismatch (lhs: %s, rhs: %s)".formatted(access.getValueType(), rhs.getValueType())
+                );
+            }
+
+            BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(access, operator, rhs);
+            if (!operation.supported()) {
+                context.syntaxError(
+                    first, "Operator not supported for types (lhs: %s, rhs: %s)".formatted(access.getValueType(), rhs.getValueType())
+                );
+                throw new UnsupportedOperationException(
+                    "Operator not supported for types (lhs: %s, rhs: %s)".formatted(access.getValueType(), rhs.getValueType())
+                );
+            }
+
+            return operation;
         }
 
         return access;

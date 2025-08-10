@@ -29,6 +29,18 @@ public class LocationValue extends Value {
     }
 
     /**
+     * Get the constant string representation of the value.
+     * <p>
+     * Housing variables are handled as string by default, this format is the input for housing variables.
+     *
+     * @return the final string value
+     */
+    @Override
+    public @NotNull String asConstantValue() {
+        return location.asConstantValue();
+    }
+
+    /**
      * Returns a string representation of the implementing class.
      *
      * @return the class debug information
@@ -36,7 +48,7 @@ public class LocationValue extends Value {
     @Override
     public @NotNull String print() {
         return switch (location.type()) {
-            case SPAWN, INVOKER, CURRENT -> "Location::" + location.type().name();
+            case SPAWN, INVOKER, CURRENT -> "Location::" + location.type().format();
             case CUSTOM -> {
                 CustomLocation loc = (CustomLocation) location;
                 yield "Location::Custom(%s, %s, %s)".formatted(loc.x().print(), loc.y().print(), loc.z().print());

@@ -53,7 +53,7 @@ public class MethodParseTest {
         assertEquals(Type.STRING, local.type());
         ConstantLiteral literal = assertInstanceOf(ConstantLiteral.class, local.value());
 
-        assertEquals("hello", literal.value().value());
+        assertEquals("hello", literal.token().value());
     }
 
     @Test
@@ -77,6 +77,6 @@ public class MethodParseTest {
         assertEquals(Type.INT, local.type());
         ConstantLiteral literal = assertInstanceOf(ConstantLiteral.class, local.value());
 
-        assertEquals("123", literal.value().value());
+        assertEquals("123", literal.token().value());
     }
 }

@@ -1,5 +1,7 @@
 package org.hsl.compiler.parser.impl.value;
 
+import org.hsl.compiler.ast.impl.operator.BinaryOperator;
+import org.hsl.compiler.ast.impl.operator.Operator;
 import org.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.AstParser;
@@ -46,10 +48,29 @@ public class LiteralParser extends ParserAlgorithm<Value> {
         //                         the two operands are grouped together by an Operation node
         if (peek().is(TokenType.OPERATOR)) {
             // parse the target operator of the operation
-            //Operator operator = parser.nextOperator();
+            Operator operator = parser.nextOperator();
+
             // TODO handle non-binary operators
-            throw new IllegalStateException("Unsupported operator: " + peek());
-            //return parser.nextBinaryOperation(literal, operator, parser.nextValue());
+            Value rhs = parser.nextValue();
+
+            if (literal.getValueType() != rhs.getValueType()) {
+                context.syntaxError(token, "Operator type mismatch");
+                throw new UnsupportedOperationException(
+                    "Operator type mismatch (lhs: %s, rhs: %s)".formatted(literal.getValueType(), rhs.getValueType())
+                );
+            }
+
+            BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(literal, operator, rhs);
+            if (!operation.supported()) {
+                context.syntaxError(
+                    token, "Operator not supported for types (lhs: %s, rhs: %s)".formatted(literal.getValueType(), rhs.getValueType())
+                );
+                throw new UnsupportedOperationException(
+                    "Operator not supported for types (lhs: %s, rhs: %s)".formatted(literal.getValueType(), rhs.getValueType())
+                );
+            }
+
+            return operation;
         }
 
         // handle group closing

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
-import org.hsl.compiler.ast.impl.declaration.Constant;
+import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
@@ -27,8 +27,20 @@ public class ConstantAccess extends Value {
         return load().getValueType();
     }
 
+    /**
+     * Get the constant string representation of the value.
+     * <p>
+     * Housing variables are handled as string by default, this format is the input for housing variables.
+     *
+     * @return the final string value
+     */
+    @Override
+    public @NotNull String asConstantValue() {
+        return load().asConstantValue();
+    }
+
     public @NotNull Value load() {
-        Constant constant = game.constants().get(name.value());
+        ConstantDeclare constant = game.constants().get(name.value());
         if (constant == null) {
             context.syntaxError(name, "Constant not found");
             throw new UnsupportedOperationException("Cannot find constant: " + name.value());

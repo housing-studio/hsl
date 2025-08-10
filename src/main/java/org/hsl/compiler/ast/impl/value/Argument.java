@@ -29,6 +29,18 @@ public class Argument extends Value {
     }
 
     /**
+     * Get the constant string representation of the value.
+     * <p>
+     * Housing variables are handled as string by default, this format is the input for housing variables.
+     *
+     * @return the final string value
+     */
+    @Override
+    public @NotNull String asConstantValue() {
+        return value.asConstantValue();
+    }
+
+    /**
      * Returns a string representation of the implementing class.
      *
      * @return the class debug information

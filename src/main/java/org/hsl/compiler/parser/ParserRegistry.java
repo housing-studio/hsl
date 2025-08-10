@@ -5,6 +5,7 @@ import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
 import org.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
+import org.hsl.compiler.parser.impl.operator.OperatorParser;
 import org.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.hsl.compiler.parser.impl.scope.StatementParser;
 import org.hsl.compiler.parser.impl.value.*;
@@ -38,6 +39,7 @@ public class ParserRegistry {
             ConstantAccessParser.class,
             TypeParser.class,
             ArgumentListParser.class,
+            OperatorParser.class
         };
 
         for (Class<?> parser : parsers) {

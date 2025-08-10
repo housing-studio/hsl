@@ -15,4 +15,16 @@ public class CustomLocation implements Location {
     private final LocationType type = LocationType.CUSTOM;
 
     private final @NotNull Value x, y, z;
+
+    /**
+     * Get the constant string representation of the value.
+     * <p>
+     * Housing variables are handled as string by default, this format is the input for housing variables.
+     *
+     * @return the final string value
+     */
+    @Override
+    public @NotNull String asConstantValue() {
+        return type.format() + " " + x.asConstantValue() + " " + y.asConstantValue() + " " + z.asConstantValue();
+    }
 }

@@ -7,15 +7,18 @@ import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.ast.impl.value.Value;
-import org.hsl.std.type.Time;
+import org.hsl.std.type.slot.Slot;
+import org.hsl.std.type.slot.impl.CustomSlot;
+import org.hsl.std.type.slot.impl.HotbarSlot;
+import org.hsl.std.type.slot.impl.InventorySlot;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.BUILTIN)
-public class TimeValue extends Value {
-    private final @NotNull Time time;
+public class SlotValue extends Value {
+    private final @NotNull Slot slot;
 
     /**
      * Retrieve the type of the held value. This result will be used to inter types for untyped variables.
@@ -24,7 +27,7 @@ public class TimeValue extends Value {
      */
     @Override
     public @NotNull Type getValueType() {
-        return Type.TIME;
+        return Type.SLOT;
     }
 
     /**
@@ -36,7 +39,7 @@ public class TimeValue extends Value {
      */
     @Override
     public @NotNull String asConstantValue() {
-        return time.format();
+        return slot.asConstantValue();
     }
 
     /**
@@ -46,6 +49,20 @@ public class TimeValue extends Value {
      */
     @Override
     public @NotNull String print() {
-        return "Time::" + time.format();
+        return switch (slot.type()) {
+            case HELMET, CHESTPLATE, LEGGINGS, BOOTS, FIRST_AVAILABLE, HAND_SLOT -> "Slot::" + slot.type().format();
+            case CUSTOM -> {
+                CustomSlot custom = (CustomSlot) slot;
+                yield "Slot::Custom(%s)".formatted(custom.rawSlot());
+            }
+            case INVENTORY -> {
+                InventorySlot inventory = (InventorySlot) slot;
+                yield "Slot::Inventory(%s)".formatted(inventory.inventorySlot());
+            }
+            case HOTBAR -> {
+                HotbarSlot hotbar = (HotbarSlot) slot;
+                yield "Slot::Hotbar(%s)".formatted(hotbar.hotbarSlot());
+            }
+        };
     }
 }

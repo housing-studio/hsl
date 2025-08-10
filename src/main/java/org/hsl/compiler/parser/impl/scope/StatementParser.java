@@ -35,8 +35,8 @@ public class StatementParser extends ParserAlgorithm<Node> {
         // handle variable assignment
         // foo = 123
         //     ^ the `=` symbol after an identifier indicates, that a variable is assigned
+        //      ^ the `=` symbol must not follow another `=`, as that would be a comparing binary operator
         // ^^^ the identifier must be followed by a `=`
-        //       ^ the `=` symbol must not follow another `=`, as that would be a comparing binary operator
         if (
             peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.OPERATOR, "=") &&
             !at(cursor() + 2).is(TokenType.OPERATOR, "=")
