@@ -54,6 +54,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case "Effect" -> { return parseEffect(context); }
             case "Enchant" -> { return parseEnchant(context); }
             case "Mode" -> { return parseMode(context); }
+            case "Lobby" -> { return parseLobby(context); }
             default -> {
                 context.syntaxError(type, "Invalid builtin type");
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
@@ -230,5 +231,20 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         }
 
         return new ModeValue(wrapped);
+    }
+
+    private @NotNull Value parseLobby(@NotNull ParserContext context) {
+        Token lobby = get(TokenType.IDENTIFIER);
+        Lobby wrapped = Stream.of(Lobby.values())
+            .filter(v -> v.format().equals(lobby.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(lobby, "Invalid lobby type");
+            throw new UnsupportedOperationException("Invalid lobby type: " + lobby);
+        }
+
+        return new LobbyValue(wrapped);
     }
 }
