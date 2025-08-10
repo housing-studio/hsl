@@ -10,7 +10,7 @@ public class Testing {
     public static void main(String[] args) {
         String source =
             """
-            const TEST_VALUE = 123
+            const SPAWN_LOC = Location::Custom(1, 1, 1)
 
             fn foo() {
                 stat player msg = "hello"

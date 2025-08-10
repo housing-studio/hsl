@@ -4,6 +4,7 @@ import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.AstParser;
 import org.hsl.compiler.parser.ParserAlgorithm;
 import org.hsl.compiler.parser.ParserContext;
+import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -27,6 +28,15 @@ public class ValueParser extends ParserAlgorithm<Value> {
         //                    ^^^^^^^^^^ the literal token indicates, that a value is expected
         if (peek().isLiteral())
             return parser.nextLiteral();
+
+        // handle builtin value
+        // const TEST_LOCATION = Location::Custom(10, 10, 10)
+        //                       ^^^^^^^^^^ the identifier follows two colons
+        if (
+            peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.COLON) &&
+            at(cursor() + 2).is(TokenType.COLON)
+        )
+            return parser.nextBuiltinValue();
 
         /*
         // handle variable access

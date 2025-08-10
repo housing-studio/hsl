@@ -15,6 +15,7 @@ import org.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
 import org.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.hsl.compiler.parser.impl.scope.StatementParser;
+import org.hsl.compiler.parser.impl.value.BuiltinValueParser;
 import org.hsl.compiler.parser.impl.value.LiteralParser;
 import org.hsl.compiler.parser.impl.value.ValueParser;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +53,10 @@ public class AstParser {
 
     public @NotNull Value nextLiteral() {
         return parse(LiteralParser.class, Value.class);
+    }
+
+    public @NotNull Value nextBuiltinValue() {
+        return parse(BuiltinValueParser.class, Value.class);
     }
 
     public @NotNull Value nextValue() {

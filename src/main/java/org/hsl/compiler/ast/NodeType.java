@@ -9,6 +9,8 @@ public enum NodeType {
     EXPRESSION,
 
     LITERAL,
+    CONSTANT,
+    BUILTIN,
 
     LOCAL_DECLARE,
     LOCAL_DECLARE_ASSIGN,
@@ -24,7 +26,6 @@ public enum NodeType {
     TERNARY_OPERATOR,
 
     METHOD,
-    CONSTANT,
 
     EMPTY,
     ERROR,

@@ -1,25 +1,35 @@
 package org.hsl.std.type;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
+
+@RequiredArgsConstructor
+@Accessors(fluent = true)
+@Getter
 public enum Effect {
-    SLOWNESS,
-    HASTE,
-    MINING_FATIGUE,
-    STRENGTH,
-    INSTANT_HEALTH,
-    INSTANT_DAMAGE,
-    JUMP_BOOST,
-    NAUSEA,
-    REGENERATION,
-    RESISTANCE,
-    FIRE_RESISTANCE,
-    WATER_BREATHING,
-    INVISIBILITY,
-    BLINDNESS,
-    NIGHT_VISION,
-    HUNGER,
-    WEAKNESS,
-    POISON,
-    WITHER,
-    HEALTH_BOOST,
-    ABSORPTION
+    SLOWNESS("Slowness"),
+    HASTE("Haste"),
+    MINING_FATIGUE("MiningFatigue"),
+    STRENGTH("Strength"),
+    INSTANT_HEALTH("InstantHealth"),
+    INSTANT_DAMAGE("InstantDamage"),
+    JUMP_BOOST("JumpBoost"),
+    NAUSEA("Nausea"),
+    REGENERATION("Regeneration"),
+    RESISTANCE("Resistance"),
+    FIRE_RESISTANCE("FireResistance"),
+    WATER_BREATHING("WaterBreathing"),
+    INVISIBILITY("Invisibility"),
+    BLINDNESS("Blindness"),
+    NIGHT_VISION("NightVision"),
+    HUNGER("Hunger"),
+    WEAKNESS("Weakness"),
+    POISON("Poison"),
+    WITHER("Wither"),
+    HEALTH_BOOST("HealthBoost"),
+    ABSORPTION("Absorption");
+
+    private final @NotNull String format;
 }
