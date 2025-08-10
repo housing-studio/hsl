@@ -5,5 +5,15 @@ public enum Type {
     FLOAT,
     STRING,
     BOOL,
-    ANY
+    ANY,
+
+    SLOT,
+    LOCATION,
+    GAME_MODE,
+    TARGET,
+    WEATHER,
+    TIME,
+    NAMESPACE,
+    EFFECT,
+    ENCHANT
 }

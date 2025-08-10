@@ -1,6 +1,7 @@
 package org.hsl.compiler.parser;
 
 import lombok.experimental.UtilityClass;
+import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
 import org.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
@@ -32,7 +33,8 @@ public class ParserRegistry {
             LiteralParser.class,
             ValueParser.class,
             LocalDeclareParser.class,
-            LocalAssignParser.class
+            LocalAssignParser.class,
+            ConstantParser.class,
         };
 
         for (Class<?> parser : parsers) {

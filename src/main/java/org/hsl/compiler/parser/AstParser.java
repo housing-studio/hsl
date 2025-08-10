@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.Node;
+import org.hsl.compiler.ast.impl.declaration.Constant;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.local.Variable;
 import org.hsl.compiler.ast.impl.scope.Scope;
 import org.hsl.compiler.ast.impl.value.Value;
+import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
 import org.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
@@ -31,6 +33,10 @@ public class AstParser {
      * The context of the token stream parsing.
      */
     private final @NotNull ParserContext context;
+
+    public @NotNull Constant nextConstant() {
+        return parse(ConstantParser.class, Constant.class);
+    }
 
     public @NotNull Method nextMethod() {
         return parse(MethodParser.class, Method.class);
