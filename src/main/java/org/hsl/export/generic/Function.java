@@ -1,4 +1,4 @@
-package org.hsl.export.function;
+package org.hsl.export.generic;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;

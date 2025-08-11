@@ -1,4 +1,4 @@
-package org.hsl.export.event;
+package org.hsl.export.generic;
 
 public enum EventType {
     /**

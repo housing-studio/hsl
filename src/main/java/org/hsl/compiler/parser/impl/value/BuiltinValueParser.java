@@ -56,6 +56,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case "Mode" -> { return parseMode(context); }
             case "Lobby" -> { return parseLobby(context); }
             case "Sound" -> { return parseSound(context); }
+            case "Flag" -> { return parseFlag(context); }
             default -> {
                 context.syntaxError(type, "Invalid builtin type");
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
@@ -262,5 +263,20 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         }
 
         return new SoundValue(wrapped);
+    }
+
+    private @NotNull Value parseFlag(@NotNull ParserContext context) {
+        Token flag = get(TokenType.IDENTIFIER);
+        Flag wrapped = Stream.of(Flag.values())
+            .filter(v -> v.format().equals(flag.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(flag, "Invalid flag type");
+            throw new UnsupportedOperationException("Invalid flag type: " + flag);
+        }
+
+        return new FlagValue(wrapped);
     }
 }
