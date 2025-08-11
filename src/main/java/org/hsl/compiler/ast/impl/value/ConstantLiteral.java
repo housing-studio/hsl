@@ -33,7 +33,7 @@ public class ConstantLiteral extends Value implements Printable {
     public @NotNull Type getValueType() {
         return switch (token.type()) {
             case STRING -> Type.STRING;
-            case INT -> Type.INT;
+            case INT, DURATION, HEXADECIMAL, BINARY -> Type.INT;
             case FLOAT -> Type.FLOAT;
             case BOOL -> Type.BOOL;
             default -> throw new IllegalStateException("Cannot resolve type of token: " + token);

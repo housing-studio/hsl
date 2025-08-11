@@ -5,6 +5,7 @@ import org.hsl.compiler.debug.Format;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 /**
  * Represents a class that parses the content of a source file into a list of tokens.
@@ -13,6 +14,15 @@ import java.io.File;
  */
 @RequiredArgsConstructor
 public class Tokenizer {
+    private static final Pattern DURATION_PATTERN = Pattern.compile(
+        "^(?:(\\d+(?:_\\d+)*h))?" +                // hours
+            "(?:(\\d+(?:_\\d+)*m))?" +                 // minutes
+            "(?:(\\d+(?:_\\d+)*s))?" +                 // seconds
+            "(?:(\\d+(?:_\\d+)*ms))?" +                // milliseconds
+            "(?:(\\d+(?:_\\d+)*(?:us|µs)))?" +         // microseconds
+            "(?:(\\d+(?:_\\d+)*ns))?$"                 // nanoseconds
+    );
+
     /**
      * The maximum length of a displayable line of code in a syntax error.
      */
@@ -138,7 +148,7 @@ public class Tokenizer {
             return nextSeparator();
 
         // handle literal tokens
-        else if (isNumber(peek()))
+        else if (isNumberStart(peek()))
             return nextNumber();
         else if (isStringStart(peek()))
             return nextString();
@@ -281,11 +291,14 @@ public class Tokenizer {
         // if it does not, then it is an integer-like number
         boolean integer = true;
 
+        // will adjust this later, if the content contains duration specifiers such as `h` or `m`
+        boolean duration = false;
+
         // handle regular number format
         // loop until we reach the end of the number content
         // for example: `123.4D`
         //               ^^^^^^ will loop 6 times
-        while (isNumberContent(upper(peek()))) {
+        while (isNumberContent(peek())) {
             // handle floating point number
             // for example: `1.5`, `1.5F`, `1.5D`
             //                ^ this character is checked here
@@ -300,6 +313,19 @@ public class Tokenizer {
                     return makeToken(TokenType.UNEXPECTED);
                 }
                 integer = false;
+
+                // check if duration value contains decimal points
+                if (duration) {
+                    syntaxError(
+                        Errno.CANNOT_HAVE_DECIMAL_POINT,
+                        "duration number cannot have decimal points"
+                    );
+                    return makeToken(TokenType.UNEXPECTED);
+                }
+            }
+
+            else if (isDuration(peek())) {
+                duration = true;
             }
 
             // move to the next number part
@@ -312,6 +338,16 @@ public class Tokenizer {
 
         // get the value of the number
         String value = range(begin, cursor);
+
+        if (duration) {
+            if (value.isBlank() || !DURATION_PATTERN.matcher(value).matches()) {
+                syntaxError(Errno.INVALID_DURATION_VALUE, "invalid duration value");
+                return makeToken(TokenType.UNEXPECTED);
+            }
+
+            return makeToken(TokenType.DURATION, value);
+        }
+
         return makeToken(integer ? TokenType.INT : TokenType.FLOAT, value);
     }
 
@@ -526,7 +562,7 @@ public class Tokenizer {
      * @param c the character to test
      * @return {@code true} if the character is numeric
      */
-    private boolean isNumber(char c) {
+    private boolean isNumberStart(char c) {
         return Character.isDigit(c);
     }
 
@@ -557,9 +593,10 @@ public class Tokenizer {
      * @return {@code true} if the character is a hexadecimal char
      */
     private boolean isHexValue(char c) {
+        c = lower(c);
         return switch (c) {
             case 'A', 'B', 'C', 'D', 'E', 'F' -> true;
-            default -> isNumber(c); // fall back to digit check
+            default -> isNumberStart(c); // fall back to digit check
         };
     }
 
@@ -577,6 +614,19 @@ public class Tokenizer {
     }
 
     /**
+     * Indicate, whether the specified character is a time duration part.
+     *
+     * @param c the character to test
+     * @return {@code ture} if the character is a duration char
+     */
+    private boolean isDuration(char c) {
+        return switch (c) {
+            case 'h', 'm', 's', 'µ', 'n' -> true;
+            default -> false;
+        };
+    }
+
+    /**
      * Indicate, whether the specified character is a content of a number.
      *
      * @param c the character to test
@@ -585,7 +635,7 @@ public class Tokenizer {
     private boolean isNumberContent(char c) {
         return switch (c) {
             case '.', '_' -> true;
-            default -> isHexValue(c);
+            default -> isHexValue(c) || isDuration(c);
         };
     }
 

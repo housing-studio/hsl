@@ -84,7 +84,7 @@ public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Met
      */
     public boolean isNumber() {
         return switch (type) {
-            case INT, FLOAT, HEXADECIMAL, BINARY -> true;
+            case INT, FLOAT, HEXADECIMAL, BINARY, DURATION -> true;
             default -> false;
         };
     }

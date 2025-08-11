@@ -18,7 +18,8 @@ public class Testing {
 
             const ERROR = 10
 
-            const SPAWN_LOC = Location::Custom(X + 1, Y - ERROR, Z - ERROR)
+            const SPAWN_LOC = Location::Custom(X - ERROR, Y - ERROR, Z - ERROR)
+            const LOOP_DUR = 1h30m
 
             fn foo() {
                 stat player msg = "hello"
@@ -40,8 +41,5 @@ public class Testing {
 
         for (Method method : game.methods().values())
             System.out.println(method.print());
-
-        String spawnLoc = game.constants().get("SPAWN_LOC").value().asConstantValue();
-        System.out.println(spawnLoc);
     }
 }

@@ -56,6 +56,11 @@ public enum Errno {
     UNKNOWN_VARIABLE(108),
 
     /**
+     * `UNKNOWN_VARIABLE` indicates, that a duration value has invalid format.
+     */
+    INVALID_DURATION_VALUE(109),
+
+    /**
      * `UNKNOWN_METHOD` indicates, that a method is being called that is not found.
      */
     UNKNOWN_METHOD(110);

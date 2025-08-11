@@ -26,7 +26,8 @@ public class LiteralParser extends ParserAlgorithm<Value> {
         // stat player name = "John Doe"
         //                    ^^^^^^^^^^ the literal token indicates, that a value is expected
         Token token = get(
-            TokenType.BOOL, TokenType.STRING, TokenType.INT, TokenType.FLOAT, TokenType.HEXADECIMAL, TokenType.BINARY
+            TokenType.BOOL, TokenType.STRING, TokenType.INT, TokenType.FLOAT, TokenType.HEXADECIMAL, TokenType.BINARY,
+            TokenType.DURATION
         );
         ConstantLiteral literal = new ConstantLiteral(token);
 

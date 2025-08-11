@@ -35,6 +35,11 @@ public enum TokenType {
     FLOAT,
 
     /**
+     * `DURATION` represents a signed 32-bit integer that stores time duration.
+     */
+    DURATION,
+
+    /**
      * `HEXADECIMAL` represents a hexadecimal number literal.
      * Example: {@code 0xFFFFF}
      */

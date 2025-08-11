@@ -33,6 +33,7 @@ public class TokenTransformer {
         Token.of(TokenType.INT),
         Token.of(TokenType.FLOAT),
         Token.of(TokenType.HEXADECIMAL),
+        Token.of(TokenType.DURATION),
         Token.of(TokenType.BOOL),
         Token.of(TokenType.NIL),
         Token.of(TokenType.EXPRESSION, "break"),
