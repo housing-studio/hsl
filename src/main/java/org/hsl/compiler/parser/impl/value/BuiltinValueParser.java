@@ -55,6 +55,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case "Enchant" -> { return parseEnchant(context); }
             case "Mode" -> { return parseMode(context); }
             case "Lobby" -> { return parseLobby(context); }
+            case "Sound" -> { return parseSound(context); }
             default -> {
                 context.syntaxError(type, "Invalid builtin type");
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
@@ -246,5 +247,20 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         }
 
         return new LobbyValue(wrapped);
+    }
+
+    private @NotNull Value parseSound(@NotNull ParserContext context) {
+        Token sound = get(TokenType.IDENTIFIER);
+        Sound wrapped = Stream.of(Sound.values())
+            .filter(v -> v.format().equals(sound.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(sound, "Invalid sound type");
+            throw new UnsupportedOperationException("Invalid sound type: " + sound);
+        }
+
+        return new SoundValue(wrapped);
     }
 }

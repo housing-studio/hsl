@@ -18,7 +18,8 @@ public enum Type {
     EFFECT,
     ENCHANT,
     MODE,
-    LOBBY;
+    LOBBY,
+    SOUND;
 
     public boolean isNumber() {
         return this == INT || this == FLOAT;
