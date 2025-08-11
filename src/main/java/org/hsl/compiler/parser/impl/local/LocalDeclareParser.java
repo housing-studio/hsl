@@ -3,6 +3,7 @@ package org.hsl.compiler.parser.impl.local;
 import org.hsl.compiler.ast.impl.local.LocalDeclare;
 import org.hsl.compiler.ast.impl.local.LocalDeclareAssign;
 import org.hsl.compiler.ast.impl.local.Variable;
+import org.hsl.compiler.token.Token;
 import org.hsl.std.type.Namespace;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.ast.impl.value.Value;
@@ -44,7 +45,7 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         // parse the local variable name
         // stat global msg: string
         //             ^^^ the name of the local variable
-        String name = get(TokenType.IDENTIFIER).value();
+        Token name = get(TokenType.IDENTIFIER);
 
         // parse the local variable type
         Type type = null; // if null, infer type

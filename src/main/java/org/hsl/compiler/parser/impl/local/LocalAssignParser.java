@@ -23,7 +23,7 @@ public class LocalAssignParser extends ParserAlgorithm<Node> {
         // resolve the name of the local variable
         // foo = "Bar"
         // ^^^ an IDENTIFIER token represents the target of the assignation
-        String name = get(TokenType.IDENTIFIER).value();
+        Token name = get(TokenType.IDENTIFIER);
 
         // handle the equals sign
         // val = 123

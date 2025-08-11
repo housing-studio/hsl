@@ -5,6 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
+import org.hsl.compiler.ast.builder.ActionBuilder;
+import org.hsl.compiler.token.Token;
+import org.hsl.export.action.Action;
+import org.hsl.export.action.impl.ChangeVariable;
+import org.hsl.std.type.Mode;
 import org.hsl.std.type.Namespace;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.ast.impl.value.Value;
@@ -16,9 +21,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.LOCAL_DECLARE_ASSIGN)
-public class LocalDeclareAssign extends Variable implements Printable {
+public class LocalDeclareAssign extends Variable implements Printable, ActionBuilder {
     private final @NotNull Namespace namespace;
-    private final @NotNull String name;
+    private final @NotNull Token name;
     private final @NotNull Type type;
     private final @NotNull Value value;
 
@@ -30,7 +35,22 @@ public class LocalDeclareAssign extends Variable implements Printable {
     @Override
     public @NotNull String print() {
         return Format.RED + "stat " + Format.LIGHT_YELLOW + namespace.name().toLowerCase() + " " +
-            Format.WHITE + name + Format.YELLOW + ": " + Format.RED + type.name().toLowerCase() +
+            Format.WHITE + name.value() + Format.YELLOW + ": " + Format.RED + type.name().toLowerCase() +
             Format.YELLOW + " = " + Format.WHITE + value.print();
+    }
+
+    /**
+     * Generate an {@link Action} based on the underlying node.
+     *
+     * @return the built action representing this node
+     */
+    @Override
+    public @NotNull Action build() {
+        return new ChangeVariable(namespace, name.value(), Mode.SET, value.asConstantValue(), false);
+    }
+
+    @Override
+    public @NotNull String name() {
+        return name.value();
     }
 }

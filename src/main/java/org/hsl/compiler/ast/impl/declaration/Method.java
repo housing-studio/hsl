@@ -6,11 +6,13 @@ import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
+import org.hsl.compiler.ast.builder.FunctionBuilder;
 import org.hsl.compiler.ast.impl.scope.Scope;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.debug.Format;
 import org.hsl.compiler.debug.Printable;
 import org.hsl.compiler.token.Token;
+import org.hsl.export.generic.Function;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -19,11 +21,22 @@ import java.util.List;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.METHOD)
-public class Method extends Node implements Printable {
+public class Method extends Node implements Printable, FunctionBuilder {
     private final @NotNull Token name;
     private final @NotNull Type returnType;
     private final List<Parameter> parameters;
     private final @NotNull Scope scope;
+
+    @Override
+    public @NotNull Function build() {
+        return new Function(
+            name.value(),
+            scope.build(),
+            null,
+            null,
+            null
+        );
+    }
 
     /**
      * Returns a string representation of the implementing class.

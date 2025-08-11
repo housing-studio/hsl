@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 public enum Namespace {
-    PLAYER("Player"),
-    TEAM("Team"),
-    GLOBAL("Global");
+    PLAYER("Player", "stat"),
+    TEAM("Team", "teamstat"),
+    GLOBAL("Global", "globalstat");
 
-    private final @NotNull String format;
+    private final @NotNull String format, prefix;
 }

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hsl.export.action.Action;
 import org.hsl.export.action.ActionType;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
+@ToString
 public class ChangeVariable implements Action {
     private final ActionType type = ActionType.CHANGE_VARIABLE;
 

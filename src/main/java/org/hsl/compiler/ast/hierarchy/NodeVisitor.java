@@ -48,14 +48,9 @@ public class NodeVisitor {
 
     /**
      * Initialize the lifecycle of each node in the node hierarchy.
-     *
-     * @param generator the LLVM code generation context
      */
-    public void initLifecycle(/*@NotNull Generator generator*/) {
+    public void initLifecycle() {
         visit(Node::init);
-        visit(node -> node.initTypes());
-        visit(node -> node.initMembers());
-        visit(node -> node.initUses());
     }
 
     /**

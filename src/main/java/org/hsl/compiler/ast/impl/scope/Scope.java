@@ -6,15 +6,19 @@ import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
+import org.hsl.compiler.ast.builder.ActionBuilder;
+import org.hsl.compiler.ast.builder.ActionListBuilder;
 import org.hsl.compiler.ast.hierarchy.Children;
 import org.hsl.compiler.ast.hierarchy.NodeVisitor;
 import org.hsl.compiler.ast.hierarchy.Parent;
 import org.hsl.compiler.ast.impl.declaration.Method;
+import org.hsl.compiler.ast.impl.local.Variable;
+import org.hsl.export.action.Action;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Represents a block in the source code that contains a list of instructions.
@@ -25,7 +29,7 @@ import java.util.Optional;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.SCOPE)
-public class Scope extends ScopeContainer {
+public class Scope extends ScopeContainer implements ActionListBuilder {
     /**
      * The list of instructions that are associated with the scope.
      */
@@ -40,31 +44,15 @@ public class Scope extends ScopeContainer {
     @Parent
     private @Nullable ScopeContainer parent;
 
-    /**
-     * Generate the LLVM IR code for this node, that will be put into the parent scope instruction set.
-     * <p>
-     * This method should return {@link Optional#empty()}, if the parent node should not use the result of this node.
-     *
-     * @param generator the generation context to use for the code generation
-     * @return the LLVM IR value representing the result of the node, that is empty if the result is not used
-     */
-    /*
-    public @NotNull Optional<@NotNull IRValue> codegen(@NotNull Generator generator) {
-        IRFunction function = generator.function();
-        if (function == null)
-            throw new IllegalStateException("Cannot create a scope outside a function");
-
-        // create a new block for the scope
-        IRBlock block = IRBlock.create(generator.context(), function, "scope");
-        generator.builder().positionAtEnd(block);
-
-        // generate the LLVM instructions for the statements
-        for (Node statement : statements)
-            statement.codegen(generator);
-
-        return Optional.empty();
+    @Override
+    public @NotNull List<Action> build() {
+        List<Action> actions = new ArrayList<>();
+        for (Node statement : statements) {
+            if (statement instanceof ActionBuilder builder)
+                actions.add(builder.build());
+        }
+        return actions;
     }
-     */
 
     /**
      * Resolve a local variable or a global constant by its specified name.
@@ -77,7 +65,6 @@ public class Scope extends ScopeContainer {
      * @param name the name of the variable or constant to resolve
      * @return the value of the variable or constant, or {@code null} if the name is not found
      */
-    /*
     @Override
     public @Nullable Variable resolveName(@NotNull String name) {
         // try to resolve the value from this scope
@@ -87,7 +74,6 @@ public class Scope extends ScopeContainer {
         }
         return parent != null ? parent.resolveName(name) : null;
     }
-    */
 
     /**
      * Retrieve the parent scope of this scope.

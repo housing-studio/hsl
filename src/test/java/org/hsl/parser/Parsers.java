@@ -1,6 +1,7 @@
 package org.hsl.parser;
 
 import lombok.experimental.UtilityClass;
+import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.parser.AstParser;
 import org.hsl.compiler.parser.ParserContext;
 import org.hsl.compiler.token.Token;
@@ -14,6 +15,7 @@ public class Parsers {
     public @NotNull AstParser of(@NotNull String source) {
         List<Token> tokens = Tokenizers.tokenizeSource(source);
         ParserContext context = new ParserContext(tokens, source);
+        Node.context(context);
 
         return new AstParser(context);
     }
