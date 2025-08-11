@@ -1,11 +1,16 @@
 package org.hsl.parser;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.hierarchy.NodeVisitor;
 import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.hsl.compiler.ast.impl.declaration.Method;
+import org.hsl.compiler.debug.Format;
 import org.hsl.compiler.parser.AstParser;
+import org.hsl.export.Exporter;
+import org.hsl.export.House;
 import org.hsl.export.action.Action;
 import org.hsl.export.generic.Function;
 
@@ -43,5 +48,10 @@ public class Testing {
 
         for (Action action : build.actions())
             System.out.println(action);
+
+        House export = Exporter.export(game);
+        String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);
+        System.out.println(Format.WHITE);
+        System.out.println(json);
     }
 }

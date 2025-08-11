@@ -20,7 +20,7 @@ import java.util.Map;
 @Getter
 public class House {
     private @NotNull Map<EventType, List<Action>> events;
-    private @NotNull Map<String, Function> functions;
-    private @NotNull Map<String, Command> commands;
-    private @NotNull Map<String, Region> regions;
+    private @NotNull List<Function> functions;
+    private @NotNull List<Command> commands;
+    private @NotNull List<Region> regions;
 }

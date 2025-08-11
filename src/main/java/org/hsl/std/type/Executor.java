@@ -1,6 +1,6 @@
 package org.hsl.std.type;
 
-public enum Argument {
+public enum Executor {
     Self,
     Targeted
 }

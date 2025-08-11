@@ -18,14 +18,38 @@ import java.util.Map;
 @Accessors(fluent = true)
 @Getter
 public class Region {
-    private @NotNull Vector from, to;
+    /**
+     * The unique name of the region.
+     */
+    private @NotNull String name;
 
+    /**
+     * The pos1 selection of the region area.
+     */
+    private @NotNull Vector from;
+
+    /**
+     * The pos2 selection of the region area.
+     */
+    private @NotNull Vector to;
+
+    /**
+     * The overridden settings of the region.
+     */
     @SerializedName("pvp-settings")
     private @NotNull Map<Flag, Boolean> pvpSettings;
 
+    /**
+     * The list of actions to invoke upon region entry.
+     * <p>
+     * These may not trigger when teleporting into region.
+     */
     @SerializedName("entry-actions")
     private @NotNull List<Action> entryActions;
 
+    /**
+     * The list of actions to invoke upon region exit.
+     */
     @SerializedName("exit-actions")
     private @NotNull List<Action> exitActions;
 }
