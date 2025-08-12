@@ -42,10 +42,10 @@ public class Method extends Node implements Printable, FunctionBuilder {
     }
 
     @Override
-    public @NotNull Function build() {
+    public @NotNull Function buildFunction() {
         return new Function(
             name.value(),
-            scope.build(),
+            scope.buildActionList(),
             resolveDescription(),
             resolveIcon(),
             resolveAutomaticExecution()

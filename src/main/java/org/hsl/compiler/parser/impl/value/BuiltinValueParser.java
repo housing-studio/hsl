@@ -45,6 +45,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         switch (type.value()) {
             case "Location" -> { return parseLocation(parser, context); }
+            case "Vector" -> { return parseVector(parser, context); }
             case "Slot" -> { return parseSlot(parser, context); }
             case "GameMode" -> { return parseGameMode(context); }
             case "Target" -> { return parseTarget(context); }
@@ -114,6 +115,18 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         };
 
         return new LocationValue(value);
+    }
+
+    public @NotNull Value parseVector(@NotNull AstParser parser, @NotNull ParserContext context) {
+        get(TokenType.IDENTIFIER);
+        get(TokenType.LPAREN);
+        Value x = parser.nextValue();
+        get(TokenType.COMMA);
+        Value y = parser.nextValue();
+        get(TokenType.COMMA);
+        Value z = parser.nextValue();
+        get(TokenType.RPAREN);
+        return new VectorValue(new Vector(x, y, z));
     }
 
     private @NotNull Value parseGameMode(@NotNull ParserContext context) {

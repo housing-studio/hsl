@@ -24,7 +24,7 @@ public class Exporter {
         List<Region> regions = new ArrayList<>();
 
         for (Method method : game.methods().values())
-            functions.add(method.build());
+            functions.add(method.buildFunction());
 
         return new House(events, functions, commands, regions);
     }

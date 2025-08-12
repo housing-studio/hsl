@@ -45,7 +45,7 @@ public class LocalDeclareAssign extends Variable implements Printable, ActionBui
      * @return the built action representing this node
      */
     @Override
-    public @NotNull Action build() {
+    public @NotNull Action buildAction() {
         return new ChangeVariable(namespace, name.value(), Mode.SET, value.asConstantValue(), false);
     }
 

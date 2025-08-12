@@ -13,6 +13,7 @@ import org.hsl.compiler.ast.impl.scope.Scope;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.ast.impl.value.Annotation;
 import org.hsl.compiler.ast.impl.value.Argument;
+import org.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.impl.annotation.AnnotationParser;
 import org.hsl.compiler.parser.impl.declaration.ConstantParser;
@@ -82,6 +83,10 @@ public class AstParser {
 
     public @NotNull Value nextConstantAccess() {
         return parse(ConstantAccessParser.class, Value.class);
+    }
+
+    public @NotNull Value nextMethodCall() {
+        return parse(MethodCallParser.class, Value.class);
     }
 
     @SuppressWarnings("unchecked")

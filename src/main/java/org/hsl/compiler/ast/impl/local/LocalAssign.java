@@ -33,7 +33,7 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
      * @return the built action representing this node
      */
     @Override
-    public @NotNull Action build() {
+    public @NotNull Action buildAction() {
         Variable variable = resolveName(name.value());
         if (variable == null) {
             context.syntaxError(name, "Cannot find variable");

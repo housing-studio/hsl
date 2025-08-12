@@ -7,6 +7,7 @@ public enum Type {
     STRING,
     BOOL,
     ANY,
+    NIL,
 
     SLOT,
     LOCATION,
@@ -21,7 +22,8 @@ public enum Type {
     LOBBY,
     SOUND,
     FLAG,
-    MATERIAL;
+    MATERIAL,
+    VECTOR;
 
     public boolean isNumber() {
         return this == INT || this == FLOAT;

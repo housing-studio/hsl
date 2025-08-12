@@ -130,4 +130,20 @@ public class ConstantLiteral extends Value implements Printable {
 
         return (int) Long.parseLong(bin, 2); // parse as base 2
     }
+
+    public static @NotNull ConstantLiteral ofInt(int value) {
+        return new ConstantLiteral(Token.of(TokenType.INT, String.valueOf(value)));
+    }
+
+    public static @NotNull ConstantLiteral ofBool(boolean value) {
+        return new ConstantLiteral(Token.of(TokenType.BOOL, String.valueOf(value)));
+    }
+
+    public static @NotNull ConstantLiteral ofString(String value) {
+        return new ConstantLiteral(Token.of(TokenType.STRING, String.valueOf(value)));
+    }
+
+    public static @NotNull ConstantLiteral ofFloat(float value) {
+        return new ConstantLiteral(Token.of(TokenType.FLOAT, String.valueOf(value)));
+    }
 }

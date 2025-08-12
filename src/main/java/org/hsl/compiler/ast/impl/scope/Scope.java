@@ -30,6 +30,8 @@ import java.util.List;
 @Getter
 @NodeInfo(type = NodeType.SCOPE)
 public class Scope extends ScopeContainer implements ActionListBuilder {
+    public static final Scope EMPTY = new Scope(new ArrayList<>());
+
     /**
      * The list of instructions that are associated with the scope.
      */
@@ -45,11 +47,11 @@ public class Scope extends ScopeContainer implements ActionListBuilder {
     private @Nullable ScopeContainer parent;
 
     @Override
-    public @NotNull List<Action> build() {
+    public @NotNull List<Action> buildActionList() {
         List<Action> actions = new ArrayList<>();
         for (Node statement : statements) {
             if (statement instanceof ActionBuilder builder)
-                actions.add(builder.build());
+                actions.add(builder.buildAction());
         }
         return actions;
     }

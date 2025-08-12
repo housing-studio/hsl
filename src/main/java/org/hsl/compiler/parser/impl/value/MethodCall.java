@@ -28,7 +28,7 @@ public class MethodCall extends Value {
     /**
      * The list of arguments to pass to the method.
      */
-    private final @NotNull List<@NotNull Argument> arguments;
+    private final @NotNull List<Argument> arguments;
 
     /**
      * Retrieve the type of the held value. This result will be used to inter types for untyped variables.
