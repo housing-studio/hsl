@@ -3,6 +3,7 @@ package org.hsl.compiler.parser.impl.declaration;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.scope.Scope;
 import org.hsl.compiler.ast.impl.type.Type;
+import org.hsl.compiler.ast.impl.value.Annotation;
 import org.hsl.compiler.parser.AstParser;
 import org.hsl.compiler.parser.ParserAlgorithm;
 import org.hsl.compiler.parser.ParserContext;
@@ -59,7 +60,8 @@ public class MethodParser extends ParserAlgorithm<Method> {
         }
 
         Scope scope = parser.nextScope();
-
-        return new Method(name, returnType, new ArrayList<>(), scope);
+        ArrayList<Annotation> annotations = new ArrayList<>(context.currentAnnotations());
+        context.currentAnnotations().clear();
+        return new Method(annotations, name, returnType, new ArrayList<>(), scope);
     }
 }

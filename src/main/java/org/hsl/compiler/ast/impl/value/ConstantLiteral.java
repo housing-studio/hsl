@@ -57,6 +57,10 @@ public class ConstantLiteral extends Value implements Printable {
         String value = token.value();
         if (token.type() == TokenType.DURATION)
             value = Long.toString(durationToTicks(value));
+        else if (token.type() == TokenType.HEXADECIMAL)
+            value = Long.toString(hexStringToInt(value));
+        else if (token.type() == TokenType.BINARY)
+            value = Long.toString(binaryStringToInt(value));
         return value;
     }
 
@@ -73,7 +77,7 @@ public class ConstantLiteral extends Value implements Printable {
         return str;
     }
 
-    public long durationToTicks(String input) {
+    public static long durationToTicks(String input) {
         if (input == null || input.isEmpty())
             throw new IllegalArgumentException("Duration string cannot be null or empty");
 
@@ -103,5 +107,27 @@ public class ConstantLiteral extends Value implements Printable {
 
         // Convert nanoseconds → seconds → ticks
         return totalNanos / 50_000_000L; // 1 tick = 50ms = 50,000,000 ns
+    }
+
+    public static int hexStringToInt(String hex) {
+        if (hex == null)
+            throw new IllegalArgumentException("Input cannot be null");
+
+        hex = hex.trim();
+        if (hex.startsWith("0x") || hex.startsWith("0X"))
+            hex = hex.substring(2); // remove the "0x" prefix
+
+        return (int) Long.parseLong(hex, 16); // use long to avoid overflow, cast back to int
+    }
+
+    public static int binaryStringToInt(String bin) {
+        if (bin == null)
+            throw new IllegalArgumentException("Input cannot be null");
+
+        bin = bin.trim();
+        if (bin.startsWith("0b") || bin.startsWith("0B"))
+            bin = bin.substring(2); // remove "0b" prefix
+
+        return (int) Long.parseLong(bin, 2); // parse as base 2
     }
 }

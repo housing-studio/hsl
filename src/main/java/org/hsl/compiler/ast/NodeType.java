@@ -29,6 +29,8 @@ public enum NodeType {
     METHOD,
     GAME,
 
+    ANNOTATION,
+
     EMPTY,
     ERROR,
     EOF

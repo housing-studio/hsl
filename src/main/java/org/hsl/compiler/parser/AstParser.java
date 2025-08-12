@@ -11,8 +11,10 @@ import org.hsl.compiler.ast.impl.local.Variable;
 import org.hsl.compiler.ast.impl.operator.Operator;
 import org.hsl.compiler.ast.impl.scope.Scope;
 import org.hsl.compiler.ast.impl.type.Type;
+import org.hsl.compiler.ast.impl.value.Annotation;
 import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.ast.impl.value.Value;
+import org.hsl.compiler.parser.impl.annotation.AnnotationParser;
 import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
 import org.hsl.compiler.parser.impl.local.LocalAssignParser;
@@ -95,6 +97,10 @@ public class AstParser {
         return parse(OperatorParser.class, Operator.class);
     }
 
+    public @NotNull Annotation nextAnnotation() {
+        return parse(AnnotationParser.class, Annotation.class);
+    }
+
     public @NotNull Value nextBinaryOperation(@NotNull Value lhs, @NotNull Operator operator, @NotNull Value rhs) {
         return BinaryOperatorTree.makeBinaryOperator(lhs, operator, rhs);
     }
@@ -112,7 +118,7 @@ public class AstParser {
                 game.methods().put(method.name().value(), method);
             }
 
-            if (context.peek().is(TokenType.EXPRESSION, "const")) {
+            else if (context.peek().is(TokenType.EXPRESSION, "const")) {
                 ConstantDeclare constant = nextConstant();
 
                 if (game.constants().containsKey(constant.name().value())) {
@@ -121,6 +127,24 @@ public class AstParser {
                 }
 
                 game.constants().put(constant.name().value(), constant);
+            }
+
+            else if (context.peek().is(TokenType.ANNOTATION)) {
+                Annotation annotation = nextAnnotation();
+
+                if (
+                    context.currentAnnotations().stream().anyMatch(a -> a.name().value().equals(annotation.name().value()))
+                ) {
+                    context.syntaxError(annotation.name(), "Annotation name is already in use");
+                    throw new UnsupportedOperationException("Annotation name is already in use: " + annotation.name().value());
+                }
+
+                context.currentAnnotations().add(annotation);
+            }
+
+            else {
+                context.syntaxError(context.peek(), "Expected declaration");
+                throw new UnsupportedOperationException("Expected declaration but got " + context.peek());
             }
         }
     }

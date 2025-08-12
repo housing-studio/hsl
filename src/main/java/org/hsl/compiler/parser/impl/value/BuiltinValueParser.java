@@ -57,6 +57,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case "Lobby" -> { return parseLobby(context); }
             case "Sound" -> { return parseSound(context); }
             case "Flag" -> { return parseFlag(context); }
+            case "Material" -> { return parseMaterial(context); }
             default -> {
                 context.syntaxError(type, "Invalid builtin type");
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
@@ -278,5 +279,20 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         }
 
         return new FlagValue(wrapped);
+    }
+
+    private @NotNull Value parseMaterial(@NotNull ParserContext context) {
+        Token material = get(TokenType.IDENTIFIER);
+        Material wrapped = Stream.of(Material.values())
+            .filter(v -> v.format().equals(material.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(material, "Invalid material type");
+            throw new UnsupportedOperationException("Invalid material type: " + material);
+        }
+
+        return new MaterialValue(wrapped);
     }
 }

@@ -35,6 +35,11 @@ public class ConstantParser extends ParserAlgorithm<ConstantDeclare> {
         if (peek().is(TokenType.SEMICOLON))
             get();
 
+        if (!context.currentAnnotations().isEmpty()) {
+            context.syntaxError(context.currentAnnotations().getFirst().name(), "Annotations not allowed for constants");
+            throw new UnsupportedOperationException("Annotations not allowed for constants");
+        }
+
         return new ConstantDeclare(name, value);
     }
 }

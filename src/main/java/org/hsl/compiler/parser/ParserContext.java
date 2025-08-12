@@ -3,10 +3,13 @@ package org.hsl.compiler.parser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.hsl.compiler.ast.Node;
+import org.hsl.compiler.ast.impl.value.Annotation;
 import org.hsl.compiler.debug.Format;
 import org.hsl.compiler.token.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -21,6 +24,12 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 public class ParserContext {
+    /**
+     * The list of annotations that are declared by a type/function definition.
+     */
+    @Getter
+    private final List<Annotation> currentAnnotations = new ArrayList<>();
+
     /**
      * The list of tokens received by the {@link Tokenizer}, to be parsed to a tree of {@link Node}s.
      */

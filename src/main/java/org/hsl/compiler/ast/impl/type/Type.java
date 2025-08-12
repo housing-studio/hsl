@@ -20,7 +20,8 @@ public enum Type {
     MODE,
     LOBBY,
     SOUND,
-    FLAG;
+    FLAG,
+    MATERIAL;
 
     public boolean isNumber() {
         return this == INT || this == FLOAT;
