@@ -39,6 +39,14 @@ public class Method extends Node implements Printable, FunctionBuilder {
      */
     @Override
     public void init() {
+        for (Annotation annotation : annotations) {
+            if (!annotation.isAllowedForFunctions()) {
+                context.syntaxError(annotation.name(), "This annotation is not allowed in functions");
+                throw new UnsupportedOperationException(
+                    "Annotation `%s` is not allowed in functions".formatted(annotation.name().value())
+                );
+            }
+        }
     }
 
     @Override

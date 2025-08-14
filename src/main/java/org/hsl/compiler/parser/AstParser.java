@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.Node;
+import org.hsl.compiler.ast.impl.declaration.CommandNode;
 import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.local.Variable;
@@ -16,6 +17,7 @@ import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.impl.annotation.AnnotationParser;
+import org.hsl.compiler.parser.impl.declaration.CommandParser;
 import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
 import org.hsl.compiler.parser.impl.local.LocalAssignParser;
@@ -51,6 +53,10 @@ public class AstParser {
 
     public @NotNull Method nextMethod() {
         return parse(MethodParser.class, Method.class);
+    }
+
+    public @NotNull CommandNode nextCommand() {
+        return parse(CommandParser.class, CommandNode.class);
     }
 
     public @NotNull Scope nextScope() {
@@ -115,12 +121,23 @@ public class AstParser {
             if (context.peek().is(TokenType.EXPRESSION, "fn")) {
                 Method method = nextMethod();
 
-                if (game.methods().containsKey(method.name().value())) {
+                if (game.functions().containsKey(method.name().value())) {
                     context.syntaxError(method.name(), "Method name is already in use");
                     throw new UnsupportedOperationException("Method name is already in use: " + method.name().value());
                 }
 
-                game.methods().put(method.name().value(), method);
+                game.functions().put(method.name().value(), method);
+            }
+
+            else if (context.peek().is(TokenType.EXPRESSION, "command")) {
+                CommandNode command = nextCommand();
+
+                if (game.commands().containsKey(command.name().value())) {
+                    context.syntaxError(command.name(), "Command name is already in use");
+                    throw new UnsupportedOperationException("Command name is already in use: " + command.name().value());
+                }
+
+                game.commands().put(command.name().value(), command);
             }
 
             else if (context.peek().is(TokenType.EXPRESSION, "const")) {
@@ -148,7 +165,7 @@ public class AstParser {
             }
 
             else {
-                context.syntaxError(context.peek(), "Expected declaration");
+                context.syntaxError(context.peek(), "Expected declaration, got " + context.peek());
                 throw new UnsupportedOperationException("Expected declaration but got " + context.peek());
             }
         }

@@ -25,6 +25,10 @@ public class Testing {
                 changeVariable(Namespace::Player, "kills", Mode::Increment)
                 chat("hello")
             }
+
+            command abc() {
+                chat("hello")
+            }
             """;
 
         BuiltinActions.init();
@@ -40,7 +44,7 @@ public class Testing {
         for (ConstantDeclare constant : game.constants().values())
             System.out.println(constant.print());
 
-        for (Method method : game.methods().values())
+        for (Method method : game.functions().values())
             System.out.println(method.print());
 
         House export = Exporter.export(game);

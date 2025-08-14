@@ -6,8 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.impl.value.Argument;
+import org.hsl.export.action.Action;
+import org.hsl.std.type.Executor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,9 +24,14 @@ public class Command {
     private @NotNull String name;
 
     /**
+     * The actions to be executed when the command is invoked.
+     */
+    private @NotNull List<Action> actions;
+
+    /**
      * The target player of the command to execute against.
      */
-    private @NotNull Argument argument;
+    private @NotNull Executor executor;
 
     /**
      * Change the required priority so only players in a group with a priority equal or higher can use the command.

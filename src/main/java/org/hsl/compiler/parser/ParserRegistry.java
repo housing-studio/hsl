@@ -3,6 +3,7 @@ package org.hsl.compiler.parser;
 import lombok.experimental.UtilityClass;
 import org.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.hsl.compiler.parser.impl.annotation.AnnotationParser;
+import org.hsl.compiler.parser.impl.declaration.CommandParser;
 import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
 import org.hsl.compiler.parser.impl.local.LocalAssignParser;
@@ -30,6 +31,7 @@ public class ParserRegistry {
     static {
         Class<?>[] parsers = {
             MethodParser.class,
+            CommandParser.class,
             ScopeParser.class,
             StatementParser.class,
             LiteralParser.class,

@@ -59,6 +59,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case "Sound" -> { return parseSound(context); }
             case "Flag" -> { return parseFlag(context); }
             case "Material" -> { return parseMaterial(context); }
+            case "Executor" -> { return parseExecutor(context); }
             default -> {
                 context.syntaxError(type, "Invalid builtin type");
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
@@ -307,5 +308,20 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         }
 
         return new MaterialValue(wrapped);
+    }
+
+    private @NotNull Value parseExecutor(@NotNull ParserContext context) {
+        Token executor = get(TokenType.IDENTIFIER);
+        Executor wrapped = Stream.of(Executor.values())
+            .filter(v -> v.format().equals(executor.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(executor, "Invalid executor type");
+            throw new UnsupportedOperationException("Invalid executor type: " + executor);
+        }
+
+        return new ExecutorValue(wrapped);
     }
 }

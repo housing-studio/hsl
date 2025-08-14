@@ -2,6 +2,7 @@ package org.hsl.compiler.ast;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.hsl.compiler.ast.impl.declaration.CommandNode;
 import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.hsl.compiler.ast.impl.declaration.Method;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 @Accessors(fluent = true)
 @Getter
 public class Game extends Node {
-    private final Map<String, Method> methods = new LinkedHashMap<>();
+    private final Map<String, Method> functions = new LinkedHashMap<>();
+    private final Map<String, CommandNode> commands = new LinkedHashMap<>();
     private final Map<String, ConstantDeclare> constants = new LinkedHashMap<>();
 }

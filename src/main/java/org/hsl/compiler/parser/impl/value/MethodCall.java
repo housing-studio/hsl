@@ -11,16 +11,11 @@ import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.declaration.Parameter;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.ast.impl.value.Argument;
-import org.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.hsl.compiler.ast.impl.value.Value;
-import org.hsl.compiler.ast.impl.value.builtin.ModeValue;
-import org.hsl.compiler.ast.impl.value.builtin.NamespaceValue;
 import org.hsl.compiler.parser.impl.action.ActionArgs;
 import org.hsl.compiler.parser.impl.action.ActionCodec;
 import org.hsl.compiler.token.Token;
 import org.hsl.export.action.Action;
-import org.hsl.export.action.impl.ChangeVariable;
-import org.hsl.std.type.Mode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -51,7 +46,7 @@ public class MethodCall extends Value implements ActionBuilder {
     public @NotNull Type getValueType() {
         Method method = BuiltinActions.LOOKUP.get(name.value());
         if (method == null)
-            method = game.methods().get(name.value());
+            method = game.functions().get(name.value());
 
         if (method == null) {
             context.syntaxError(name, "Method not found: `%s`".formatted(name.value()));
@@ -88,7 +83,7 @@ public class MethodCall extends Value implements ActionBuilder {
     public @NotNull Action buildAction() {
         Method method = BuiltinActions.LOOKUP.get(name.value());
         if (method == null)
-            method = game.methods().get(name.value());
+            method = game.functions().get(name.value());
 
         if (method == null) {
             context.syntaxError(name, "Method not found: `%s`".formatted(name.value()));

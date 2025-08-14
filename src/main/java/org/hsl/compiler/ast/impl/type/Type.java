@@ -23,7 +23,8 @@ public enum Type {
     SOUND,
     FLAG,
     MATERIAL,
-    VECTOR;
+    VECTOR,
+    EXECUTOR;
 
     public boolean isNumber() {
         return this == INT || this == FLOAT;

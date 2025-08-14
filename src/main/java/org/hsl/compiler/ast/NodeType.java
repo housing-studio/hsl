@@ -27,6 +27,7 @@ public enum NodeType {
 
     ARGUMENT,
     METHOD,
+    COMMAND,
     GAME,
 
     ANNOTATION,

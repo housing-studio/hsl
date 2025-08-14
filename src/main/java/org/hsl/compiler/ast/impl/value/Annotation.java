@@ -6,6 +6,9 @@ import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
+import org.hsl.compiler.ast.impl.annotation.DescriptionAnnotation;
+import org.hsl.compiler.ast.impl.annotation.IconAnnotation;
+import org.hsl.compiler.ast.impl.annotation.LoopAnnotation;
 import org.hsl.compiler.debug.Printable;
 import org.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
@@ -26,5 +29,9 @@ public class Annotation extends Node implements Printable {
     @Override
     public @NotNull String print() {
         return "@" + name.value() + "(" + value.print() + ")";
+    }
+
+    public boolean isAllowedForFunctions() {
+        return this instanceof DescriptionAnnotation || this instanceof IconAnnotation || this instanceof LoopAnnotation;
     }
 }

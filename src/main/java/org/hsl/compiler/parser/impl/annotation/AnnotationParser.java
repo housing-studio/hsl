@@ -1,10 +1,8 @@
 package org.hsl.compiler.parser.impl.annotation;
 
+import org.hsl.compiler.ast.impl.annotation.*;
 import org.hsl.compiler.ast.impl.value.Annotation;
 import org.hsl.compiler.ast.impl.value.Value;
-import org.hsl.compiler.ast.impl.annotation.DescriptionAnnotation;
-import org.hsl.compiler.ast.impl.annotation.IconAnnotation;
-import org.hsl.compiler.ast.impl.annotation.LoopAnnotation;
 import org.hsl.compiler.parser.AstParser;
 import org.hsl.compiler.parser.ParserAlgorithm;
 import org.hsl.compiler.parser.ParserContext;
@@ -39,6 +37,9 @@ public class AnnotationParser extends ParserAlgorithm<Annotation> {
             case "description" -> new DescriptionAnnotation(name, value);
             case "loop" -> new LoopAnnotation(name, value);
             case "icon" -> new IconAnnotation(name, value);
+            case "executor" -> new ExecutorAnnotation(name, value);
+            case "priority" -> new PriorityAnnotation(name, value);
+            case "listed" -> new ListedAnnotation(name, value);
             default -> new Annotation(name, value);
         };
     }
