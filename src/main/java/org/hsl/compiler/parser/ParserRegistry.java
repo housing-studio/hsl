@@ -5,6 +5,7 @@ import org.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.hsl.compiler.parser.impl.annotation.AnnotationParser;
 import org.hsl.compiler.parser.impl.declaration.CommandParser;
 import org.hsl.compiler.parser.impl.declaration.ConstantParser;
+import org.hsl.compiler.parser.impl.declaration.EventParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
 import org.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
@@ -32,6 +33,7 @@ public class ParserRegistry {
         Class<?>[] parsers = {
             MethodParser.class,
             CommandParser.class,
+            EventParser.class,
             ScopeParser.class,
             StatementParser.class,
             LiteralParser.class,

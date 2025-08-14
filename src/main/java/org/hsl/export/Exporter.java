@@ -3,6 +3,7 @@ package org.hsl.export;
 import lombok.experimental.UtilityClass;
 import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.impl.declaration.CommandNode;
+import org.hsl.compiler.ast.impl.declaration.Event;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.export.action.Action;
 import org.hsl.export.generic.Command;
@@ -29,6 +30,14 @@ public class Exporter {
 
         for (CommandNode value : game.commands().values())
             commands.add(value.buildCommand());
+
+        for (List<Event> eventList : game.events().values()) {
+            for (Event event : eventList) {
+                events
+                    .computeIfAbsent(event.type(), k -> new ArrayList<>())
+                    .addAll(event.buildActionList());
+            }
+        }
 
         return new House(events, functions, commands, regions);
     }

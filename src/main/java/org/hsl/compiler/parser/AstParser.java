@@ -7,6 +7,7 @@ import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.impl.declaration.CommandNode;
 import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
+import org.hsl.compiler.ast.impl.declaration.Event;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.local.Variable;
 import org.hsl.compiler.ast.impl.operator.Operator;
@@ -19,6 +20,7 @@ import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.impl.annotation.AnnotationParser;
 import org.hsl.compiler.parser.impl.declaration.CommandParser;
 import org.hsl.compiler.parser.impl.declaration.ConstantParser;
+import org.hsl.compiler.parser.impl.declaration.EventParser;
 import org.hsl.compiler.parser.impl.declaration.MethodParser;
 import org.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.hsl.compiler.parser.impl.local.LocalDeclareParser;
@@ -30,6 +32,7 @@ import org.hsl.compiler.parser.impl.value.*;
 import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,6 +60,10 @@ public class AstParser {
 
     public @NotNull CommandNode nextCommand() {
         return parse(CommandParser.class, CommandNode.class);
+    }
+
+    public @NotNull Event nextEvent() {
+        return parse(EventParser.class, Event.class);
     }
 
     public @NotNull Scope nextScope() {
@@ -138,6 +145,12 @@ public class AstParser {
                 }
 
                 game.commands().put(command.name().value(), command);
+            }
+
+            else if (context.peek().is(TokenType.EXPRESSION, "event")) {
+                Event event = nextEvent();
+
+                game.events().computeIfAbsent(event.type(), t -> new ArrayList<>()).add(event);
             }
 
             else if (context.peek().is(TokenType.EXPRESSION, "const")) {

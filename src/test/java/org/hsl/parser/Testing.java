@@ -21,13 +21,20 @@ public class Testing {
             @description("hello world")
             @loop(1s)
             @icon(Material::Stone)
-            fn foo() {
+            fn example() {
                 changeVariable(Namespace::Player, "kills", Mode::Increment)
                 chat("hello")
             }
 
-            command abc() {
+            @executor(Executor::Targeted)
+            @priority(3)
+            @listed(false)
+            command example() {
                 chat("hello")
+            }
+
+            event join() {
+                chat("foo")
             }
             """;
 
