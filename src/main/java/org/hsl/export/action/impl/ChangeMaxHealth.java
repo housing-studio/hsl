@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.export.action.Action;
 import org.hsl.export.action.ActionType;
+import org.hsl.std.type.Mode;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,5 +19,8 @@ public class ChangeMaxHealth implements Action {
     @SerializedName("max-health")
     private int maxHealth;
 
+    private Mode mode;
 
+    @SerializedName("heal-on-change")
+    private boolean healOnChange;
 }

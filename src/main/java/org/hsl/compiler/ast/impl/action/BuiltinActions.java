@@ -20,9 +20,55 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @UtilityClass
 public class BuiltinActions {
+    public final Map<String, Method> LOOKUP = new HashMap<>();
+
+    public void init() {
+        // TODO conditional
+        LOOKUP.put("setGroup", SET_GROUP);
+        LOOKUP.put("kill", KILL);
+        LOOKUP.put("heal", HEAL);
+        LOOKUP.put("title", TITLE);
+        LOOKUP.put("actionbar", ACTIONBAR);
+        LOOKUP.put("resetInventory", RESET_INVENTORY);
+        LOOKUP.put("changeMaxHealth", CHANGE_MAX_HEALTH);
+        LOOKUP.put("parkourCheckpoint", PARKOUR_CHECKPOINT);
+        LOOKUP.put("giveItem", GIVE_ITEM);
+        LOOKUP.put("removeItem", REMOVE_ITEM);
+        LOOKUP.put("chat", CHAT);
+        LOOKUP.put("addEffect", ADD_EFFECT);
+        LOOKUP.put("clearEffects", CLEAR_EFFECTS);
+        LOOKUP.put("addExperience", ADD_EXPERIENCE);
+        LOOKUP.put("sendToLobby", SEND_TO_LOBBY);
+        LOOKUP.put("changeVariable", CHANGE_VARIABLE);
+        LOOKUP.put("teleport", TELEPORT);
+        LOOKUP.put("failParkour", FAIL_PARKOUR);
+        LOOKUP.put("playSound", PLAY_SOUND);
+        LOOKUP.put("setCompassTarget", SET_COMPASS_TARGET);;
+        LOOKUP.put("setGameMode", SET_GAME_MODE);
+        LOOKUP.put("changeHealth", CHANGE_HEALTH);
+        LOOKUP.put("changeHunger", CHANGE_HUNGER);
+        // TODO random action
+        LOOKUP.put("triggerFunction", TRIGGER_FUNCTION);
+        LOOKUP.put("applyInventoryLayout", APPLY_INVENTORY_LAYOUT);
+        LOOKUP.put("enchantHeldItem", ENCHANT_HELD_ITEM);
+        LOOKUP.put("sleep", SLEEP);
+        LOOKUP.put("setTeam", SET_TEAM);
+        LOOKUP.put("dropItem", DROP_ITEM);
+        LOOKUP.put("changeVelocity", CHANGE_VELOCITY);
+        LOOKUP.put("launchToTarget", LAUNCH_TO_TARGET);
+        LOOKUP.put("setPlayerWeather", SET_PLAYER_WEATHER);
+        LOOKUP.put("setPlayerTime", SET_PLAYER_TIME);
+        LOOKUP.put("toggleNameTagDisplay", TOGGLE_NAME_TAG_DISPLAY);
+        LOOKUP.put("cancelEvent", CANCEL_EVENT);
+        LOOKUP.put("openMenu", OPEN_MENU);
+        LOOKUP.put("closeMenu", CLOSE_MENU);
+    }
+
     // TODO conditional
 
     public final Method SET_GROUP = createAction(
@@ -44,7 +90,7 @@ public class BuiltinActions {
         Parameter.optional("fadeout", Type.INT, ConstantLiteral.ofInt(1))
     );
 
-    public final Method ACTION_BAR = createAction("actionBar", Parameter.required("message", Type.STRING));
+    public final Method ACTIONBAR = createAction("actionbar", Parameter.required("message", Type.STRING));
 
     public final Method RESET_INVENTORY = createAction("resetInventory");
 
@@ -67,7 +113,7 @@ public class BuiltinActions {
 
     public final Method REMOVE_ITEM = createAction("removeItem", Parameter.required("item", Type.MATERIAL));
 
-    public final Method CHAT = createAction("chat", Parameter.required("chat", Type.STRING));
+    public final Method CHAT = createAction("chat", Parameter.required("message", Type.STRING));
 
     public final Method ADD_EFFECT = createAction(
         "addEffect",
@@ -94,7 +140,7 @@ public class BuiltinActions {
         "changeVariable",
         Parameter.required("namespace", Type.NAMESPACE),
         Parameter.required("variable", Type.STRING),
-        Parameter.required("mode", Type.MODE),
+        Parameter.optional("mode", Type.MODE, new ModeValue(Mode.SET)),
         Parameter.optional("value", Type.ANY, ConstantLiteral.ofInt(1)),
         Parameter.optional("autoUnset", Type.BOOL, ConstantLiteral.ofBool(false))
     );

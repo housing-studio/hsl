@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.hierarchy.NodeVisitor;
+import org.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.debug.Format;
@@ -21,11 +22,12 @@ public class Testing {
             @loop(1s)
             @icon(Material::Stone)
             fn foo() {
-                stat player msg = "hello"
-                msg = "foo"
+                changeVariable(Namespace::Player, "kills", Mode::Increment)
+                chat("hello")
             }
             """;
 
+        BuiltinActions.init();
         AstParser parser = Parsers.of(source);
 
         Game game = new Game();

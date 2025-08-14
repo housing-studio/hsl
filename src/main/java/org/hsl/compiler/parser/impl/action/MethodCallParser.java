@@ -24,8 +24,6 @@ public class MethodCallParser extends ParserAlgorithm<Value> {
         Token method = get();
         List<Argument> arguments = parser.nextArgumentList();
 
-        return switch (method.value()) {
-            default -> new MethodCall(method, arguments);
-        };
+        return new MethodCall(method, arguments);
     }
 }

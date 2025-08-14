@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.export.action.Action;
 import org.hsl.export.action.ActionType;
+import org.hsl.std.type.Vector;
+import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,5 +16,5 @@ import org.hsl.export.action.ActionType;
 public class ChangeVelocity implements Action {
     private final ActionType type = ActionType.CHANGE_VELOCITY;
 
-    private int x, y, z;
+    private @NotNull Vector velocity;
 }
