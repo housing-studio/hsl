@@ -52,6 +52,10 @@ public class StatementParser extends ParserAlgorithm<Node> {
             return new MethodCall(method, arguments);
         }
 
+        // handle conditional
+        if (peek().is(TokenType.EXPRESSION, "if"))
+            return parser.nextConditional();
+
         context.syntaxError(peek(), "Invalid statement");
         throw new UnsupportedOperationException("Not implemented statement: " + peek());
     }

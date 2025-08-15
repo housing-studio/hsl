@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.export.action.Action;
 import org.hsl.export.action.ActionType;
+import org.hsl.export.condition.Condition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -15,10 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class Conditional implements Action{
+public class Conditional implements Action {
     private final ActionType type = ActionType.CONDITIONAL;
 
-    // TODO conditions
+    private @NotNull List<Condition> conditions;
 
     @SerializedName("match-any-condition")
     private boolean matchAnyCondition;

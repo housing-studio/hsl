@@ -5,6 +5,7 @@ import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.Node;
 import org.hsl.compiler.ast.hierarchy.NodeVisitor;
 import org.hsl.compiler.ast.impl.action.BuiltinActions;
+import org.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.debug.Format;
@@ -18,28 +19,17 @@ public class Testing {
     public static void main(String[] args) {
         String source =
             """
-            @description("hello world")
-            @loop(1s)
-            @icon(Material::Stone)
             fn example() {
-                changeVariable(Namespace::Player, "kills", Mode::Increment)
-                chat("hello")
-            }
-
-            @executor(Executor::Targeted)
-            @priority(3)
-            @listed(false)
-            command example() {
-                chat("hello")
-            }
-
-            event join() {
-                chat("foo")
+                if (hasPermission(Permission::Build)) {
+                    chat("you can build")
+                } else {
+                    chat("you cannot build")
+                }
             }
             """;
 
         BuiltinActions.init();
-        BuiltinActions.init();
+        BuiltinConditions.init();
         AstParser parser = Parsers.of(source);
 
         Game game = new Game();

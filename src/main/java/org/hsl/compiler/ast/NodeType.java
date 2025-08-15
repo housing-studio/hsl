@@ -31,6 +31,7 @@ public enum NodeType {
     EVENT,
     GAME,
 
+    CONDITIONAL,
     ANNOTATION,
 
     EMPTY,

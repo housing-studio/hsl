@@ -7,7 +7,6 @@ import org.hsl.compiler.parser.ParserAlgorithm;
 import org.hsl.compiler.parser.ParserContext;
 import org.hsl.compiler.parser.impl.value.MethodCall;
 import org.hsl.compiler.token.Token;
-import org.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.Game;
 import org.hsl.compiler.ast.Node;
+import org.hsl.compiler.ast.builder.ConditionBuilder;
+import org.hsl.compiler.ast.impl.control.ConditionalNode;
 import org.hsl.compiler.ast.impl.declaration.CommandNode;
 import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.hsl.compiler.ast.impl.declaration.Event;
@@ -18,6 +20,8 @@ import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.impl.annotation.AnnotationParser;
+import org.hsl.compiler.parser.impl.conditional.ConditionParser;
+import org.hsl.compiler.parser.impl.conditional.ConditionalParser;
 import org.hsl.compiler.parser.impl.declaration.CommandParser;
 import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.EventParser;
@@ -98,8 +102,8 @@ public class AstParser {
         return parse(ConstantAccessParser.class, Value.class);
     }
 
-    public @NotNull Value nextMethodCall() {
-        return parse(MethodCallParser.class, Value.class);
+    public @NotNull MethodCall nextMethodCall() {
+        return parse(MethodCallParser.class, MethodCall.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -121,6 +125,14 @@ public class AstParser {
 
     public @NotNull Value nextBinaryOperation(@NotNull Value lhs, @NotNull Operator operator, @NotNull Value rhs) {
         return BinaryOperatorTree.makeBinaryOperator(lhs, operator, rhs);
+    }
+
+    public @NotNull ConditionBuilder nextCondition() {
+        return parse(ConditionParser.class, ConditionBuilder.class);
+    }
+
+    public @NotNull ConditionalNode nextConditional() {
+        return parse(ConditionalParser.class, ConditionalNode.class);
     }
 
     public void parseGame(@NotNull Game game) {

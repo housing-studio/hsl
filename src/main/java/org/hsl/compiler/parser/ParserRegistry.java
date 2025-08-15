@@ -3,6 +3,8 @@ package org.hsl.compiler.parser;
 import lombok.experimental.UtilityClass;
 import org.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.hsl.compiler.parser.impl.annotation.AnnotationParser;
+import org.hsl.compiler.parser.impl.conditional.ConditionParser;
+import org.hsl.compiler.parser.impl.conditional.ConditionalParser;
 import org.hsl.compiler.parser.impl.declaration.CommandParser;
 import org.hsl.compiler.parser.impl.declaration.ConstantParser;
 import org.hsl.compiler.parser.impl.declaration.EventParser;
@@ -48,6 +50,8 @@ public class ParserRegistry {
             OperatorParser.class,
             AnnotationParser.class,
             MethodCallParser.class,
+            ConditionParser.class,
+            ConditionalParser.class,
         };
 
         for (Class<?> parser : parsers) {

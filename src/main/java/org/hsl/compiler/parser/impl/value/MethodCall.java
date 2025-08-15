@@ -120,7 +120,7 @@ public class MethodCall extends Value implements ActionBuilder, ConditionBuilder
     public @NotNull Condition buildCondition() {
         Method method = BuiltinConditions.LOOKUP.get(name.value());
         if (method == null) {
-            context.syntaxError(name, "Condition not found");
+            context.syntaxError(name, "Condition not found: `%s`".formatted(name.value()));
             throw new UnsupportedOperationException("Cannot find condition: " + name.value());
         }
 
@@ -146,6 +146,7 @@ public class MethodCall extends Value implements ActionBuilder, ConditionBuilder
             }
         }
     }
+
 
     private @NotNull Condition buildBuiltinCondition(@NotNull ActionArgs args) {
         return switch (name.value()) {
