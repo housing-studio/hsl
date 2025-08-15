@@ -21,7 +21,9 @@ public class Testing {
             """
             fn enterArea() {
                 if (!hasPermission(Permission::Build)) {
+                    return
                 }
+                chat("hi")
             }
             """;
 

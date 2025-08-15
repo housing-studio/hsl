@@ -19,6 +19,7 @@ public enum NodeType {
     CONSTANT_ACCESS,
 
     METHOD_CALL,
+    RETURN,
 
     BINARY_OPERATOR,
     PREFIX_UNARY_OPERATOR,

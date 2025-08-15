@@ -1,6 +1,7 @@
 package org.hsl.compiler.parser.impl.scope;
 
 import org.hsl.compiler.ast.Node;
+import org.hsl.compiler.ast.impl.control.Return;
 import org.hsl.compiler.ast.impl.scope.Statement;
 import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.parser.AstParser;
@@ -55,6 +56,14 @@ public class StatementParser extends ParserAlgorithm<Node> {
         // handle conditional
         if (peek().is(TokenType.EXPRESSION, "if"))
             return parser.nextConditional();
+
+        // handle return
+        if (peek().is(TokenType.EXPRESSION, "return")) {
+            get();
+            if (peek().is(TokenType.SEMICOLON))
+                get();
+            return new Return();
+        }
 
         context.syntaxError(peek(), "Invalid statement");
         throw new UnsupportedOperationException("Not implemented statement: " + peek());

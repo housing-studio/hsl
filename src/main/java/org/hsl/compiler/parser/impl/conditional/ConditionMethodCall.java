@@ -11,6 +11,7 @@ import org.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.hsl.compiler.ast.impl.value.Value;
+import org.hsl.compiler.debug.Printable;
 import org.hsl.compiler.parser.impl.action.ArgAccess;
 import org.hsl.compiler.parser.impl.action.ConditionCodec;
 import org.hsl.compiler.parser.impl.value.ArgumentParser;
@@ -24,7 +25,7 @@ import java.util.Map;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.METHOD_CALL)
-public class ConditionMethodCall extends Node implements ConditionBuilder {
+public class ConditionMethodCall extends Node implements ConditionBuilder, Printable {
     private final @NotNull MethodCall call;
     private boolean inverted;
 
@@ -69,5 +70,15 @@ public class ConditionMethodCall extends Node implements ConditionBuilder {
                 "Condition `%s` not implemented yet".formatted(call.name().value())
             );
         };
+    }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        return (inverted ? "!" : "") + call.print();
     }
 }

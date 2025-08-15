@@ -80,7 +80,7 @@ public class MethodCall extends Value implements ActionBuilder {
      */
     @Override
     public @NotNull String print() {
-        return "call " + name.value() + "(" + arguments.stream().map(Argument::print).collect(Collectors.joining(", ")) + ")";
+        return name.value() + "(" + arguments.stream().map(Argument::print).collect(Collectors.joining(", ")) + ")";
     }
 
     @Override

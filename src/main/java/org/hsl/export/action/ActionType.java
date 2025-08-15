@@ -47,7 +47,8 @@ public enum ActionType {
     SET_PLAYER_WEATHER      (5,  SetPlayerWeather.class),
     SET_PLAYER_TIME         (5,  SetPlayerTime.class),
     TOGGLE_NAME_TAG_DISPLAY (5,  ToggleNameTagDisplay.class),
-    CANCEL_EVENT            (1,  CancelEvent.class);
+    CANCEL_EVENT            (1,  CancelEvent.class),
+    EXIT                    (1,  Exit.class),;
 
     // USE_HELD_ITEM, BALANCE_PLAYER_TEAM,
 

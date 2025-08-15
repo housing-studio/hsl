@@ -13,6 +13,7 @@ import org.hsl.compiler.ast.hierarchy.NodeVisitor;
 import org.hsl.compiler.ast.hierarchy.Parent;
 import org.hsl.compiler.ast.impl.declaration.Method;
 import org.hsl.compiler.ast.impl.local.Variable;
+import org.hsl.compiler.debug.Printable;
 import org.hsl.export.action.Action;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +30,7 @@ import java.util.List;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.SCOPE)
-public class Scope extends ScopeContainer implements ActionListBuilder {
+public class Scope extends ScopeContainer implements ActionListBuilder, Printable {
     public static final Scope EMPTY = new Scope(new ArrayList<>());
 
     /**
@@ -104,5 +105,26 @@ public class Scope extends ScopeContainer implements ActionListBuilder {
             .filter(node -> node instanceof Scope)
             .map(node -> (ScopeContainer) node)
             .toList();
+    }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{\n");
+        for (Node statement : statements) {
+            builder.append("\t\t");
+            if (statement instanceof Printable printable)
+                builder.append(printable.print());
+            else
+                builder.append(statement.getClass().getSimpleName());
+            builder.append('\n');
+        }
+        builder.append("\t}");
+        return builder.toString();
     }
 }

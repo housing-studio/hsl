@@ -673,7 +673,7 @@ public class Tokenizer {
      */
     private boolean isExpression(@NotNull String token) {
         return switch (token) {
-            case "fn", "const", "command", "event", "scoreboard", "region", "stat", "if", "else" -> true;
+            case "fn", "const", "command", "event", "scoreboard", "region", "stat", "if", "else", "return" -> true;
             default -> false;
         };
     }
