@@ -1,11 +1,13 @@
 package org.hsl.export.action.impl;
 
+import com.google.gson.annotations.JsonAdapter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.hsl.export.action.Action;
 import org.hsl.export.action.ActionType;
+import org.hsl.export.adapter.VectorAdapter;
 import org.hsl.std.type.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,5 +18,6 @@ import org.jetbrains.annotations.NotNull;
 public class ChangeVelocity implements Action {
     private final ActionType type = ActionType.CHANGE_VELOCITY;
 
+    @JsonAdapter(VectorAdapter.class)
     private @NotNull Vector velocity;
 }

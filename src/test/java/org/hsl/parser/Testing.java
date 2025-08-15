@@ -20,7 +20,7 @@ public class Testing {
         String source =
             """
             fn enterArea() {
-                 giveItem(Material::Stone, slot=Slot::Hotbar(5))
+                changeVelocity(Vector::new(10, 20, 30))
             }
             """;
 
