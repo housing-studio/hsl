@@ -7,6 +7,7 @@ import org.hsl.std.type.*;
 import org.hsl.std.type.location.Location;
 import org.hsl.std.type.slot.Slot;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -24,6 +25,13 @@ public class ActionArgs {
 
     public @NotNull String getString(@NotNull String key) {
         return args.get(key).asConstantValue();
+    }
+
+    public @Nullable String getNullableString(@NotNull String key) {
+        Value value = args.get(key);
+        if (value instanceof NullValue)
+            return null;
+        return value.asConstantValue();
     }
 
     public int getInt(@NotNull String key) {
@@ -76,6 +84,26 @@ public class ActionArgs {
 
     public @NotNull Slot getSlot(@NotNull String key) {
         return ((SlotValue) args.get(key)).slot();
+    }
+
+    public @NotNull Comparator getComparator(@NotNull String key) {
+        return ((ComparatorValue) args.get(key)).comparator();
+    }
+
+    public @NotNull ItemComparator getItemComparator(@NotNull String key) {
+        return ((ItemComparatorValue) args.get(key)).itemComparator();
+    }
+
+    public @NotNull ComparatorTarget getComparatorTarget(@NotNull String key) {
+        return ((ComparatorTargetValue) args.get(key)).comparatorTarget();
+    }
+
+    public @NotNull ComparatorAmount getComparatorAmount(@NotNull String key) {
+        return ((ComparatorAmountValue) args.get(key)).comparatorAmount();
+    }
+
+    public @NotNull Permission getPermission(@NotNull String key) {
+        return ((PermissionValue) args.get(key)).permission();
     }
 
     public boolean getBoolean(@NotNull String key) {

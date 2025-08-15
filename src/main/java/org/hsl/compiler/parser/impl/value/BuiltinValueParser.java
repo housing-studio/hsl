@@ -12,6 +12,7 @@ import org.hsl.std.type.location.Location;
 import org.hsl.std.type.location.LocationType;
 import org.hsl.std.type.location.impl.CustomLocation;
 import org.hsl.std.type.location.impl.StaticLocation;
+import org.hsl.std.type.ComparatorTarget;
 import org.hsl.std.type.slot.Slot;
 import org.hsl.std.type.slot.SlotType;
 import org.hsl.std.type.slot.impl.CustomSlot;
@@ -60,6 +61,11 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case "Flag" -> { return parseFlag(context); }
             case "Material" -> { return parseMaterial(context); }
             case "Executor" -> { return parseExecutor(context); }
+            case "Comparator" -> { return parseComparator(context); }
+            case "ItemComparator" -> { return parseItemComparator(context); }
+            case "ComparatorTarget" -> { return parseComparatorTarget(context); }
+            case "ComparatorAmount" -> { return parseComparatorAmount(context); }
+            case "Permission" -> { return parsePermission(context); }
             default -> {
                 context.syntaxError(type, "Invalid builtin type");
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
@@ -323,5 +329,80 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         }
 
         return new ExecutorValue(wrapped);
+    }
+
+    private @NotNull Value parseComparator(@NotNull ParserContext context) {
+        Token comparator = get(TokenType.IDENTIFIER);
+        Comparator wrapped = Stream.of(Comparator.values())
+            .filter(v -> v.format().equals(comparator.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(comparator, "Invalid comparator type");
+            throw new UnsupportedOperationException("Invalid comparator type: " + comparator);
+        }
+
+        return new ComparatorValue(wrapped);
+    }
+
+    private @NotNull Value parseItemComparator(@NotNull ParserContext context) {
+        Token item = get(TokenType.IDENTIFIER);
+        ItemComparator wrapped = Stream.of(ItemComparator.values())
+            .filter(v -> v.format().equals(item.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(item, "Invalid item comparator type");
+            throw new UnsupportedOperationException("Invalid item comparator type: " + item);
+        }
+
+        return new ItemComparatorValue(wrapped);
+    }
+
+    private @NotNull Value parseComparatorTarget(@NotNull ParserContext context) {
+        Token comparator = get(TokenType.IDENTIFIER);
+        ComparatorTarget wrapper = Stream.of(ComparatorTarget.values())
+            .filter(v -> v.format().equals(comparator.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapper == null) {
+            context.syntaxError(comparator, "Invalid comparator target type");
+            throw new UnsupportedOperationException("Invalid comparator target type: " + comparator);
+        }
+
+        return new ComparatorTargetValue(wrapper);
+    }
+
+    private @NotNull Value parseComparatorAmount(@NotNull ParserContext context) {
+        Token amount = get(TokenType.IDENTIFIER);
+        ComparatorAmount wrapped = Stream.of(ComparatorAmount.values())
+            .filter(v -> v.format().equals(amount.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(amount, "Invalid comparator amount type");
+            throw new UnsupportedOperationException("Invalid comparator amount type: " + amount);
+        }
+
+        return new ComparatorAmountValue(wrapped);
+    }
+
+    private @NotNull Value parsePermission(@NotNull ParserContext context) {
+        Token permission = get(TokenType.IDENTIFIER);
+        Permission wrapped = Stream.of(Permission.values())
+            .filter(v -> v.format().equals(permission.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.syntaxError(permission, "Invalid permission type");
+            throw new UnsupportedOperationException("Invalid permission type: " + permission);
+        }
+
+        return new PermissionValue(wrapped);
     }
 }

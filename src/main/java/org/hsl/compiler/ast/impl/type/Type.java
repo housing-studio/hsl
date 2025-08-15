@@ -24,7 +24,12 @@ public enum Type {
     FLAG,
     MATERIAL,
     VECTOR,
-    EXECUTOR;
+    EXECUTOR,
+    COMPARATOR,
+    ITEM_COMPARATOR,
+    COMPARATOR_TARGET,
+    COMPARATOR_AMOUNT,
+    PERMISSION;
 
     public boolean isNumber() {
         return this == INT || this == FLOAT;

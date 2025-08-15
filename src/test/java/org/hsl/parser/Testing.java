@@ -39,6 +39,7 @@ public class Testing {
             """;
 
         BuiltinActions.init();
+        BuiltinActions.init();
         AstParser parser = Parsers.of(source);
 
         Game game = new Game();
