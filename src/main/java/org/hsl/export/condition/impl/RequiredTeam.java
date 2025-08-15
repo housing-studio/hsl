@@ -11,8 +11,10 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class RequiredTeam extends Condition {
+public class RequiredTeam implements Condition {
     private final ConditionType type = ConditionType.REQUIRED_TEAM;
+
+    private boolean inverted;
 
     @SerializedName("required-team")
     private @NotNull String requiredTeam;

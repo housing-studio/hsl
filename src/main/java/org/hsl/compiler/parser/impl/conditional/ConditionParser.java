@@ -18,7 +18,14 @@ public class ConditionParser extends ParserAlgorithm<ConditionBuilder> {
     @Override
     public @NotNull ConditionBuilder parse(@NotNull AstParser parser, @NotNull ParserContext context) {
         if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.LPAREN))
-            return parser.nextMethodCall();
+            return new ConditionMethodCall(parser.nextMethodCall());
+
+        if (peek().is(TokenType.OPERATOR, "!")) {
+            get();
+            ConditionBuilder condition = parser.nextCondition();
+            condition.invert();
+            return condition;
+        }
 
         context.syntaxError(peek(), "Unexpected condition");
         throw new UnsupportedOperationException("Unexpected condition");

@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.NodeInfo;
 import org.hsl.compiler.ast.NodeType;
 import org.hsl.compiler.ast.builder.ActionBuilder;
-import org.hsl.compiler.ast.builder.ConditionBuilder;
 import org.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.hsl.compiler.ast.impl.declaration.Method;
@@ -16,10 +15,8 @@ import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.parser.impl.action.ArgAccess;
 import org.hsl.compiler.parser.impl.action.ActionCodec;
-import org.hsl.compiler.parser.impl.action.ConditionCodec;
 import org.hsl.compiler.token.Token;
 import org.hsl.export.action.Action;
-import org.hsl.export.condition.Condition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -30,7 +27,7 @@ import java.util.stream.Collectors;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.METHOD_CALL)
-public class MethodCall extends Value implements ActionBuilder, ConditionBuilder {
+public class MethodCall extends Value implements ActionBuilder {
     /**
      * The name of the method to call.
      */
@@ -116,21 +113,7 @@ public class MethodCall extends Value implements ActionBuilder, ConditionBuilder
         return buildFunctionTrigger();
     }
 
-    @Override
-    public @NotNull Condition buildCondition() {
-        Method method = BuiltinConditions.LOOKUP.get(name.value());
-        if (method == null) {
-            context.syntaxError(name, "Condition not found: `%s`".formatted(name.value()));
-            throw new UnsupportedOperationException("Cannot find condition: " + name.value());
-        }
-
-        Map<String, Value> args = ArgumentParser.parseArguments(method.parameters(), arguments);
-        validateArgumentTypes(method.parameters(), args);
-
-        return buildBuiltinCondition(new ArgAccess(args));
-    }
-
-    private void validateArgumentTypes(@NotNull List<Parameter> parameters, @NotNull Map<String, Value> args) {
+    public void validateArgumentTypes(@NotNull List<Parameter> parameters, @NotNull Map<String, Value> args) {
         for (Parameter parameter : parameters) {
             Value value = args.get(parameter.name().value());
             if (parameter.type() == Type.ANY)
@@ -145,28 +128,6 @@ public class MethodCall extends Value implements ActionBuilder, ConditionBuilder
                 );
             }
         }
-    }
-
-
-    private @NotNull Condition buildBuiltinCondition(@NotNull ArgAccess args) {
-        return switch (name.value()) {
-            case "hasGroup" -> ConditionCodec.hasGroup(args);
-            case "compareVariable" -> ConditionCodec.compareVariable(args);
-            case "hasPermission" -> ConditionCodec.hasPermission(args);
-            case "withinRegion" -> ConditionCodec.withinRegion(args);
-            case "hasItem" -> ConditionCodec.hasItem(args);
-            case "doingParkour" -> ConditionCodec.doingParkour(args);
-            case "hasEffect" -> ConditionCodec.hasEffect(args);
-            case "isSneaking" -> ConditionCodec.isSneaking(args);
-            case "isFlying" -> ConditionCodec.isFlying(args);
-            case "hasHealth" -> ConditionCodec.hasHealth(args);
-            case "hasMaxHealth" -> ConditionCodec.hasMaxHealth(args);
-            case "hasHunger" -> ConditionCodec.hasHunger(args);
-            case "hasGameMode" -> ConditionCodec.hasGameMode(args);
-            case "comparePlaceholder" -> ConditionCodec.comparePlaceholder(args);
-            case "hasTeam" -> ConditionCodec.hasTeam(args);
-            default -> throw new UnsupportedOperationException("Condition `%s` not implemented yet".formatted(name.value()));
-        };
     }
 
     private @NotNull Action buildBuiltinAction(@NotNull ArgAccess args) {

@@ -12,8 +12,10 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class WithinRegion extends Condition {
+public class WithinRegion implements Condition {
     private final ConditionType type = ConditionType.WITHIN_REGION;
+
+    private boolean inverted;
 
     private @NotNull String region;
 }

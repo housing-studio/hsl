@@ -5,4 +5,5 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ConditionBuilder extends Builder {
     @NotNull Condition buildCondition();
+    void invert();
 }

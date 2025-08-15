@@ -12,8 +12,10 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class RequiredGameMode extends Condition {
+public class RequiredGameMode implements Condition {
     private final ConditionType type = ConditionType.REQUIRED_GAME_MODE;
+
+    private boolean inverted;
 
     @SerializedName("required-game-mode")
     private @NotNull GameMode requiredGameMode;

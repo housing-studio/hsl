@@ -13,8 +13,10 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class RequiredGroup extends Condition {
+public class RequiredGroup implements Condition {
     private final ConditionType type = ConditionType.REQUIRED_GROUP;
+
+    private boolean inverted;
 
     @SerializedName("required-group")
     private @NotNull String requiredGroup;

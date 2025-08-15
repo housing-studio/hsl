@@ -12,8 +12,10 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class PlaceholderNumberRequirement extends Condition {
+public class PlaceholderNumberRequirement implements Condition {
     private final ConditionType type = ConditionType.PLACEHOLDER_NUMBER_REQUIREMENT;
+
+    private boolean inverted;
 
     private @NotNull String placeholder;
 

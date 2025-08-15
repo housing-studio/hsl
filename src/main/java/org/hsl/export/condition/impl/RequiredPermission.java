@@ -13,8 +13,10 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class RequiredPermission extends Condition {
+public class RequiredPermission implements Condition {
     private final ConditionType type = ConditionType.REQUIRED_PERMISSION;
+
+    private boolean inverted;
 
     private @NotNull Permission permission;
 }

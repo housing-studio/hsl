@@ -16,8 +16,10 @@ import org.jetbrains.annotations.Nullable;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class VariableRequirement extends Condition {
+public class VariableRequirement implements Condition {
     private final ConditionType type = ConditionType.VARIABLE_REQUIREMENT;
+
+    private boolean inverted;
 
     private @NotNull Namespace namespace;
     private @NotNull String variable;

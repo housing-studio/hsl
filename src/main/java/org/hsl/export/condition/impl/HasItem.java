@@ -17,8 +17,10 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class HasItem extends Condition {
+public class HasItem implements Condition {
     private final ConditionType type = ConditionType.HAS_ITEM;
+
+    private boolean inverted;
 
     private @NotNull Material material;
 

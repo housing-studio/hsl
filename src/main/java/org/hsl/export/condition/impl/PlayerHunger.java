@@ -12,8 +12,10 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class PlayerHunger extends Condition {
+public class PlayerHunger implements Condition {
     private final ConditionType type = ConditionType.PLAYER_HUNGER;
+
+    private boolean inverted;
 
     private @NotNull Comparator comparator;
 

@@ -1,6 +1,8 @@
 package org.hsl.compiler.parser.impl.action;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.hsl.compiler.ast.impl.value.ConstantAccess;
 import org.hsl.compiler.ast.impl.value.Value;
 import org.hsl.compiler.ast.impl.value.builtin.*;
@@ -13,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@Accessors(fluent = true)
+@Getter
 public class ArgAccess {
     private final @NotNull Map<String, Value> args;
 

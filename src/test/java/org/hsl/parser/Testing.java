@@ -20,7 +20,8 @@ public class Testing {
         String source =
             """
             fn enterArea() {
-                changeVelocity(Vector::new(10, 20, 30))
+                if (!hasPermission(Permission::Build)) {
+                }
             }
             """;
 

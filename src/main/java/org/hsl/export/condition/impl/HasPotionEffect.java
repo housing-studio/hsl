@@ -13,8 +13,9 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class HasPotionEffect extends Condition {
+public class HasPotionEffect implements Condition {
     private final ConditionType type = ConditionType.HAS_POTION_EFFECT;
 
+    private boolean inverted;
     private @NotNull Effect effect;
 }

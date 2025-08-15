@@ -9,6 +9,8 @@ import org.hsl.export.condition.ConditionType;
 @AllArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class PlayerFlying extends Condition {
+public class PlayerFlying implements Condition {
     private final ConditionType type = ConditionType.PLAYER_FLYING;
+
+    private boolean inverted;
 }
