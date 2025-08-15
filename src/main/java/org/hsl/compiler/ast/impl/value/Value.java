@@ -19,4 +19,10 @@ public abstract class Value extends Node implements Printable, Constant {
      * @return the resolved value of the type
      */
     public abstract @NotNull Type getValueType();
+
+    public @NotNull Value load() {
+        if (this instanceof ConstantAccess access)
+            return access.load();
+        return this;
+    }
 }

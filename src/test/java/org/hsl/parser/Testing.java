@@ -19,12 +19,8 @@ public class Testing {
     public static void main(String[] args) {
         String source =
             """
-            const MY_AREA_LOCATION = Location::Custom(1, 2, 3)
-
             fn enterArea() {
-                 if (hasGroup("Admin") || hasPermission(Permission::Build) || hasTeam("build")) {
-                     teleport(MY_AREA_LOCATION)
-                 }
+                 giveItem(Material::Stone, slot=Slot::Hotbar(5))
             }
             """;
 
