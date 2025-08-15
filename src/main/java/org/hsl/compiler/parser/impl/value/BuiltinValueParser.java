@@ -80,7 +80,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         }
 
         Slot value = switch (wrapped) {
-            case HELMET, CHESTPLATE, LEGGINGS, BOOTS, FIRST_AVAILABLE, HAND_SLOT -> new StaticSlot(wrapped);
+            case HELMET, CHESTPLATE, LEGGINGS, BOOTS, FIRST_AVAILABLE, HAND -> new StaticSlot(wrapped);
             case CUSTOM -> new CustomSlot(parser.nextValue());
             case INVENTORY -> new InventorySlot(parser.nextValue());
             case HOTBAR -> new HotbarSlot(parser.nextValue());

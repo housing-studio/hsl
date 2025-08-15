@@ -14,10 +14,10 @@ public enum SlotType {
     LEGGINGS("Leggings"),
     BOOTS("Boots"),
     FIRST_AVAILABLE("FirstAvailable"),
-    HAND_SLOT("HandSlot"),
+    HAND("Hand"),
     CUSTOM("Custom"),
     INVENTORY("Inventory"),
-    HOTBAR("Hotbar"),;
+    HOTBAR("Hotbar");
 
     private final @NotNull String format;
 }

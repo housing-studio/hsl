@@ -50,7 +50,7 @@ public class SlotValue extends Value {
     @Override
     public @NotNull String print() {
         return switch (slot.type()) {
-            case HELMET, CHESTPLATE, LEGGINGS, BOOTS, FIRST_AVAILABLE, HAND_SLOT -> "Slot::" + slot.type().format();
+            case HELMET, CHESTPLATE, LEGGINGS, BOOTS, FIRST_AVAILABLE, HAND -> "Slot::" + slot.type().format();
             case CUSTOM -> {
                 CustomSlot custom = (CustomSlot) slot;
                 yield "Slot::Custom(%s)".formatted(custom.rawSlot());
