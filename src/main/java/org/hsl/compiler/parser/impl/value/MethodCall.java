@@ -14,7 +14,7 @@ import org.hsl.compiler.ast.impl.declaration.Parameter;
 import org.hsl.compiler.ast.impl.type.Type;
 import org.hsl.compiler.ast.impl.value.Argument;
 import org.hsl.compiler.ast.impl.value.Value;
-import org.hsl.compiler.parser.impl.action.ActionArgs;
+import org.hsl.compiler.parser.impl.action.ArgAccess;
 import org.hsl.compiler.parser.impl.action.ActionCodec;
 import org.hsl.compiler.parser.impl.action.ConditionCodec;
 import org.hsl.compiler.token.Token;
@@ -105,7 +105,7 @@ public class MethodCall extends Value implements ActionBuilder, ConditionBuilder
         if (BuiltinActions.LOOKUP.containsKey(name.value())) {
             Map<String, Value> args = ArgumentParser.parseArguments(method.parameters(), arguments);
             validateArgumentTypes(method.parameters(), args);
-            return buildBuiltinAction(new ActionArgs(args));
+            return buildBuiltinAction(new ArgAccess(args));
         }
 
         if (!arguments.isEmpty()) {
@@ -127,7 +127,7 @@ public class MethodCall extends Value implements ActionBuilder, ConditionBuilder
         Map<String, Value> args = ArgumentParser.parseArguments(method.parameters(), arguments);
         validateArgumentTypes(method.parameters(), args);
 
-        return buildBuiltinCondition(new ActionArgs(args));
+        return buildBuiltinCondition(new ArgAccess(args));
     }
 
     private void validateArgumentTypes(@NotNull List<Parameter> parameters, @NotNull Map<String, Value> args) {
@@ -148,7 +148,7 @@ public class MethodCall extends Value implements ActionBuilder, ConditionBuilder
     }
 
 
-    private @NotNull Condition buildBuiltinCondition(@NotNull ActionArgs args) {
+    private @NotNull Condition buildBuiltinCondition(@NotNull ArgAccess args) {
         return switch (name.value()) {
             case "hasGroup" -> ConditionCodec.hasGroup(args);
             case "compareVariable" -> ConditionCodec.compareVariable(args);
@@ -169,7 +169,7 @@ public class MethodCall extends Value implements ActionBuilder, ConditionBuilder
         };
     }
 
-    private @NotNull Action buildBuiltinAction(@NotNull ActionArgs args) {
+    private @NotNull Action buildBuiltinAction(@NotNull ArgAccess args) {
         return switch (name.value()) {
             case "setGroup" -> ActionCodec.setGroup(args);
             case "kill" -> ActionCodec.kill(args);

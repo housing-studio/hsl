@@ -19,12 +19,12 @@ public class Testing {
     public static void main(String[] args) {
         String source =
             """
-            fn example() {
-                if (hasPermission(Permission::Build)) {
-                    chat("you can build")
-                } else {
-                    chat("you cannot build")
-                }
+            const MY_AREA_LOCATION = Location::Custom(1, 2, 3)
+
+            fn enterArea() {
+                 if (hasGroup("Admin") || hasPermission(Permission::Build) || hasTeam("build")) {
+                     teleport(MY_AREA_LOCATION)
+                 }
             }
             """;
 
