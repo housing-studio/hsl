@@ -1,1 +1,15 @@
-name = "{project.name}"
+[package]
+# the unique identifier of the game, visible in `/hsl list`
+id = "{project.id}"
+# the display name of the game
+name = "My Amazing Game"
+# the author of the game
+author = "TheGameMaker"
+# the contributor list of the game
+contributors = [
+    "AnotherGameMaker"
+]
+# the short description of the game
+description = "A very epic Hypixel game"
+# the current version of the game
+version = "1.0.1"

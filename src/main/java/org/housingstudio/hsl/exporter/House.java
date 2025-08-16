@@ -19,6 +19,7 @@ import java.util.Map;
 @Accessors(fluent = true)
 @Getter
 public class House {
+    private @NotNull Metadata metadata;
     private @NotNull Map<EventType, List<Action>> events;
     private @NotNull List<Function> functions;
     private @NotNull List<Command> commands;

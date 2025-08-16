@@ -1,3 +1,4 @@
+// send a message and actionbar to the player upon join
 event join() {
     chat("Welcome to my house")
     actionbar("Powered by HSL")
@@ -7,12 +8,14 @@ event kill() {
     stat player streak: int
     streak++
 
+    // apply strength effect when the player reaches a kill streak of 5
     if (streak > 5) {
         addEffect(Effect::Strength, level=2, override=true)
         chat("You have reached a 5 kill streak")
     }
 }
 
+// reset kill streak on death
 event death() {
     stat player streak: int
     streak = 0

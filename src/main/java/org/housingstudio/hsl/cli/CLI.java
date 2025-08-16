@@ -1,8 +1,13 @@
 package org.housingstudio.hsl.cli;
 
+import com.google.gson.GsonBuilder;
 import com.moandjiezana.toml.Toml;
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.Main;
+import org.housingstudio.hsl.compiler.Compiler;
+import org.housingstudio.hsl.compiler.debug.Format;
+import org.housingstudio.hsl.exporter.House;
+import org.housingstudio.hsl.exporter.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -22,7 +27,7 @@ public class CLI {
 
         switch (command) {
             case "new" -> newProject(args);
-            case "export" -> export(args);
+            case "export" -> export();
             default -> sendHelp();
         }
     }
@@ -57,13 +62,13 @@ public class CLI {
 
         writeFile(new File(projectDir, "example.hsl"), loadResource("example.hsl"));
 
-        String build = loadResource("build.toml").replace("{project.name}", projectName);
+        String build = loadResource("build.toml").replace("{project.id}", projectName);
         writeFile(new File(projectDir, "build.toml"), build);
 
         System.out.println("Created new project: " + projectName);
     }
 
-    private void export(String[] args) {
+    private void export() {
         File workDir = new File(System.getProperty("user.dir"));
         File buildFile = new File(workDir, "build.toml");
 
@@ -72,10 +77,22 @@ public class CLI {
             return;
         }
 
-        Toml toml = new Toml().read(buildFile);
-        String name = toml.getString("name");
+        Metadata metadata = Metadata.read(buildFile);
+        System.out.println("Compiling and exporting project: " + metadata.id());
 
-        System.out.println("Compiling and exporting project: " + name);
+        Compiler compiler = Compiler.create(metadata, workDir);
+        compiler.init();
+        compiler.compileSources();
+
+        House export = compiler.export();
+        String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);
+
+        File targetDir = new File(workDir, "target");
+        if (!targetDir.exists())
+            targetDir.mkdirs();
+
+        File exportFile = new File(targetDir, metadata.id() + ".json");
+        writeFile(exportFile, json);
     }
 
     private void writeFile(@NotNull File path, @NotNull String content) {
@@ -83,14 +100,6 @@ public class CLI {
             writer.write(content);
         } catch (IOException e) {
             throw new RuntimeException("Unable to write file: " + path.getName(), e);
-        }
-    }
-
-    private @NotNull String readFile(@NotNull File path) {
-        try {
-            return Files.readString(path.toPath());
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to read file: " + path.getName(), e);
         }
     }
 

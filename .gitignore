@@ -48,3 +48,4 @@ bin/
 node_modules/
 
 /hsl
+/example

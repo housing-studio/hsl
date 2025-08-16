@@ -12,6 +12,7 @@ import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.exporter.Exporter;
 import org.housingstudio.hsl.exporter.House;
+import org.housingstudio.hsl.exporter.Metadata;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,7 +45,7 @@ public class Testing {
         for (Method method : game.functions().values())
             System.out.println(method.print());
 
-        House export = Exporter.export(game);
+        House export = Exporter.export(new Metadata(), game);
         String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);
         System.out.println(Format.WHITE);
         System.out.println(json);

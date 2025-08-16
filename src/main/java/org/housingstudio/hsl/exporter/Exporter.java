@@ -19,7 +19,7 @@ import java.util.Map;
 
 @UtilityClass
 public class Exporter {
-    public @NotNull House export(@NotNull Game game) {
+    public @NotNull House export(@NotNull Metadata metadata, @NotNull Game game) {
         Map<EventType, List<Action>> events = new HashMap<>();
         List<Function> functions = new ArrayList<>();
         List<Command> commands = new ArrayList<>();
@@ -39,6 +39,6 @@ public class Exporter {
             }
         }
 
-        return new House(events, functions, commands, regions);
+        return new House(metadata, events, functions, commands, regions);
     }
 }
