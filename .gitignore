@@ -46,3 +46,5 @@ bin/
 
 ### BunJS ###
 node_modules/
+
+/hsl

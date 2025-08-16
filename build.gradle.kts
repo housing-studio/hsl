@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("application")
 }
 
@@ -24,6 +25,7 @@ dependencies {
     testCompileOnly("org.jetbrains:annotations:24.0.1")
 
     implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.moandjiezana.toml:toml4j:0.7.2")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -35,4 +37,8 @@ tasks.withType<JavaCompile> {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.build {
+    dependsOn("shadowJar")
 }

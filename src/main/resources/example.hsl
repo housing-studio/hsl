@@ -1,0 +1,19 @@
+event join() {
+    chat("Welcome to my house")
+    actionbar("Powered by HSL")
+}
+
+event kill() {
+    stat player streak: int
+    streak++
+
+    if (streak > 5) {
+        addEffect(Effect::Strength, level=2, override=true)
+        chat("You have reached a 5 kill streak")
+    }
+}
+
+event death() {
+    stat player streak: int
+    streak = 0
+}
