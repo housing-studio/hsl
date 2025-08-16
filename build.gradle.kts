@@ -11,6 +11,11 @@ application {
     mainClass.set("org.housingstudio.hsl.Main")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 repositories {
     mavenCentral()
 }
