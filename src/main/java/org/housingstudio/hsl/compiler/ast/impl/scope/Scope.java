@@ -14,7 +14,7 @@ import org.housingstudio.hsl.compiler.ast.hierarchy.Parent;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.debug.Printable;
-import org.housingstudio.hsl.export.action.Action;
+import org.housingstudio.hsl.exporter.action.Action;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

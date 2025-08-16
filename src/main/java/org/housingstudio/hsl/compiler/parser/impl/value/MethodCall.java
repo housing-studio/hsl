@@ -16,7 +16,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.parser.impl.action.ActionCodec;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.export.action.Action;
+import org.housingstudio.hsl.exporter.action.Action;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

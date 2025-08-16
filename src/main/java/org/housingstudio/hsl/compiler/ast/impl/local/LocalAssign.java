@@ -11,8 +11,8 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.export.action.Action;
-import org.housingstudio.hsl.export.action.impl.ChangeVariable;
+import org.housingstudio.hsl.exporter.action.Action;
+import org.housingstudio.hsl.exporter.action.impl.ChangeVariable;
 import org.housingstudio.hsl.type.Mode;
 import org.jetbrains.annotations.NotNull;
 

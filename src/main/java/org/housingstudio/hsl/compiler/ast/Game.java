@@ -6,7 +6,7 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.CommandNode;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Event;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
-import org.housingstudio.hsl.export.generic.EventType;
+import org.housingstudio.hsl.exporter.generic.EventType;
 
 import java.util.LinkedHashMap;
 import java.util.List;

@@ -7,7 +7,7 @@ import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
-import org.housingstudio.hsl.export.generic.EventType;
+import org.housingstudio.hsl.exporter.generic.EventType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Stream;

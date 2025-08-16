@@ -1,8 +1,8 @@
 package org.housingstudio.hsl.compiler.parser.impl.action;
 
 import lombok.experimental.UtilityClass;
-import org.housingstudio.hsl.export.action.Action;
-import org.housingstudio.hsl.export.action.impl.*;
+import org.housingstudio.hsl.exporter.action.Action;
+import org.housingstudio.hsl.exporter.action.impl.*;
 import org.housingstudio.hsl.type.Target;
 import org.jetbrains.annotations.NotNull;
 

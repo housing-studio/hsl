@@ -15,7 +15,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.export.generic.Command;
+import org.housingstudio.hsl.exporter.generic.Command;
 import org.housingstudio.hsl.type.Executor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

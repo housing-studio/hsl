@@ -10,8 +10,8 @@ import org.housingstudio.hsl.compiler.ast.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.ast.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.debug.Printable;
-import org.housingstudio.hsl.export.action.Action;
-import org.housingstudio.hsl.export.action.impl.Conditional;
+import org.housingstudio.hsl.exporter.action.Action;
+import org.housingstudio.hsl.exporter.action.impl.Conditional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

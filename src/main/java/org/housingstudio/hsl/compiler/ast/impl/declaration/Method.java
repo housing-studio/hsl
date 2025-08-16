@@ -16,7 +16,7 @@ import org.housingstudio.hsl.compiler.ast.impl.annotation.LoopAnnotation;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.export.generic.Function;
+import org.housingstudio.hsl.exporter.generic.Function;
 import org.housingstudio.hsl.type.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

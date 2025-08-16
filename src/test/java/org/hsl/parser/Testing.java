@@ -10,8 +10,8 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.parser.AstParser;
-import org.housingstudio.hsl.export.Exporter;
-import org.housingstudio.hsl.export.House;
+import org.housingstudio.hsl.exporter.Exporter;
+import org.housingstudio.hsl.exporter.House;
 
 import static org.junit.jupiter.api.Assertions.*;
 
