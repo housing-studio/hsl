@@ -1,10 +1,10 @@
 package org.hsl.parser;
 
 import lombok.experimental.UtilityClass;
-import org.hsl.compiler.ast.Node;
-import org.hsl.compiler.parser.AstParser;
-import org.hsl.compiler.parser.ParserContext;
-import org.hsl.compiler.token.Token;
+import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.parser.AstParser;
+import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Token;
 import org.hsl.tokenizer.Tokenizers;
 import org.jetbrains.annotations.NotNull;
 

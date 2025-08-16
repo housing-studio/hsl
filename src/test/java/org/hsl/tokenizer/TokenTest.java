@@ -1,7 +1,7 @@
 package org.hsl.tokenizer;
 
-import org.hsl.compiler.token.Token;
-import org.hsl.compiler.token.TokenType;
+import org.housingstudio.hsl.compiler.token.Token;
+import org.housingstudio.hsl.compiler.token.TokenType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

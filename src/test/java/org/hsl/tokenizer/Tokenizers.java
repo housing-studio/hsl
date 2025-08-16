@@ -1,10 +1,10 @@
 package org.hsl.tokenizer;
 
 import lombok.experimental.UtilityClass;
-import org.hsl.compiler.token.Token;
-import org.hsl.compiler.token.TokenTransformer;
-import org.hsl.compiler.token.TokenType;
-import org.hsl.compiler.token.Tokenizer;
+import org.housingstudio.hsl.compiler.token.Token;
+import org.housingstudio.hsl.compiler.token.TokenTransformer;
+import org.housingstudio.hsl.compiler.token.TokenType;
+import org.housingstudio.hsl.compiler.token.Tokenizer;
 
 import java.io.File;
 import java.util.ArrayList;

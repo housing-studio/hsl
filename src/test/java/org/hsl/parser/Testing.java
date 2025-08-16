@@ -1,17 +1,17 @@
 package org.hsl.parser;
 
 import com.google.gson.GsonBuilder;
-import org.hsl.compiler.ast.Game;
-import org.hsl.compiler.ast.Node;
-import org.hsl.compiler.ast.hierarchy.NodeVisitor;
-import org.hsl.compiler.ast.impl.action.BuiltinActions;
-import org.hsl.compiler.ast.impl.action.BuiltinConditions;
-import org.hsl.compiler.ast.impl.declaration.ConstantDeclare;
-import org.hsl.compiler.ast.impl.declaration.Method;
-import org.hsl.compiler.debug.Format;
-import org.hsl.compiler.parser.AstParser;
-import org.hsl.export.Exporter;
-import org.hsl.export.House;
+import org.housingstudio.hsl.compiler.ast.Game;
+import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.hierarchy.NodeVisitor;
+import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
+import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
+import org.housingstudio.hsl.compiler.debug.Format;
+import org.housingstudio.hsl.compiler.parser.AstParser;
+import org.housingstudio.hsl.export.Exporter;
+import org.housingstudio.hsl.export.House;
 
 import static org.junit.jupiter.api.Assertions.*;
 

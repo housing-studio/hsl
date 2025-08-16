@@ -1,12 +1,12 @@
 package org.hsl.parser;
 
-import org.hsl.compiler.ast.Node;
-import org.hsl.compiler.ast.impl.declaration.Method;
-import org.hsl.compiler.ast.impl.local.LocalDeclare;
-import org.hsl.compiler.ast.impl.local.LocalDeclareAssign;
-import org.hsl.compiler.ast.impl.type.Type;
-import org.hsl.compiler.ast.impl.value.ConstantLiteral;
-import org.hsl.compiler.parser.AstParser;
+import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
+import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclare;
+import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
+import org.housingstudio.hsl.compiler.parser.AstParser;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
