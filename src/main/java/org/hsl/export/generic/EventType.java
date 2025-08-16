@@ -67,7 +67,7 @@ public enum EventType {
     PLAYER_BLOCK_BREAK("blockBreak"),
 
     /**
-     * Executes when a player starts doing parkour
+     * Executes when a player starts doing parkour.
      */
     START_PARKOUR("startParkour"),
 
@@ -99,7 +99,7 @@ public enum EventType {
     /**
      * Executes when a player toggles flight.
      */
-    PLAYER_TOGGLE_FLIGHT("toggleFlight"),;
+    PLAYER_TOGGLE_FLIGHT("toggleFlight");
 
     private final @NotNull String format;
 }
