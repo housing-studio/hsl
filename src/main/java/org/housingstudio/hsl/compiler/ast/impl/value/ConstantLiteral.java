@@ -36,13 +36,21 @@ public class ConstantLiteral extends Value implements Printable {
      */
     @Override
     public @NotNull Type getValueType() {
-        return switch (token.type()) {
-            case STRING -> Type.STRING;
-            case INT, DURATION, HEXADECIMAL, BINARY -> Type.INT;
-            case FLOAT -> Type.FLOAT;
-            case BOOL -> Type.BOOL;
-            default -> throw new IllegalStateException("Cannot resolve type of token: " + token);
-        };
+        switch (token.type()) {
+            case STRING:
+                return Type.STRING;
+            case INT:
+            case DURATION:
+            case HEXADECIMAL:
+            case BINARY:
+                return Type.INT;
+            case FLOAT:
+                return Type.FLOAT;
+            case BOOL:
+                return Type.BOOL;
+            default:
+                throw new IllegalStateException("Cannot resolve type of token: " + token);
+        }
     }
 
     /**

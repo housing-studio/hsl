@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -34,7 +35,7 @@ public class ConditionalNode extends Node implements ActionBuilder, Printable {
     @Override
     public @NotNull Action buildAction() {
         return new Conditional(
-            conditions.stream().map(ConditionBuilder::buildCondition).toList(),
+            conditions.stream().map(ConditionBuilder::buildCondition).collect(Collectors.toList()),
             matchAnyCases,
             ifScope.buildActionList(),
             elseScope != null ? elseScope.buildActionList() : new ArrayList<>()
@@ -56,8 +57,8 @@ public class ConditionalNode extends Node implements ActionBuilder, Printable {
         Iterator<ConditionBuilder> iterator = conditions.iterator();
         while (iterator.hasNext()) {
             ConditionBuilder condition = iterator.next();
-            if (condition instanceof Printable printable)
-                builder.append(printable.print());
+            if (condition instanceof Printable)
+                builder.append(((Printable) condition).print());
             else
                 builder.append(condition.getClass().getSimpleName());
             if (iterator.hasNext())

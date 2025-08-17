@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class TokenTransformer {
     /**
      * The list of tokens required before the new line for the semicolon to be inserted.
      */
-    private static final @NotNull List<@NotNull Token> REQUIRED_BEFORE = List.of(
+    private static final @NotNull List<@NotNull Token> REQUIRED_BEFORE = Arrays.asList(
         Token.of(TokenType.IDENTIFIER),
         Token.of(TokenType.STRING),
         Token.of(TokenType.INT),
@@ -49,7 +50,7 @@ public class TokenTransformer {
     /**
      * The list of tokens forbidden after the new line for the semicolon to be inserted.
      */
-    private static final @NotNull List<@NotNull Token> FORBIDDEN_AFTER = List.of(
+    private static final @NotNull List<@NotNull Token> FORBIDDEN_AFTER = Arrays.asList(
         Token.of(TokenType.OPERATOR, "="),
         Token.of(TokenType.OPERATOR, "+"),
         Token.of(TokenType.OPERATOR, "-"),
@@ -167,10 +168,13 @@ public class TokenTransformer {
             return false;
 
         // some tokens' values must be checked as well
-        return switch (left.type()) {
-            case OPERATOR, EXPRESSION -> left.value().equals(right.value());
-            default -> true;
-        };
+        switch (left.type()) {
+            case OPERATOR:
+            case EXPRESSION:
+                return left.value().equals(right.value());
+            default:
+                return true;
+        }
     }
 
     /**

@@ -53,7 +53,7 @@ public class MethodCall extends Value implements ActionBuilder {
             method = game.functions().get(name.value());
 
         if (method == null) {
-            context.syntaxError(name, "Method not found: `%s`".formatted(name.value()));
+            context.syntaxError(name, String.format("Method not found: `%s`", name.value()));
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
 
@@ -95,7 +95,7 @@ public class MethodCall extends Value implements ActionBuilder {
             method = game.functions().get(name.value());
 
         if (method == null) {
-            context.syntaxError(name, "Method not found: `%s`".formatted(name.value()));
+            context.syntaxError(name, String.format("Method not found: `%s`", name.value()));
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
 
@@ -121,55 +121,91 @@ public class MethodCall extends Value implements ActionBuilder {
 
             if (parameter.type() != value.getValueType()) {
                 context.syntaxError(
-                    name, "Invalid parameter type (given: %s, expected: %s)".formatted(value.getValueType(), parameter.type())
+                    name, String.format("Invalid parameter type: (given: %s, expected: %s)", value.getValueType(), parameter.type())
                 );
                 throw new UnsupportedOperationException(
-                    "Invalid parameter type (given: %s, expected: %s)".formatted(value.getValueType(), parameter.type())
+                    String.format("Invalid parameter type: (given: %s, expected: %s)", value.getValueType(), parameter.type())
                 );
             }
         }
     }
 
     private @NotNull Action buildBuiltinAction(@NotNull ArgAccess args) {
-        return switch (name.value()) {
-            case "setGroup" -> ActionCodec.setGroup(args);
-            case "kill" -> ActionCodec.kill(args);
-            case "heal" -> ActionCodec.heal(args);
-            case "title" -> ActionCodec.title(args);
-            case "actionbar" -> ActionCodec.actionbar(args);
-            case "resetInventory" -> ActionCodec.resetInventory(args);
-            case "changeMaxHealth" -> ActionCodec.changeMaxHealth(args);
-            case "parkourCheckpoint" -> ActionCodec.parkourCheckpoint(args);
-            case "giveItem" -> ActionCodec.giveItem(args);
-            case "removeItem" -> ActionCodec.removeItem(args);
-            case "chat" -> ActionCodec.chat(args);
-            case "addEffect" -> ActionCodec.addEffect(args);
-            case "clearEffects" -> ActionCodec.clearEffects(args);
-            case "addExperience" -> ActionCodec.addExperience(args);
-            case "sendToLobby" -> ActionCodec.sendToLobby(args);
-            case "changeVariable" -> ActionCodec.changeVariable(args);
-            case "teleport" -> ActionCodec.teleport(args);
-            case "failParkour" -> ActionCodec.failParkour(args);
-            case "playSound" -> ActionCodec.playSound(args);
-            case "setCompassTarget" -> ActionCodec.setCompassTarget(args);
-            case "setGameMode" -> ActionCodec.setGameMode(args);
-            case "changeHealth" -> ActionCodec.changeHealth(args);
-            case "changeHunger" -> ActionCodec.changeHunger(args);
+        switch (name.value()) {
+            case "setGroup":
+                return ActionCodec.setGroup(args);
+            case "kill":
+                return ActionCodec.kill(args);
+            case "heal":
+                return ActionCodec.heal(args);
+            case "title":
+                return ActionCodec.title(args);
+            case "actionbar":
+                return ActionCodec.actionbar(args);
+            case "resetInventory":
+                return ActionCodec.resetInventory(args);
+            case "changeMaxHealth":
+                return ActionCodec.changeMaxHealth(args);
+            case "parkourCheckpoint":
+                return ActionCodec.parkourCheckpoint(args);
+            case "giveItem":
+                return ActionCodec.giveItem(args);
+            case "removeItem":
+                return ActionCodec.removeItem(args);
+            case "chat":
+                return ActionCodec.chat(args);
+            case "addEffect":
+                return ActionCodec.addEffect(args);
+            case "clearEffects":
+                return ActionCodec.clearEffects(args);
+            case "addExperience":
+                return ActionCodec.addExperience(args);
+            case "sendToLobby":
+                return ActionCodec.sendToLobby(args);
+            case "changeVariable":
+                return ActionCodec.changeVariable(args);
+            case "teleport":
+                return ActionCodec.teleport(args);
+            case "failParkour":
+                return ActionCodec.failParkour(args);
+            case "playSound":
+                return ActionCodec.playSound(args);
+            case "setCompassTarget":
+                return ActionCodec.setCompassTarget(args);
+            case "setGameMode":
+                return ActionCodec.setGameMode(args);
+            case "changeHealth":
+                return ActionCodec.changeHealth(args);
+            case "changeHunger":
+                return ActionCodec.changeHunger(args);
             // TODO random action
-            case "triggerFunction" -> ActionCodec.triggerFunction(args);
-            case "applyInventoryLayout" -> ActionCodec.applyInventoryLayout(args);
-            case "enchantHeldItem" -> ActionCodec.enchantHeldItem(args);
-            case "sleep" -> ActionCodec.sleep(args);
-            case "setTeam" -> ActionCodec.setTeam(args);
-            case "dropItem" -> ActionCodec.dropItem(args);
-            case "changeVelocity" -> ActionCodec.changeVelocity(args);
-            case "launchToTarget" -> ActionCodec.launchToTarget(args);
-            case "setPlayerWeather" -> ActionCodec.setPlayerWeather(args);
-            case "setPlayerTime" -> ActionCodec.setPlayerTime(args);
-            case "toggleNameTagDisplay" -> ActionCodec.toggleNameTagDisplay(args);
-            case "cancelEvent" -> ActionCodec.cancelEvent(args);
-            default -> throw new UnsupportedOperationException("Action `%s` not implemented yet".formatted(name.value()));
-        };
+            case "triggerFunction":
+                return ActionCodec.triggerFunction(args);
+            case "applyInventoryLayout":
+                return ActionCodec.applyInventoryLayout(args);
+            case "enchantHeldItem":
+                return ActionCodec.enchantHeldItem(args);
+            case "sleep":
+                return ActionCodec.sleep(args);
+            case "setTeam":
+                return ActionCodec.setTeam(args);
+            case "dropItem":
+                return ActionCodec.dropItem(args);
+            case "changeVelocity":
+                return ActionCodec.changeVelocity(args);
+            case "launchToTarget":
+                return ActionCodec.launchToTarget(args);
+            case "setPlayerWeather":
+                return ActionCodec.setPlayerWeather(args);
+            case "setPlayerTime":
+                return ActionCodec.setPlayerTime(args);
+            case "toggleNameTagDisplay":
+                return ActionCodec.toggleNameTagDisplay(args);
+            case "cancelEvent":
+                return ActionCodec.cancelEvent(args);
+            default:
+                throw new UnsupportedOperationException(String.format("Action `%s` is not implemented yet", name.value()));
+        }
     }
 
     private @NotNull Action buildFunctionTrigger() {

@@ -1,17 +1,14 @@
 package org.housingstudio.hsl.cli;
 
 import com.google.gson.GsonBuilder;
-import com.moandjiezana.toml.Toml;
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.Main;
 import org.housingstudio.hsl.compiler.Compiler;
-import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.exporter.House;
 import org.housingstudio.hsl.exporter.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.Arrays;
 
 @UtilityClass
@@ -26,9 +23,14 @@ public class CLI {
         args = Arrays.copyOfRange(args, 1, args.length);
 
         switch (command) {
-            case "new" -> newProject(args);
-            case "export" -> export();
-            default -> sendHelp();
+            case "new":
+                newProject(args);
+                break;
+            case "export":
+                export();
+                break;
+            default:
+                sendHelp();
         }
     }
 

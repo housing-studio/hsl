@@ -228,17 +228,37 @@ public class Tokenizer {
     private @NotNull Token nextSeparator() {
         char c = get();
         // resolve the token types for the separator char
-        TokenType type = switch (c) {
-            case ';' -> TokenType.SEMICOLON;
-            case ':' -> TokenType.COLON;
-            case ',' -> TokenType.COMMA;
-            case '{' -> TokenType.LBRACE;
-            case '}' -> TokenType.RBRACE;
-            case '(' -> TokenType.LPAREN;
-            case ')' -> TokenType.RPAREN;
-            case '[' -> TokenType.LBRACKET;
-            case ']' -> TokenType.RBRACKET;
-            default -> TokenType.UNEXPECTED; // should never reach this, as the separator check is done beforehand
+        TokenType type;
+        switch (c) {
+            case ';':
+                type = TokenType.SEMICOLON;
+                break;
+            case ':':
+                type = TokenType.COLON;
+                break;
+            case ',':
+                type = TokenType.COMMA;
+                break;
+            case '{':
+                type = TokenType.LBRACE;
+                break;
+            case '}':
+                type = TokenType.RBRACE;
+                break;
+            case '(':
+                type = TokenType.LPAREN;
+                break;
+            case ')':
+                type = TokenType.RPAREN;
+                break;
+            case '[':
+                type = TokenType.LBRACKET;
+                break;
+            case ']':
+                type = TokenType.RBRACKET;
+                break;
+            default:
+                type = TokenType.UNEXPECTED; // should never reach this, as the separator check is done beforehand
         };
         return makeToken(type, String.valueOf(c));
     }
@@ -340,7 +360,7 @@ public class Tokenizer {
         String value = range(begin, cursor);
 
         if (duration) {
-            if (value.isBlank() || !DURATION_PATTERN.matcher(value).matches()) {
+            if (value.isEmpty() || !DURATION_PATTERN.matcher(value).matches()) {
                 syntaxError(Errno.INVALID_DURATION_VALUE, "invalid duration value");
                 return makeToken(TokenType.UNEXPECTED);
             }
@@ -530,10 +550,15 @@ public class Tokenizer {
      * @return {@code true} if the character is a whitespace
      */
     private boolean isWhitespace(char c) {
-        return switch (c) {
-            case ' ', '\t', '\r', '\n' -> true;
-            default -> false;
-        };
+        switch (c) {
+            case ' ':
+            case '\t':
+            case '\r':
+            case '\n':
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -594,10 +619,17 @@ public class Tokenizer {
      */
     private boolean isHexValue(char c) {
         c = lower(c);
-        return switch (c) {
-            case 'A', 'B', 'C', 'D', 'E', 'F' -> true;
-            default -> isNumberStart(c); // fall back to digit check
-        };
+        switch (c) {
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+                return true;
+            default:
+                return isNumberStart(c); // fall back to digit check
+        }
     }
 
     /**
@@ -607,10 +639,13 @@ public class Tokenizer {
      * @return {@code true} if the character is a binary char
      */
     private boolean isBinary(char c) {
-        return switch (c) {
-            case '0', '1' -> true;
-            default -> false;
-        };
+        switch (c) {
+            case '0':
+            case '1':
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -620,10 +655,16 @@ public class Tokenizer {
      * @return {@code ture} if the character is a duration char
      */
     private boolean isDuration(char c) {
-        return switch (c) {
-            case 'h', 'm', 's', 'µ', 'n' -> true;
-            default -> false;
-        };
+        switch (c) {
+            case 'h':
+            case 'm':
+            case 's':
+            case 'µ':
+            case 'n':
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -633,10 +674,13 @@ public class Tokenizer {
      * @return {@code true} if the character is a number content
      */
     private boolean isNumberContent(char c) {
-        return switch (c) {
-            case '.', '_' -> true;
-            default -> isHexValue(c) || isDuration(c);
-        };
+        switch (c) {
+            case '.':
+            case '_':
+                return true;
+            default:
+                return isHexValue(c) || isDuration(c);
+        }
     }
 
     /**
@@ -646,10 +690,27 @@ public class Tokenizer {
      * @return {@code true} if the character is an operator
      */
     private boolean isOperator(char c) {
-        return switch (c) {
-            case '.', '=', '+', '-', '*', '/', '<', '>', '?', '!', '^', '&', '~', '$', '|', '%' -> true;
-            default -> false;
-        };
+        switch (c) {
+            case '.':
+            case '=':
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+            case '<':
+            case '>':
+            case '?':
+            case '!':
+            case '^':
+            case '&':
+            case '~':
+            case '$':
+            case '|':
+            case '%':
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -659,10 +720,20 @@ public class Tokenizer {
      * @return {@code true} if the character is a separator
      */
     private boolean isSeparator(char c) {
-        return switch (c) {
-            case ';', ':', ',', '{', '}', '(', ')', '[', ']' -> true;
-            default -> false;
-        };
+        switch (c) {
+            case ';':
+            case ':':
+            case ',':
+            case '{':
+            case '}':
+            case '(':
+            case ')':
+            case '[':
+            case ']':
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -672,10 +743,21 @@ public class Tokenizer {
      * @return {@code true} if the token is an expression
      */
     private boolean isExpression(@NotNull String token) {
-        return switch (token) {
-            case "fn", "const", "command", "event", "scoreboard", "region", "stat", "if", "else", "return" -> true;
-            default -> false;
-        };
+        switch (token) {
+            case "fn":
+            case "const":
+            case "command":
+            case "event":
+            case "scoreboard":
+            case "region":
+            case "stat":
+            case "if":
+            case "else":
+            case "return":
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -685,10 +767,15 @@ public class Tokenizer {
      * @return {@code true} if the token is a type
      */
     private boolean isType(@NotNull String token) {
-        return switch (token) {
-            case "int", "float", "any", "string" -> true;
-            default -> false;
-        };
+        switch (token) {
+            case "int":
+            case "float":
+            case "any":
+            case "string":
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -698,10 +785,13 @@ public class Tokenizer {
      * @return {@code true} if the token is a boolean
      */
     private boolean isBoolean(@NotNull String token) {
-        return switch (token) {
-            case "true", "false" -> true;
-            default -> false;
-        };
+        switch (token) {
+            case "true":
+            case "false":
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -750,6 +840,13 @@ public class Tokenizer {
         return makeToken(type, "");
     }
 
+    private @NotNull String repeat(@NotNull String value, int count) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < count; i++)
+            builder.append(value);
+        return builder.toString();
+    }
+
     /**
      * Display a syntax error in the standard error output with the with some debug information.
      *
@@ -766,7 +863,7 @@ public class Tokenizer {
         int lineSize = String.valueOf(tokenLineNumber).length();
 
         // display the line number
-        System.err.print(Format.CYAN + " ".repeat(lineSize + 1));
+        System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
         System.err.println(" | ");
 
         System.err.print(" " + tokenLineNumber + " | ");
@@ -782,8 +879,8 @@ public class Tokenizer {
         System.err.println(Format.LIGHT_GRAY + line.substring(start, end));
 
         // display the error pointer
-        System.err.print(Format.CYAN + " ".repeat(lineSize + 1));
-        System.err.println(" | " + " ".repeat(lineSize + (tokenLineIndex - start) - 1) + Format.RED + "^");
+        System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
+        System.err.println(" | " + repeat(" ", lineSize + (tokenLineIndex - start) - 1) + Format.RED + "^");
 
         // exit the program with the error code
         //System.exit(error.code());

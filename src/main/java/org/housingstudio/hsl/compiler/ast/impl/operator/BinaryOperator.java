@@ -129,12 +129,19 @@ public class BinaryOperator extends Value {
     public boolean supported() {
         Type type = lhs.getValueType();
 
-        return switch (operator) {
-            case ADD -> type.isNumber() || type == Type.STRING;
-            case NEGATE_OR_SUBTRACT, DIVIDE, MULTIPLY -> type.isNumber();
-            case AND, OR -> type == Type.BOOL;
-            default -> false;
-        };
+        switch (operator) {
+            case ADD:
+                return type.isNumber() || type == Type.STRING;
+            case NEGATE_OR_SUBTRACT:
+            case DIVIDE:
+            case MULTIPLY:
+                return type.isNumber();
+            case AND:
+            case OR:
+                return type == Type.BOOL;
+            default:
+                return false;
+        }
     }
 
     /**

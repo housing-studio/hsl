@@ -81,10 +81,19 @@ public class OperatorParser extends ParserAlgorithm<Operator> {
      * @return {@code true} if the operator parsing should terminate, {@code false} otherwise
      */
     private boolean shouldOperatorTerminate(@NotNull String operator) {
-        return switch (operator) {
-            case "&&", "||", "??", "?.", "++", "--", "==", "!=" -> true;
-            default -> false;
-        };
+        switch (operator) {
+            case "&&":
+            case "||":
+            case "??":
+            case "?.":
+            case "++":
+            case "--":
+            case "==":
+            case "!=":
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -92,14 +101,20 @@ public class OperatorParser extends ParserAlgorithm<Operator> {
      *
      * @param operator the current operator
      * @param next the next operator
+     *
      * @return {@code true} if the operator parsing should terminate, {@code false} otherwise
      */
     private boolean shouldOperatorTerminate(@NotNull String operator, @NotNull String next) {
-        return switch (operator) {
-            case "?" -> !next.equals(".") && !next.equals("?");
-            case "=", "!" -> !next.equals("=");
-            case "&" -> !next.equals("&");
-            default -> false;
-        };
+        switch (operator) {
+            case "?":
+                return !next.equals(".") && !next.equals("?");
+            case "=":
+            case "!":
+                return !next.equals("=");
+            case "&":
+                return !next.equals("&");
+            default:
+                return false;
+        }
     }
 }

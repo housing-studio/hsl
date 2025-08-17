@@ -45,69 +45,103 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
         get(TokenType.COLON);
 
         switch (type.value()) {
-            case "Location" -> { return parseLocation(parser, context); }
-            case "Vector" -> { return parseVector(parser, context); }
-            case "Slot" -> { return parseSlot(parser, context); }
-            case "GameMode" -> { return parseGameMode(context); }
-            case "Target" -> { return parseTarget(context); }
-            case "Weather" -> { return parseWeather(context); }
-            case "Time" -> { return parseTime(context); }
-            case "Namespace" -> { return parseNamespace(context); }
-            case "Effect" -> { return parseEffect(context); }
-            case "Enchant" -> { return parseEnchant(context); }
-            case "Mode" -> { return parseMode(context); }
-            case "Lobby" -> { return parseLobby(context); }
-            case "Sound" -> { return parseSound(context); }
-            case "Flag" -> { return parseFlag(context); }
-            case "Material" -> { return parseMaterial(context); }
-            case "Executor" -> { return parseExecutor(context); }
-            case "Comparator" -> { return parseComparator(context); }
-            case "ItemComparator" -> { return parseItemComparator(context); }
-            case "ComparatorTarget" -> { return parseComparatorTarget(context); }
-            case "ComparatorAmount" -> { return parseComparatorAmount(context); }
-            case "Permission" -> { return parsePermission(context); }
-            default -> {
+            case "Location":
+                return parseLocation(parser, context);
+            case "Vector":
+                return parseVector(parser, context);
+            case "Slot":
+                return parseSlot(parser, context);
+            case "GameMode":
+                return parseGameMode(context);
+            case "Target":
+                return parseTarget(context);
+            case "Weather":
+                return parseWeather(context);
+            case "Time":
+                return parseTime(context);
+            case "Namespace":
+                return parseNamespace(context);
+            case "Effect":
+                return parseEffect(context);
+            case "Enchant":
+                return parseEnchant(context);
+            case "Mode":
+                return parseMode(context);
+            case "Lobby":
+                return parseLobby(context);
+            case "Sound":
+                return parseSound(context);
+            case "Flag":
+                return parseFlag(context);
+            case "Material":
+                return parseMaterial(context);
+            case "Executor":
+                return parseExecutor(context);
+            case "Comparator":
+                return parseComparator(context);
+            case "ItemComparator":
+                return parseItemComparator(context);
+            case "ComparatorTarget":
+                return parseComparatorTarget(context);
+            case "ComparatorAmount":
+                return parseComparatorAmount(context);
+            case "Permission":
+                return parsePermission(context);
+            default:
                 context.syntaxError(type, "Invalid builtin type");
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
-            }
         }
     }
 
     private @NotNull Value parseSlot(@NotNull AstParser parser, @NotNull ParserContext context) {
-        Token slot = get(TokenType.IDENTIFIER);
+        Token token = get(TokenType.IDENTIFIER);
         SlotType wrapped = Stream.of(SlotType.values())
-            .filter(v -> v.format().equals(slot.value()))
+            .filter(v -> v.format().equals(token.value()))
             .findFirst()
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(slot, "Invalid slot type");
-            throw new UnsupportedOperationException("Invalid slot type: " + slot);
+            context.syntaxError(token, "Invalid slot type");
+            throw new UnsupportedOperationException("Invalid slot type: " + token);
         }
 
-        Slot value = switch (wrapped) {
-            case HELMET, CHESTPLATE, LEGGINGS, BOOTS, FIRST_AVAILABLE, HAND -> new StaticSlot(wrapped);
-            case CUSTOM -> {
+        Slot slot;
+        switch (wrapped) {
+            case HELMET:
+            case CHESTPLATE:
+            case LEGGINGS:
+            case BOOTS:
+            case FIRST_AVAILABLE:
+            case HAND:
+                slot = new StaticSlot(wrapped);
+                break;
+            case CUSTOM: {
                 get(TokenType.LPAREN);
-                Value v = parser.nextValue();
+                Value value = parser.nextValue();
                 get(TokenType.RPAREN);
-                yield new CustomSlot(v);
+                slot = new CustomSlot(value);
+                break;
             }
-            case INVENTORY -> {
+            case INVENTORY: {
                 get(TokenType.LPAREN);
-                Value v = parser.nextValue();
+                Value value = parser.nextValue();
                 get(TokenType.RPAREN);
-                yield new InventorySlot(v);
+                slot = new InventorySlot(value);
+                break;
             }
-            case HOTBAR -> {
+            case HOTBAR: {
                 get(TokenType.LPAREN);
-                Value v = parser.nextValue();
+                Value value = parser.nextValue();
                 get(TokenType.RPAREN);
-                yield new HotbarSlot(v);
+                slot = new HotbarSlot(value);
+                break;
             }
-        };
+            default:
+                context.syntaxError(token, "Invalid slot type");
+                throw new UnsupportedOperationException("Invalid slot type: " + token);
+        }
 
-        return new SlotValue(value);
+        return new SlotValue(slot);
     }
 
     private @NotNull Value parseLocation(@NotNull AstParser parser, @NotNull ParserContext context) {
@@ -122,9 +156,14 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             throw new UnsupportedOperationException("Invalid location type: " + location);
         }
 
-        Location value = switch (wrapped) {
-            case SPAWN, INVOKER, CURRENT -> new StaticLocation(wrapped);
-            case CUSTOM -> {
+        Location value;
+        switch (wrapped) {
+            case SPAWN:
+            case INVOKER:
+            case CURRENT:
+                value = new StaticLocation(wrapped);
+                break;
+            case CUSTOM:
                 get(TokenType.LPAREN);
                 Value x = parser.nextValue();
                 get(TokenType.COMMA);
@@ -132,8 +171,11 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
                 get(TokenType.COMMA);
                 Value z = parser.nextValue();
                 get(TokenType.RPAREN);
-                yield new CustomLocation(x, y, z);
-            }
+                value = new CustomLocation(x, y, z);
+                break;
+            default:
+                context.syntaxError(location, "Invalid location type");
+                throw new UnsupportedOperationException("Invalid location type: " + location);
         };
 
         return new LocationValue(value);

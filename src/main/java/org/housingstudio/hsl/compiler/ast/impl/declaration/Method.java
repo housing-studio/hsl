@@ -43,7 +43,7 @@ public class Method extends Node implements Printable, FunctionBuilder {
             if (!annotation.isAllowedForFunctions()) {
                 context.syntaxError(annotation.name(), "This annotation is not allowed in functions");
                 throw new UnsupportedOperationException(
-                    "Annotation `%s` is not allowed in functions".formatted(annotation.name().value())
+                    String.format("Annotation '%s' is not allowed in functions", annotation.name().value())
                 );
             }
         }
@@ -62,8 +62,8 @@ public class Method extends Node implements Printable, FunctionBuilder {
 
     private @Nullable String resolveDescription() {
         for (Annotation annotation : annotations) {
-            if (annotation instanceof DescriptionAnnotation description)
-                return description.description();
+            if (annotation instanceof DescriptionAnnotation)
+                return ((DescriptionAnnotation) annotation).description();
         }
 
         return null;
@@ -71,8 +71,8 @@ public class Method extends Node implements Printable, FunctionBuilder {
 
     private @Nullable Material resolveIcon() {
         for (Annotation annotation : annotations) {
-            if (annotation instanceof IconAnnotation icon)
-                return icon.material();
+            if (annotation instanceof IconAnnotation)
+                return ((IconAnnotation) annotation).material();
         }
 
         return null;
@@ -80,8 +80,8 @@ public class Method extends Node implements Printable, FunctionBuilder {
 
     private @Nullable Integer resolveAutomaticExecution() {
         for (Annotation annotation : annotations) {
-            if (annotation instanceof LoopAnnotation loop)
-                return (int) loop.ticks();
+            if (annotation instanceof LoopAnnotation)
+                return (int) ((LoopAnnotation) annotation).ticks();
         }
 
         return null;
@@ -103,8 +103,8 @@ public class Method extends Node implements Printable, FunctionBuilder {
         builder.append(Format.LIGHT_GRAY).append(" {").append('\n');
 
         for (Node statement : scope.statements()) {
-            if (statement instanceof Printable printable)
-                builder.append('\t').append(Format.WHITE).append(printable.print()).append('\n');
+            if (statement instanceof Printable)
+                builder.append('\t').append(Format.WHITE).append(((Printable) statement).print()).append('\n');
             else
                 builder.append('\t').append(Format.WHITE).append(statement.getClass().getSimpleName()).append('\n');
         }

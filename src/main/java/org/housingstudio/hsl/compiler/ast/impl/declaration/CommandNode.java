@@ -44,8 +44,8 @@ public class CommandNode extends Node implements Printable, CommandBuilder {
 
     private @NotNull Executor resolveExecutor() {
         for (Annotation annotation : annotations) {
-            if (annotation instanceof ExecutorAnnotation executor)
-                return executor.executor();
+            if (annotation instanceof ExecutorAnnotation)
+                return ((ExecutorAnnotation) annotation).executor();
         }
 
         return Executor.SELF;
@@ -53,8 +53,8 @@ public class CommandNode extends Node implements Printable, CommandBuilder {
 
     private @Nullable Integer resolvePriority() {
         for (Annotation annotation : annotations) {
-            if (annotation instanceof PriorityAnnotation priority)
-                return priority.priority();
+            if (annotation instanceof PriorityAnnotation)
+                return ((PriorityAnnotation) annotation).priority();
         }
 
         return null;
@@ -62,8 +62,8 @@ public class CommandNode extends Node implements Printable, CommandBuilder {
 
     private boolean resolveListed() {
         for (Annotation annotation : annotations) {
-            if (annotation instanceof ListedAnnotation listed)
-                return listed.listed();
+            if (annotation instanceof ListedAnnotation)
+                return ((ListedAnnotation) annotation).listed();
         }
 
         return true;
@@ -80,8 +80,8 @@ public class CommandNode extends Node implements Printable, CommandBuilder {
         builder.append(Format.CYAN).append("()").append(Format.LIGHT_GRAY).append(" {").append('\n');
 
         for (Node statement : scope.statements()) {
-            if (statement instanceof Printable printable)
-                builder.append('\t').append(Format.WHITE).append(printable.print()).append('\n');
+            if (statement instanceof Printable)
+                builder.append('\t').append(Format.WHITE).append(((Printable) statement).print()).append('\n');
             else
                 builder.append('\t').append(Format.WHITE).append(statement.getClass().getSimpleName()).append('\n');
         }

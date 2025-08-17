@@ -1,5 +1,8 @@
 package org.housingstudio.hsl.compiler.token;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.jetbrains.annotations.NotNull;
@@ -9,13 +12,26 @@ import java.util.Objects;
 
 /**
  * Represents a section of the parsed source string that holds specific information of a file part.
- *
- * @param type the type of the token
- * @param value the value of the token
- *
- * @author AdvancedAntiSkid
  */
-public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Meta meta) implements Printable {
+@RequiredArgsConstructor
+@Accessors(fluent = true)
+@Getter
+public class Token implements Printable {
+    /**
+     * The type of the token.
+     */
+    private final @NotNull TokenType type;
+
+    /**
+     * The value of the token.
+     */
+    private final @NotNull String value;
+
+    /**
+     * The source file metadata of the token.
+     */
+    private final @NotNull Meta meta;
+
     /**
      * Indicate, whether this token is of the specified type.
      *
@@ -71,10 +87,13 @@ public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Met
      * @return {@code true} if there are more tokens to be parsed, {@code false} otherwise
      */
     public boolean hasNext() {
-        return switch (type) {
-            case UNEXPECTED, EOF -> false;
-            default -> true;
-        };
+        switch (type) {
+            case UNEXPECTED:
+            case EOF:
+                return false;
+            default:
+                return true;
+        }
     }
 
     /**
@@ -83,10 +102,16 @@ public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Met
      * @return {@code true} if this token is a number
      */
     public boolean isNumber() {
-        return switch (type) {
-            case INT, FLOAT, HEXADECIMAL, BINARY, DURATION -> true;
-            default -> false;
-        };
+        switch (type) {
+            case INT:
+            case FLOAT:
+            case HEXADECIMAL:
+            case BINARY:
+            case DURATION:
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -95,10 +120,13 @@ public record Token(@NotNull TokenType type, @NotNull String value, @NotNull Met
      * @return {@code true} if this token is a constant literal
      */
     public boolean isLiteral() {
-        return switch (type) {
-            case STRING, BOOL -> true;
-            default -> isNumber();
-        };
+        switch (type) {
+            case STRING:
+            case BOOL:
+                return true;
+            default:
+                return isNumber();
+        }
     }
 
     /**

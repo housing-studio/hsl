@@ -33,7 +33,7 @@ public class ConditionMethodCall extends Node implements ConditionBuilder, Print
     public @NotNull Condition buildCondition() {
         Method method = BuiltinConditions.LOOKUP.get(call.name().value());
         if (method == null) {
-            context.syntaxError(call.name(), "Condition not found: `%s`".formatted(call.name().value()));
+            context.syntaxError(call.name(), String.format("Condition not found: `%s`", call.name().value()));
             throw new UnsupportedOperationException("Cannot find condition: " + call.name().value());
         }
 
@@ -50,26 +50,42 @@ public class ConditionMethodCall extends Node implements ConditionBuilder, Print
 
     private @NotNull Condition buildBuiltinCondition(@NotNull ArgAccess args) {
         args.args().put("inverted", ConstantLiteral.ofBool(inverted));
-        return switch (call.name().value()) {
-            case "hasGroup" -> ConditionCodec.hasGroup(args);
-            case "compareVariable" -> ConditionCodec.compareVariable(args);
-            case "hasPermission" -> ConditionCodec.hasPermission(args);
-            case "withinRegion" -> ConditionCodec.withinRegion(args);
-            case "hasItem" -> ConditionCodec.hasItem(args);
-            case "doingParkour" -> ConditionCodec.doingParkour(args);
-            case "hasEffect" -> ConditionCodec.hasEffect(args);
-            case "isSneaking" -> ConditionCodec.isSneaking(args);
-            case "isFlying" -> ConditionCodec.isFlying(args);
-            case "hasHealth" -> ConditionCodec.hasHealth(args);
-            case "hasMaxHealth" -> ConditionCodec.hasMaxHealth(args);
-            case "hasHunger" -> ConditionCodec.hasHunger(args);
-            case "hasGameMode" -> ConditionCodec.hasGameMode(args);
-            case "comparePlaceholder" -> ConditionCodec.comparePlaceholder(args);
-            case "hasTeam" -> ConditionCodec.hasTeam(args);
-            default -> throw new UnsupportedOperationException(
-                "Condition `%s` not implemented yet".formatted(call.name().value())
-            );
-        };
+        switch (call.name().value()) {
+            case "hasGroup":
+                return ConditionCodec.hasGroup(args);
+            case "compareVariable":
+                return ConditionCodec.compareVariable(args);
+            case "hasPermission":
+                return ConditionCodec.hasPermission(args);
+            case "withinRegion":
+                return ConditionCodec.withinRegion(args);
+            case "hasItem":
+                return ConditionCodec.hasItem(args);
+            case "doingParkour":
+                return ConditionCodec.doingParkour(args);
+            case "hasEffect":
+                return ConditionCodec.hasEffect(args);
+            case "isSneaking":
+                return ConditionCodec.isSneaking(args);
+            case "isFlying":
+                return ConditionCodec.isFlying(args);
+            case "hasHealth":
+                return ConditionCodec.hasHealth(args);
+            case "hasMaxHealth":
+                return ConditionCodec.hasMaxHealth(args);
+            case "hasHunger":
+                return ConditionCodec.hasHunger(args);
+            case "hasGameMode":
+                return ConditionCodec.hasGameMode(args);
+            case "comparePlaceholder":
+                return ConditionCodec.comparePlaceholder(args);
+            case "hasTeam":
+                return ConditionCodec.hasTeam(args);
+            default:
+                throw new UnsupportedOperationException(
+                    String.format("Condition `%s` not implemented yet", call.name().value())
+                );
+        }
     }
 
     /**

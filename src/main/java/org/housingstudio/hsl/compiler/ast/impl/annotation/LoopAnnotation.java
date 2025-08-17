@@ -23,16 +23,16 @@ public class LoopAnnotation extends Annotation {
 
     @Override
     public void init() {
-        if (!(value() instanceof ConstantLiteral literal)) {
+        if (!(value() instanceof ConstantLiteral)) {
             context.syntaxError(name(), "Description annotation expects constant literal");
             throw new UnsupportedOperationException("Description annotation expects constant literal");
         }
 
-        if (literal.getValueType() != Type.INT) {
+        if (value().getValueType() != Type.INT) {
             context.syntaxError(name(), "Loop annotation expects int literal");
             throw new UnsupportedOperationException("Loop annotation expects int literal");
         }
 
-        ticks = Long.parseLong(literal.asConstantValue());
+        ticks = Long.parseLong(value().asConstantValue());
     }
 }

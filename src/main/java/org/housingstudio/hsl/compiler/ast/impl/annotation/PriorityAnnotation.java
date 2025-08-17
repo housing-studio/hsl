@@ -23,11 +23,11 @@ public class PriorityAnnotation extends Annotation {
 
     @Override
     public void init() {
-        if (!(value() instanceof ConstantLiteral value) || value.getValueType() != Type.INT) {
+        if (!(value() instanceof ConstantLiteral) || value().getValueType() != Type.INT) {
             context.syntaxError(name(), "Priority annotation expects int value");
             throw new UnsupportedOperationException("Priority annotation expects int value");
         }
 
-        priority = Integer.parseInt(value.asConstantValue());
+        priority = Integer.parseInt(value().asConstantValue());
     }
 }

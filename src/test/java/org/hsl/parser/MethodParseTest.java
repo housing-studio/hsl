@@ -14,11 +14,9 @@ public class MethodParseTest {
     @Test
     public void testDeclare() {
         String source =
-            """
-            fn foo() {
-                stat player kills: int
-            }
-            """;
+            "fn foo() {\n" +
+            "    stat player kills: int\n" +
+            "}\n";
 
         AstParser parser = Parsers.of(source);
         Method method = assertDoesNotThrow(parser::nextMethod);
@@ -35,11 +33,9 @@ public class MethodParseTest {
     @Test
     public void testInfer() {
         String source =
-            """
-            fn foo() {
-                stat player msg = "hello"
-            }
-            """;
+            "fn foo() {\n" +
+            "    stat player msg = \"hello\"\n" +
+            "}\n";
 
         AstParser parser = Parsers.of(source);
         Method method = assertDoesNotThrow(parser::nextMethod);
@@ -59,11 +55,9 @@ public class MethodParseTest {
     @Test
     public void testDeclareAssign() {
         String source =
-            """
-            fn foo() {
-                stat player health: int = 123
-            }
-            """;
+            "fn foo() {\n" +
+            "    stat player health: int = 123\n" +
+            "}\n";
 
         AstParser parser = Parsers.of(source);
         Method method = assertDoesNotThrow(parser::nextMethod);

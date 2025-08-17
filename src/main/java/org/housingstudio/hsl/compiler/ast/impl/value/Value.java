@@ -21,8 +21,6 @@ public abstract class Value extends Node implements Printable, Constant {
     public abstract @NotNull Type getValueType();
 
     public @NotNull Value load() {
-        if (this instanceof ConstantAccess access)
-            return access.load();
         return this;
     }
 }

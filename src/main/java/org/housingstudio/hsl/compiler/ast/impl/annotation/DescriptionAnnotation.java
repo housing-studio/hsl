@@ -23,16 +23,16 @@ public class DescriptionAnnotation extends Annotation {
 
     @Override
     public void init() {
-        if (!(value() instanceof ConstantLiteral literal)) {
+        if (!(value() instanceof ConstantLiteral)) {
             context.syntaxError(name(), "Description annotation expects constant literal");
             throw new UnsupportedOperationException("Description annotation expects constant literal");
         }
 
-        if (literal.getValueType() != Type.STRING) {
+        if (value().getValueType() != Type.STRING) {
             context.syntaxError(name(), "Description annotation expects string literal");
             throw new UnsupportedOperationException("Description annotation expects string literal");
         }
 
-        description = literal.asConstantValue();
+        description = value().asConstantValue();
     }
 }

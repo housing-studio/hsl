@@ -1,10 +1,17 @@
 package org.housingstudio.hsl.type.slot.impl;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.housingstudio.hsl.type.slot.Slot;
 import org.housingstudio.hsl.type.slot.SlotType;
 import org.jetbrains.annotations.NotNull;
 
-public record StaticSlot(@NotNull SlotType type) implements Slot {
+@RequiredArgsConstructor
+@Accessors(fluent = true)
+@Getter
+public class StaticSlot implements Slot {
+    private final @NotNull SlotType type;
     /**
      * Get the constant string representation of the value.
      * <p>

@@ -4,6 +4,7 @@ import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
@@ -13,16 +14,13 @@ public class TokenTest {
     @Test
     public void testTokenize() {
         String source =
-            """
-            fn foo() {
-                stat player kills: int
-                kills++
+            "fn foo() {\n" +
+            "    stat player kills: int\n" +
+            "    kills++\n" +
+            "    chat(\"Hello, World!\")\n" +
+            "}\n";
 
-                chat("Hello, World!")
-            }
-            """;
-
-        List<Token> expect = List.of(
+        List<Token> expect = Arrays.asList(
             Token.of(TokenType.EXPRESSION, "fn"),
             Token.of(TokenType.IDENTIFIER, "foo"),
             Token.of(TokenType.LPAREN, "("),
@@ -53,11 +51,9 @@ public class TokenTest {
     @Test
     public void testFail() {
         String source =
-            """
-            fn main() {
-                "Hello, World
-            }
-            """;
+            "fn main() {\n" +
+            "    \"Hello, World\n" +
+            "}\n";
 
         assertThrows(RuntimeException.class, () -> Tokenizers.tokenizeSource(source));
     }

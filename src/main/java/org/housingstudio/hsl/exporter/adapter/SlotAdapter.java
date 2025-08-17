@@ -17,13 +17,13 @@ public class SlotAdapter implements JsonSerializer<Slot> {
         JsonObject json = new JsonObject();
         json.add("type", context.serialize(slot.type()));
 
-        switch (slot) {
-            case CustomSlot custom -> json.addProperty("raw-slot", custom.rawSlot().load().asConstantValue());
-            case InventorySlot inventory ->
-                json.addProperty("inventory-slow", inventory.inventorySlot().load().asConstantValue());
-            case HotbarSlot hotbar -> json.addProperty("hotbar-slot", hotbar.hotbarSlot().load().asConstantValue());
-            default -> {}
-        }
+
+        if (slot instanceof CustomSlot)
+            json.addProperty("raw-slot", ((CustomSlot) slot).rawSlot().load().asConstantValue());
+        else if (slot instanceof InventorySlot)
+            json.addProperty("inventory-slow", ((InventorySlot) slot).inventorySlot().load().asConstantValue());
+        else if (slot instanceof HotbarSlot)
+            json.addProperty("hotbar-slot", ((HotbarSlot) slot).hotbarSlot().load().asConstantValue());
 
         return json;
     }

@@ -1,5 +1,8 @@
 package org.housingstudio.hsl.compiler.parser.impl.conditional;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.control.ConditionalNode;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
@@ -79,7 +82,12 @@ public class ConditionalParser extends ParserAlgorithm<ConditionalNode> {
         return new Conditions(conditions, operator != null ? operator : Operator.AND);
     }
 
-    private record Conditions(@NotNull List<ConditionBuilder> conditions, @NotNull Operator operator) {
+    @RequiredArgsConstructor
+    @Accessors(fluent = true)
+    @Getter
+    private static class Conditions {
+        private final @NotNull List<ConditionBuilder> conditions;
+        private final @NotNull Operator operator;
     }
 
     private enum Operator {

@@ -52,31 +52,39 @@ public class BinaryOperatorTree {
      */
     public static @NotNull Value updateOperationTree(@NotNull Value node) {
         // return if the node itself, if it is not a binary operation
-        if (!(node instanceof BinaryOperator operation))
+        if (!(node instanceof BinaryOperator))
             return node;
+
+        BinaryOperator operation = (BinaryOperator) node;
 
         // recursively correct the order of child operands of the binary operation
         operation.lhs(updateOperationTree(operation.lhs()));
         operation.rhs(updateOperationTree(operation.rhs()));
 
         // check if the current operator has lower precedence than the operator of its right child
-        if (operation.rhs() instanceof BinaryOperator rhs && hasPrecedence(operation.operator(), rhs.operator())) {
-            // rotate the operation order to the right
-            operation.rhs(rhs.lhs());
-            rhs.lhs(operation);
-            return rhs;
+        if (operation.rhs() instanceof BinaryOperator) {
+            BinaryOperator rhs = (BinaryOperator) operation.rhs();
+            if (hasPrecedence(operation.operator(), rhs.operator())) {
+                // rotate the operation order to the right
+                operation.rhs(rhs.lhs());
+                rhs.lhs(operation);
+                return rhs;
+            }
         }
 
         // check if the current operator has lower or equal precedence than the
         // operator of its left child, and the left child is also an operation
-        if (
-            operation.lhs() instanceof BinaryOperator lhs && hasPrecedence(operation.operator(), lhs.operator()) &&
-            operation.operator().associativity() == 0
-        ) {
-            // rotate the operation order to the left
-            operation.lhs(lhs.rhs());
-            lhs.rhs(operation);
-            return lhs;
+        if (operation.lhs() instanceof BinaryOperator) {
+            BinaryOperator lhs = (BinaryOperator) operation.lhs();
+            if (
+                hasPrecedence(operation.operator(), lhs.operator()) &&
+                operation.operator().associativity() == 0
+            ) {
+                // rotate the operation order to the left
+                operation.lhs(lhs.rhs());
+                lhs.rhs(operation);
+                return lhs;
+            }
         }
 
         // the current order is correct, so return the node as it is

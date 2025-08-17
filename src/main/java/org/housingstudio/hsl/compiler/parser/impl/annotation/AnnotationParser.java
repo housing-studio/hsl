@@ -33,14 +33,21 @@ public class AnnotationParser extends ParserAlgorithm<Annotation> {
         if (peek().is(TokenType.SEMICOLON))
             get();
 
-        return switch (name.value()) {
-            case "description" -> new DescriptionAnnotation(name, value);
-            case "loop" -> new LoopAnnotation(name, value);
-            case "icon" -> new IconAnnotation(name, value);
-            case "executor" -> new ExecutorAnnotation(name, value);
-            case "priority" -> new PriorityAnnotation(name, value);
-            case "listed" -> new ListedAnnotation(name, value);
-            default -> new Annotation(name, value);
-        };
+        switch (name.value()) {
+            case "description":
+                return new DescriptionAnnotation(name, value);
+            case "loop":
+                return new LoopAnnotation(name, value);
+            case "icon":
+                return new IconAnnotation(name, value);
+            case "executor":
+                return new ExecutorAnnotation(name, value);
+            case "priority":
+                return new PriorityAnnotation(name, value);
+            case "listed":
+                return new ListedAnnotation(name, value);
+            default:
+                return new Annotation(name, value);
+        }
     }
 }

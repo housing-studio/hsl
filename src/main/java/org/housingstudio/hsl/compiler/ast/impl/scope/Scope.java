@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a block in the source code that contains a list of instructions.
@@ -51,8 +52,8 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
     public @NotNull List<Action> buildActionList() {
         List<Action> actions = new ArrayList<>();
         for (Node statement : statements) {
-            if (statement instanceof ActionBuilder builder)
-                actions.add(builder.buildAction());
+            if (statement instanceof ActionBuilder)
+                actions.add(((ActionBuilder) statement).buildAction());
         }
         return actions;
     }
@@ -72,8 +73,8 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
     public @Nullable Variable resolveName(@NotNull String name) {
         // try to resolve the value from this scope
         for (Node statement : statements) {
-            if (statement instanceof Variable variable && variable.name().equals(name))
-                return variable;
+            if (statement instanceof Variable && ((Variable) statement).name().equals(name))
+                return (Variable) statement;
         }
         return parent != null ? parent.resolveName(name) : null;
     }
@@ -104,7 +105,7 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
         return statements.stream()
             .filter(node -> node instanceof Scope)
             .map(node -> (ScopeContainer) node)
-            .toList();
+            .collect(Collectors.toList());
     }
 
     /**
@@ -118,8 +119,8 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
         builder.append("{\n");
         for (Node statement : statements) {
             builder.append("\t\t");
-            if (statement instanceof Printable printable)
-                builder.append(printable.print());
+            if (statement instanceof Printable)
+                builder.append(((Printable) statement).print());
             else
                 builder.append(statement.getClass().getSimpleName());
             builder.append('\n');

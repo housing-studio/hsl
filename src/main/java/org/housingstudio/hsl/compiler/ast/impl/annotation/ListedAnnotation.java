@@ -23,11 +23,11 @@ public class ListedAnnotation extends Annotation {
 
     @Override
     public void init() {
-        if (!(value() instanceof ConstantLiteral value) || value.getValueType() != Type.BOOL) {
+        if (!(value() instanceof ConstantLiteral) || value().getValueType() != Type.BOOL) {
             context.syntaxError(name(), "Listed annotation expects bool value");
             throw new UnsupportedOperationException("Listed annotation expects bool value");
         }
 
-        listed = Boolean.parseBoolean(value.asConstantValue());
+        listed = Boolean.parseBoolean(value().asConstantValue());
     }
 }

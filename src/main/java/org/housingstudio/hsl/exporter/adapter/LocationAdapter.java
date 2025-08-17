@@ -11,11 +11,14 @@ public class LocationAdapter implements JsonSerializer<Location> {
     public JsonElement serialize(Location location, Type type, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
         json.add("type", context.serialize(location.type()));
-        if (location instanceof CustomLocation custom) {
+
+        if (location instanceof CustomLocation) {
+            CustomLocation custom = (CustomLocation) location;
             json.addProperty("x", custom.x().load().asConstantValue());
             json.addProperty("y", custom.y().load().asConstantValue());
             json.addProperty("z", custom.z().load().asConstantValue());
         }
+
         return json;
     }
 }

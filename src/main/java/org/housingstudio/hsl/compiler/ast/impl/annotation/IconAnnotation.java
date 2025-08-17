@@ -23,11 +23,11 @@ public class IconAnnotation extends Annotation {
 
     @Override
     public void init() {
-        if (!(value() instanceof MaterialValue value)) {
+        if (!(value() instanceof MaterialValue)) {
             context.syntaxError(name(), "Icon annotation expects material value");
             throw new UnsupportedOperationException("Icon annotation expects material value");
         }
 
-        material = value.material();
+        material = ((MaterialValue) value()).material();
     }
 }

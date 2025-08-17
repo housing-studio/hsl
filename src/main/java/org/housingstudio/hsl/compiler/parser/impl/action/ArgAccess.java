@@ -21,10 +21,7 @@ public class ArgAccess {
     private final @NotNull Map<String, Value> args;
 
     private @NotNull Value get(@NotNull String key) {
-        Value value = args.get(key);
-        if (value instanceof ConstantAccess access)
-            return access.load();
-        return value;
+        return args.get(key).load();
     }
 
     public @NotNull Namespace getNamespace(@NotNull String key) {

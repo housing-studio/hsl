@@ -31,15 +31,21 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         // parse the stat namespace
         // stat team kills: int
         //      ^^^^ the identifier after `stat` describes the namespace of the stat
-        Namespace namespace = switch (peek(TokenType.IDENTIFIER).value()) {
-            case "player" -> Namespace.PLAYER;
-            case "team" -> Namespace.TEAM;
-            case "global" -> Namespace.GLOBAL;
-            default -> {
+        Namespace namespace;
+        switch (peek(TokenType.IDENTIFIER).value()) {
+            case "player":
+                namespace = Namespace.PLAYER;
+                break;
+            case "team":
+                namespace = Namespace.TEAM;
+                break;
+            case "global":
+                namespace = Namespace.GLOBAL;
+                break;
+            default:
                 context.syntaxError(peek(), "Invalid stat namespace");
                 throw new UnsupportedOperationException("Invalid stat namespace: " + peek());
-            }
-        };
+        }
         get();
 
         // parse the local variable name
@@ -51,17 +57,26 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         Type type = null; // if null, infer type
         if (peek().is(TokenType.COLON)) {
             get();
-            type = switch (peek(TokenType.TYPE).value()) {
-                case "int" -> Type.INT;
-                case "float" -> Type.FLOAT;
-                case "bool" -> Type.BOOL;
-                case "string" -> Type.STRING;
-                case "any" -> Type.ANY;
-                default -> {
+            switch (peek(TokenType.TYPE).value()) {
+                case "int":
+                    type = Type.INT;
+                    break;
+                case "float":
+                    type = Type.FLOAT;
+                    break;
+                case "bool":
+                    type = Type.BOOL;
+                    break;
+                case "string":
+                    type = Type.STRING;
+                    break;
+                case "any":
+                    type = Type.ANY;
+                    break;
+                default:
                     context.syntaxError(peek(), "Invalid type");
                     throw new UnsupportedOperationException("Invalid type: " + peek());
-                }
-            };
+            }
             get();
         }
 

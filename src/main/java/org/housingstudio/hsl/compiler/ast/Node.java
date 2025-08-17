@@ -131,11 +131,11 @@ public abstract class Node {
                 throw new IllegalStateException("Cannot access children field", e);
             }
 
-            if (children instanceof Node child)
-                result.add(child);
+            if (children instanceof Node)
+                result.add((Node) children);
 
-            else if (children instanceof Collection<?> iterable)
-                result.addAll((Collection<? extends Node>) iterable);
+            else if (children instanceof Collection<?>)
+                result.addAll((Collection<? extends Node>) children);
 
             else
                 throw new IllegalStateException(

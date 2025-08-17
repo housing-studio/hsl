@@ -19,16 +19,20 @@ public class TypeParser extends ParserAlgorithm<Type> {
     @Override
     public @NotNull Type parse(@NotNull AstParser parser, @NotNull ParserContext context) {
         Token type = get(TokenType.TYPE);
-        return switch (type.value()) {
-            case "int" -> Type.INT;
-            case "float" -> Type.FLOAT;
-            case "string" -> Type.STRING;
-            case "bool" -> Type.BOOL;
-            case "any" -> Type.ANY;
-            default -> {
+        switch (type.value()) {
+            case "int":
+                return Type.INT;
+            case "float":
+                return Type.FLOAT;
+            case "string":
+                return Type.STRING;
+            case "bool":
+                return Type.BOOL;
+            case "any":
+                return Type.ANY;
+            default:
                 context.syntaxError(type, "Invalid type name");
                 throw new UnsupportedOperationException("Invalid type name: " + type.value());
-            }
-        };
+        }
     }
 }

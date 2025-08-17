@@ -41,8 +41,8 @@ public class Event extends Node implements Printable, ActionListBuilder {
         builder.append(Format.CYAN).append("()").append(Format.LIGHT_GRAY).append(" {").append('\n');
 
         for (Node statement : scope.statements()) {
-            if (statement instanceof Printable printable)
-                builder.append('\t').append(Format.WHITE).append(printable.print()).append('\n');
+            if (statement instanceof Printable)
+                builder.append('\t').append(Format.WHITE).append(((Printable) statement).print()).append('\n');
             else
                 builder.append('\t').append(Format.WHITE).append(statement.getClass().getSimpleName()).append('\n');
         }

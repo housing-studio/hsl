@@ -47,12 +47,16 @@ public class LocationValue extends Value {
      */
     @Override
     public @NotNull String print() {
-        return switch (location.type()) {
-            case SPAWN, INVOKER, CURRENT -> "Location::" + location.type().format();
-            case CUSTOM -> {
+        switch (location.type()) {
+            case SPAWN:
+            case INVOKER:
+            case CURRENT:
+                return "Location::" + location.type().format();
+            case CUSTOM:
                 CustomLocation loc = (CustomLocation) location;
-                yield "Location::Custom(%s, %s, %s)".formatted(loc.x().print(), loc.y().print(), loc.z().print());
-            }
-        };
+                return String.format("Location::Custom(%s, %s, %s)", loc.x().print(), loc.y().print(), loc.z().print());
+            default:
+                throw new UnsupportedOperationException("Unexpected location type: " + location.type());
+        }
     }
 }

@@ -19,14 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Testing {
     public static void main(String[] args) {
         String source =
-            """
-            fn enterArea() {
-                if (!hasPermission(Permission::Build)) {
-                    return
-                }
-                chat("hi")
-            }
-            """;
+            "fn enterArea() {\n" +
+            "    if (!hasPermission(Permission::Build)) {\n" +
+            "        return\n" +
+            "    }\n" +
+            "    chat(\"hi\")\n" +
+            "}\n";
 
         BuiltinActions.init();
         BuiltinConditions.init();

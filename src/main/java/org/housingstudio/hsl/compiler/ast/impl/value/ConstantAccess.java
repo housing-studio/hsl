@@ -39,6 +39,7 @@ public class ConstantAccess extends Value {
         return load().asConstantValue();
     }
 
+    @Override
     public @NotNull Value load() {
         ConstantDeclare constant = game.constants().get(name.value());
         if (constant == null) {

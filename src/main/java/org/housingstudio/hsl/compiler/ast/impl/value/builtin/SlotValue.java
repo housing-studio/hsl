@@ -49,20 +49,28 @@ public class SlotValue extends Value {
      */
     @Override
     public @NotNull String print() {
-        return switch (slot.type()) {
-            case HELMET, CHESTPLATE, LEGGINGS, BOOTS, FIRST_AVAILABLE, HAND -> "Slot::" + slot.type().format();
-            case CUSTOM -> {
+        switch (slot.type()) {
+            case HELMET:
+            case CHESTPLATE:
+            case LEGGINGS:
+            case BOOTS:
+            case FIRST_AVAILABLE:
+            case HAND:
+                return "Slot::" + slot.type().format();
+            case CUSTOM: {
                 CustomSlot custom = (CustomSlot) slot;
-                yield "Slot::Custom(%s)".formatted(custom.rawSlot());
+                return String.format("Slot::Custom(%s)", custom.rawSlot());
             }
-            case INVENTORY -> {
+            case INVENTORY: {
                 InventorySlot inventory = (InventorySlot) slot;
-                yield "Slot::Inventory(%s)".formatted(inventory.inventorySlot());
+                return String.format("Slot::Inventory(%s)", inventory.inventorySlot());
             }
-            case HOTBAR -> {
+            case HOTBAR: {
                 HotbarSlot hotbar = (HotbarSlot) slot;
-                yield "Slot::Hotbar(%s)".formatted(hotbar.hotbarSlot());
+                return String.format("Slot::Hotbar(%s)", hotbar.hotbarSlot());
             }
-        };
+            default:
+                throw new UnsupportedOperationException("Unexpected slot type: " + slot.type());
+        }
     }
 }

@@ -23,11 +23,11 @@ public class ExecutorAnnotation extends Annotation {
 
     @Override
     public void init() {
-        if (!(value() instanceof ExecutorValue value)) {
+        if (!(value() instanceof ExecutorValue)) {
             context.syntaxError(name(), "Executor annotation expects executor value");
             throw new UnsupportedOperationException("Executor annotation expects executor value");
         }
 
-        executor = value.executor();
+        executor = ((ExecutorValue) value()).executor();
     }
 }
