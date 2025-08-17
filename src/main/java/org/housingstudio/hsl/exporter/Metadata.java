@@ -4,6 +4,7 @@ import com.moandjiezana.toml.Toml;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
+@ToString
 public class Metadata {
     private @NotNull String id;
     private @NotNull String name;

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.ActionType;
@@ -12,6 +13,7 @@ import org.housingstudio.hsl.exporter.action.ActionType;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
+@ToString
 public class ToggleNameTagDisplay implements Action {
     private final ActionType type = ActionType.TOGGLE_NAME_TAG_DISPLAY;
 

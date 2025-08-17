@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.type.Flag;
@@ -17,6 +18,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
+@ToString
 public class Region {
     /**
      * The unique name of the region.

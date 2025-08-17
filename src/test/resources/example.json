@@ -1,0 +1,28 @@
+{
+    "metadata": {
+        "id": "example",
+        "name": "My Amazing Game",
+        "author": "TheGameMaker",
+        "contributors": [
+            "AnotherGameMaker"
+        ],
+        "description": "A very epic Hypixel game",
+        "version": "1.0.1"
+    },
+    "events": {},
+    "functions": [],
+    "commands": [
+        {
+            "name": "hello",
+            "actions": [
+                {
+                    "type": "SEND_CHAT_MESSAGE",
+                    "message": "Hello, World!"
+                }
+            ],
+            "executor": "SELF",
+            "listed": true
+        }
+    ],
+    "regions": []
+}

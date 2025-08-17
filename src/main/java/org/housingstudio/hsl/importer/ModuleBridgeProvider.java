@@ -1,10 +1,10 @@
 package org.housingstudio.hsl.importer;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.housingstudio.hsl.importer.impl.DefaultModuleBridge;
+import org.jetbrains.annotations.NotNull;
 
-@Getter
-@Setter
 public class ModuleBridgeProvider {
-    private static ModuleBridge bridge;
+    private static @NotNull ModuleBridge provide() {
+        return new DefaultModuleBridge();
+    }
 }

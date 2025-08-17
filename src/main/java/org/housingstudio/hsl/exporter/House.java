@@ -3,6 +3,7 @@ package org.housingstudio.hsl.exporter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.generic.EventType;
@@ -18,6 +19,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
+@ToString
 public class House {
     private @NotNull Metadata metadata;
     private @NotNull Map<EventType, List<Action>> events;

@@ -1,4 +1,4 @@
-# Hypixel Studio Language
+# Hypixel Scripting Language
 
 <strong>Hypixel Housing editor with superpowers.</strong>
 
