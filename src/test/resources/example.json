@@ -16,8 +16,23 @@
             "name": "hello",
             "actions": [
                 {
-                    "type": "SEND_CHAT_MESSAGE",
-                    "message": "Hello, World!"
+                    "type": "CONDITIONAL",
+                    "conditions": [
+                        {
+                            "type": "REQUIRED_GROUP",
+                            "inverted": false,
+                            "required-group": "asd",
+                            "require-higher-groups": false
+                        }
+                    ],
+                    "match-any-condition": false,
+                    "if-actions": [
+                        {
+                            "type": "SEND_CHAT_MESSAGE",
+                            "message": "Hello, World!"
+                        }
+                    ],
+                    "else-actions": []
                 }
             ],
             "executor": "SELF",

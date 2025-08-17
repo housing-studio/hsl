@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.condition.Condition;
 import org.housingstudio.hsl.exporter.condition.ConditionType;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @Accessors(fluent = true)
 @Getter
+@ToString
 public class HasItem implements Condition {
     private final ConditionType type = ConditionType.HAS_ITEM;
 

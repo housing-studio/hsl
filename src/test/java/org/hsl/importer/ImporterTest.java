@@ -1,11 +1,12 @@
 package org.hsl.importer;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.SneakyThrows;
 import org.housingstudio.hsl.exporter.House;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.adapter.ActionAdapter;
+import org.housingstudio.hsl.exporter.adapter.ConditionAdapter;
+import org.housingstudio.hsl.exporter.condition.Condition;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -17,6 +18,7 @@ public class ImporterTest {
         String resource = getResource();
         House house = new GsonBuilder()
             .registerTypeAdapter(Action.class, new ActionAdapter())
+            .registerTypeAdapter(Condition.class, new ConditionAdapter())
             .create()
             .fromJson(resource, House.class);
         System.out.println(house);
