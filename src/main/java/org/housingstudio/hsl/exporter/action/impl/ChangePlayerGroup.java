@@ -8,6 +8,10 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.ActionType;
+import org.housingstudio.hsl.importer.interaction.InteractionTarget;
+import org.housingstudio.hsl.importer.interaction.InteractionType;
+import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
+import org.housingstudio.hsl.importer.interaction.defaults.Required;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
@@ -18,8 +22,12 @@ import org.jetbrains.annotations.NotNull;
 public class ChangePlayerGroup implements Action {
     private final ActionType type = ActionType.CHANGE_PLAYER_GROUP;
 
+    @InteractionTarget(type = InteractionType.DYNAMIC_OPTION, offset = 0)
+    @Required
     private @NotNull String group;
 
+    @InteractionTarget(type = InteractionType.TOGGLE, offset = 1)
+    @DefaultBoolean(true)
     @SerializedName("demotion-protection")
     private boolean demotionProtection;
 }

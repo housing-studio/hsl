@@ -16,7 +16,6 @@ import org.housingstudio.hsl.type.location.Location;
 import org.housingstudio.hsl.type.location.LocationType;
 import org.housingstudio.hsl.type.location.impl.CustomLocation;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -40,9 +39,8 @@ public class Importer {
 
         ChatLib.prefixChat("&7Importing total &f" + commands.size() + " &7commands");
 
-        for (Command command : commands) {
+        for (Command command : commands)
             importCommand(command);
-        }
     }
 
     @SneakyThrows
@@ -127,7 +125,10 @@ public class Importer {
             return false;
         }
 
-        configureAction(action);
+        if (!configureAction(action)) {
+            ChatLib.chat("could not configure action " + action.type().name());
+            return false;
+        }
 
         // click on "go back"
         waitAndClick(31);
@@ -161,7 +162,7 @@ public class Importer {
     }
 
     @SneakyThrows
-    private void configureAction(@NotNull Action action) {
+    private boolean configureAction(@NotNull Action action) {
         ChatLib.chat("configuring action " + action.type().name());
 
         Field[] fields = action.getClass().getDeclaredFields();
@@ -177,7 +178,7 @@ public class Importer {
             int offset = target.offset();
             int slot = Interaction.START_INDEX + offset;
 
-            Object defaultValue = getDefaultValue(field);
+            Object defaultValue = Defaults.getDefaultValue(field);
             if (value.equals(defaultValue))
                 continue;
 
@@ -197,6 +198,7 @@ public class Importer {
                 case TOGGLE:
                     waitAndClick(slot);
                     Thread.sleep(3000);
+                    break;
                 case LOCATION:
                     waitAndClick(slot);
                     Thread.sleep(3000);
@@ -243,6 +245,7 @@ public class Importer {
                     GameMode gameMode = (GameMode) value;
                     waitAndClick(Interaction.START_INDEX + gameMode.offset());
                     Thread.sleep(3000);
+                    break;
                 case WEATHER:
                     waitAndClick(slot);
                     Thread.sleep(3000);
@@ -250,6 +253,7 @@ public class Importer {
                     Weather weather = (Weather) value;
                     waitAndClick(Interaction.START_INDEX + weather.offset());
                     Thread.sleep(3000);
+                    break;
                 case TIME:
                     waitAndClick(slot);
                     Thread.sleep(3000);
@@ -257,31 +261,62 @@ public class Importer {
                     Time time = (Time) value;
                     waitAndClick(Interaction.START_INDEX + time.offset());
                     Thread.sleep(3000);
+                    break;
+                case EFFECT:
+                    waitAndClick(slot);
+                    Thread.sleep(3000);
+                    // move to next page if needed
+                    Effect effect = (Effect) value;
+                    if (effect.page() > 1) {
+                        waitAndClick(53);
+                        Thread.sleep(3000);
+                    }
+                    // select effect type
+                    waitAndClick(Interaction.START_INDEX + effect.offset());
+                    Thread.sleep(3000);
+                    break;
+                case DYNAMIC_OPTION:
+                    waitAndClick(slot);
+                    Thread.sleep(3000);
+                    // select item dynamically from the container that matches the expected name
+                    if (!findAndClick((String) value)) {
+                        ChatLib.chat(
+                            "could not find dynamic option `" + value + "` for property " + field.getName() +
+                            " for action " + action.type().name()
+                        );
+                        return false;
+                    }
+                    Thread.sleep(3000);
+                    break;
                 default:
                     ChatLib.prefixChat("Unimplemented interaction type: " + type.name());
             }
         }
+
+        return true;
     }
 
-    private @Nullable Object getDefaultValue(@NotNull Field field) {
-        if (field.isAnnotationPresent(DefaultInt.class))
-            return field.getDeclaredAnnotation(DefaultInt.class).value();
-        else if (field.isAnnotationPresent(DefaultFloat.class))
-            return field.getDeclaredAnnotation(DefaultFloat.class).value();
-        else if (field.isAnnotationPresent(DefaultString.class))
-            return field.getDeclaredAnnotation(DefaultString.class).value();
-        else if (field.isAnnotationPresent(DefaultBoolean.class))
-            return field.getDeclaredAnnotation(DefaultBoolean.class).value();
-        else if (field.isAnnotationPresent(DefaultMode.class))
-            return field.getDeclaredAnnotation(DefaultMode.class).value();
-        else if (field.isAnnotationPresent(DefaultNamespace.class))
-            return field.getDeclaredAnnotation(DefaultNamespace.class).value();
-        else if (field.isAnnotationPresent(DefaultTime.class))
-            return field.getDeclaredAnnotation(DefaultTime.class).value();
-        else if (field.isAnnotationPresent(Required.class))
-            return null;
-        else
-            throw new IllegalStateException("Field " + field.getName() + " does not specify a default value");
+    @SneakyThrows
+    private boolean findAndClick(@NotNull String name) {
+        for (
+            long start = System.currentTimeMillis();
+            System.currentTimeMillis() - start < 10_000;
+            Thread.sleep(100)
+        ) {
+            Inventory container = Player.getContainer();
+            if (container == null)
+                continue;
+
+            for (Item item : container.getItems()) {
+                if (!item.getName().contains(name))
+                    continue;
+
+                container.click(item.getSlot(), false, "LEFT");
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void onMessage(@NotNull Object event, @NotNull String message) {
@@ -302,7 +337,7 @@ public class Importer {
     }
 
     public void onContainerOpen(@NotNull Object event) {
-        Exec.async(() -> {
+        Future.tryInvokeAsync(() -> {
             Thread.sleep(500);
             Inventory container = Player.getContainer();
             if (container == null)

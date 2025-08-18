@@ -14,10 +14,19 @@ import org.housingstudio.hsl.exporter.Exporter;
 import org.housingstudio.hsl.exporter.House;
 import org.housingstudio.hsl.exporter.Metadata;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Testing {
     public static void main(String[] args) {
+        Object o = Collections.emptyList();
+        List<String> t = (List<String>) o;
+        System.out.println(t);
+        System.exit(0);
+
         String source =
             "fn enterArea() {\n" +
             "    if (!hasPermission(Permission::Build)) {\n" +

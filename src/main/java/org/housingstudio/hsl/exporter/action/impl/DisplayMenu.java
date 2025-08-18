@@ -7,6 +7,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.ActionType;
+import org.housingstudio.hsl.importer.interaction.InteractionTarget;
+import org.housingstudio.hsl.importer.interaction.InteractionType;
+import org.housingstudio.hsl.importer.interaction.defaults.Required;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
@@ -17,5 +20,7 @@ import org.jetbrains.annotations.NotNull;
 public class DisplayMenu implements Action {
     private final ActionType type = ActionType.DISPLAY_MENU;
 
+    @InteractionTarget(type = InteractionType.DYNAMIC_OPTION, offset = 0)
+    @Required
     private @NotNull String menu;
 }

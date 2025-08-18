@@ -9,6 +9,11 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.ActionType;
 import org.housingstudio.hsl.exporter.adapter.LocationAdapter;
+import org.housingstudio.hsl.importer.interaction.InteractionTarget;
+import org.housingstudio.hsl.importer.interaction.InteractionType;
+import org.housingstudio.hsl.importer.interaction.defaults.DefaultFloat;
+import org.housingstudio.hsl.importer.interaction.defaults.DefaultInt;
+import org.housingstudio.hsl.importer.interaction.defaults.Required;
 import org.housingstudio.hsl.type.Sound;
 import org.housingstudio.hsl.type.location.Location;
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +27,21 @@ import org.jetbrains.annotations.Nullable;
 public class PlaySound implements Action {
     private final ActionType type = ActionType.PLAY_SOUND;
 
+    // TODO
     private @NotNull Sound sound;
 
-    private float volume, pitch;
+    @InteractionTarget(type = InteractionType.ANVIL, offset = 1)
+    @DefaultFloat(0.7F)
+    private float volume;
 
+    @InteractionTarget(type = InteractionType.ANVIL, offset = 2)
+    @DefaultFloat(1.0F)
+    private float pitch;
+
+    @InteractionTarget(type = InteractionType.LOCATION, offset = 3)
+    @Required
+    // TODO find out if it should be @Optional and @Nullable if this works without location
+    //  or should it be @Required and @NotNull
     @JsonAdapter(LocationAdapter.class)
     private @Nullable Location location;
 }

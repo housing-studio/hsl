@@ -12,4 +12,8 @@ public enum InteractionType {
     GAME_MODE,
     WEATHER,
     TIME,
+    EFFECT,
+    DYNAMIC_OPTION,
+    CONDITIONS,
+    ACTIONS
 }
