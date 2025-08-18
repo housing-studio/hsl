@@ -27,4 +27,11 @@ public class CustomLocation implements Location {
     public @NotNull String asConstantValue() {
         return type.format() + " " + x.asConstantValue() + " " + y.asConstantValue() + " " + z.asConstantValue();
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "CustomLocation(x=%s, y=%s, z=%s)", x.asConstantValue(), y.asConstantValue(), z.asConstantValue()
+        );
+    }
 }

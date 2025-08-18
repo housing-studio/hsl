@@ -1,12 +1,15 @@
 package org.housingstudio.hsl.exporter.adapter;
 
 import com.google.gson.*;
+import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.type.location.Location;
+import org.housingstudio.hsl.type.location.LocationType;
 import org.housingstudio.hsl.type.location.impl.CustomLocation;
+import org.housingstudio.hsl.type.location.impl.StaticLocation;
 
 import java.lang.reflect.Type;
 
-public class LocationAdapter implements JsonSerializer<Location> {
+public class LocationAdapter implements JsonSerializer<Location>, JsonDeserializer<Location> {
     @Override
     public JsonElement serialize(Location location, Type type, JsonSerializationContext context) {
         JsonObject json = new JsonObject();
@@ -20,5 +23,28 @@ public class LocationAdapter implements JsonSerializer<Location> {
         }
 
         return json;
+    }
+
+    @Override
+    public Location deserialize(JsonElement src, Type type, JsonDeserializationContext ctx) throws JsonParseException {
+        JsonElement kindValue = src.getAsJsonObject().get("type");
+        LocationType kind = ctx.deserialize(kindValue, LocationType.class);
+        switch (kind) {
+            case SPAWN:
+            case INVOKER:
+            case CURRENT:
+                return new StaticLocation(kind);
+            case CUSTOM:
+                float x = src.getAsJsonObject().get("x").getAsFloat();
+                float y = src.getAsJsonObject().get("y").getAsFloat();
+                float z = src.getAsJsonObject().get("z").getAsFloat();
+                return new CustomLocation(
+                    ConstantLiteral.ofFloat(x),
+                    ConstantLiteral.ofFloat(y),
+                    ConstantLiteral.ofFloat(z)
+                );
+            default:
+                throw new JsonParseException("Unknown location type: " + kind);
+        }
     }
 }

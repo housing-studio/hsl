@@ -18,6 +18,7 @@ java {
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -31,6 +32,7 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.moandjiezana.toml:toml4j:0.7.2")
+    implementation("com.github.qibergames:futura:1.1.1")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

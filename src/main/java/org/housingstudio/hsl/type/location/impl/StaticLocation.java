@@ -2,6 +2,7 @@ package org.housingstudio.hsl.type.location.impl;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.type.location.Location;
 import org.housingstudio.hsl.type.location.LocationType;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
+@ToString
 public class StaticLocation implements Location {
     private final @NotNull LocationType type;
     /**

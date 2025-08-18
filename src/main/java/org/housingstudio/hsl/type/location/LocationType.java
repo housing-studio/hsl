@@ -9,10 +9,11 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 public enum LocationType {
-    SPAWN("Spawn"),
-    INVOKER("Invoker"),
-    CURRENT("Current"),
-    CUSTOM("Custom");
+    SPAWN("Spawn", 0),
+    INVOKER("Invoker", 1),
+    CURRENT("Current", 2),
+    CUSTOM("Custom", 3);
 
     private final @NotNull String format;
+    private final int offset;
 }

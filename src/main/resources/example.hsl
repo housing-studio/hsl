@@ -9,7 +9,7 @@ event kill() {
     streak++
 
     // apply strength effect when the player reaches a kill streak of 5
-    if (streak > 5) {
+    if (streak >= 5) {
         addEffect(Effect::Strength, level=2, override=true)
         chat("You have reached a 5 kill streak")
     }

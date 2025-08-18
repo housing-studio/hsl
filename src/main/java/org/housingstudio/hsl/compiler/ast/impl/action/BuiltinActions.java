@@ -86,7 +86,7 @@ public class BuiltinActions {
         Parameter.required("title", Type.STRING),
         Parameter.optional("subtitle", Type.STRING, ConstantLiteral.ofString("")),
         Parameter.optional("fadein", Type.INT, ConstantLiteral.ofInt(1)),
-        Parameter.optional("stay", Type.INT, ConstantLiteral.ofInt(1)),
+        Parameter.optional("stay", Type.INT, ConstantLiteral.ofInt(5)),
         Parameter.optional("fadeout", Type.INT, ConstantLiteral.ofInt(1))
     );
 
