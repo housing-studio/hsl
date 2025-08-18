@@ -121,8 +121,12 @@ public class Importer {
         Thread.sleep(3000);
 
         if (!selectAction(action)) {
-            ChatLib.chat("could not select action " + action.type().name());
-            return false;
+            // retry on second page
+            waitAndClick(53);
+            if (!selectAction(action)) {
+                ChatLib.chat("could not select action " + action.type().name());
+                return false;
+            }
         }
 
         if (!configureAction(action)) {
@@ -141,9 +145,12 @@ public class Importer {
     @SneakyThrows
     private boolean selectAction(@NotNull Action action) {
         String name = action.type().itemName();
-        while (true) {
-            Thread.sleep(100);
 
+        for (
+            long start = System.currentTimeMillis();
+            System.currentTimeMillis() - start < 3000;
+            Thread.sleep(100)
+        ) {
             Inventory container = Player.getContainer();
             if (container == null)
                 continue;
@@ -159,6 +166,8 @@ public class Importer {
                 return true;
             }
         }
+
+        return false;
     }
 
     @SneakyThrows
