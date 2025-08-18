@@ -7,6 +7,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.ActionType;
+import org.housingstudio.hsl.importer.interaction.InteractionTarget;
+import org.housingstudio.hsl.importer.interaction.InteractionType;
+import org.housingstudio.hsl.importer.interaction.defaults.DefaultString;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
@@ -17,5 +20,7 @@ import org.jetbrains.annotations.NotNull;
 public class DisplayActionBar implements Action {
     private final ActionType type = ActionType.DISPLAY_ACTION_BAR;
 
+    @InteractionTarget(type = InteractionType.CHAT, offset = 0)
+    @DefaultString("Hello World!")
     private @NotNull String title;
 }

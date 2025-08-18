@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.impl.*;
 import org.housingstudio.hsl.type.Target;
+import org.housingstudio.hsl.type.Vector;
 import org.jetbrains.annotations.NotNull;
 
 @UtilityClass
@@ -171,7 +172,11 @@ public class ActionCodec {
     }
 
     public @NotNull Action changeVelocity(@NotNull ArgAccess args) {
-        return new ChangeVelocity(args.getVector("velocity"));
+        Vector velocity = args.getVector("velocity");
+        float x = Float.parseFloat(velocity.x().load().asConstantValue());
+        float y = Float.parseFloat(velocity.y().load().asConstantValue());
+        float z = Float.parseFloat(velocity.z().load().asConstantValue());
+        return new ChangeVelocity(x, y, z);
     }
 
     public @NotNull Action launchToTarget(@NotNull ArgAccess args) {

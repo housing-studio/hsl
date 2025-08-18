@@ -9,11 +9,12 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 public enum Time {
-    WORLD("World"),
-    SUNRISE("Sunrise"),
-    NOON("Noon"),
-    SUNSET("Sunset"),
-    MIDNIGHT("Midnight");
+    WORLD("World", 0),
+    SUNRISE("Sunrise", 1),
+    NOON("Noon", 2),
+    SUNSET("Sunset", 3),
+    MIDNIGHT("Midnight", 4);
 
     private final @NotNull String format;
+    private final int offset;
 }

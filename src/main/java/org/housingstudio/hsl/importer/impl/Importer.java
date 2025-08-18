@@ -9,11 +9,9 @@ import org.housingstudio.hsl.exporter.generic.Command;
 import org.housingstudio.hsl.importer.interaction.Interaction;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
-import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
-import org.housingstudio.hsl.importer.interaction.defaults.DefaultInt;
-import org.housingstudio.hsl.importer.interaction.defaults.DefaultString;
-import org.housingstudio.hsl.importer.interaction.defaults.Required;
+import org.housingstudio.hsl.importer.interaction.defaults.*;
 import org.housingstudio.hsl.importer.platform.*;
+import org.housingstudio.hsl.type.*;
 import org.housingstudio.hsl.type.location.Location;
 import org.housingstudio.hsl.type.location.LocationType;
 import org.housingstudio.hsl.type.location.impl.CustomLocation;
@@ -187,7 +185,7 @@ public class Importer {
                 case CHAT:
                     waitAndClick(slot);
                     Thread.sleep(3000);
-                    ChatLib.say((String) value);
+                    ChatLib.say(String.valueOf(value));
                     Thread.sleep(3000);
                     break;
                 case ANVIL:
@@ -196,6 +194,9 @@ public class Importer {
                     Anvil.input(String.valueOf(value));
                     Thread.sleep(3000);
                     break;
+                case TOGGLE:
+                    waitAndClick(slot);
+                    Thread.sleep(3000);
                 case LOCATION:
                     waitAndClick(slot);
                     Thread.sleep(3000);
@@ -211,6 +212,51 @@ public class Importer {
                         );
                         Anvil.input(format);
                     }
+                    break;
+                case MODE:
+                case MODE_WITH_UNSET:
+                    waitAndClick(slot);
+                    Thread.sleep(3000);
+                    // select mode type
+                    Mode mode = (Mode) value;
+                    int modeSlot = Interaction.START_INDEX + mode.offset();
+                    // some guis have an "Unset" mode, so all the modes are shifted right
+                    // this is kinda strange, as afaik no other enum types have an unset
+                    // field in the option selector
+                    if (type == InteractionType.MODE_WITH_UNSET)
+                        modeSlot++;
+                    waitAndClick(modeSlot);
+                    Thread.sleep(3000);
+                    break;
+                case LOBBY:
+                    waitAndClick(slot);
+                    Thread.sleep(3000);
+                    // select lobby type
+                    Lobby lobby = (Lobby) value;
+                    waitAndClick(Interaction.START_INDEX + lobby.offset());
+                    Thread.sleep(3000);
+                    break;
+                case GAME_MODE:
+                    waitAndClick(slot);
+                    Thread.sleep(3000);
+                    // select game mode
+                    GameMode gameMode = (GameMode) value;
+                    waitAndClick(Interaction.START_INDEX + gameMode.offset());
+                    Thread.sleep(3000);
+                case WEATHER:
+                    waitAndClick(slot);
+                    Thread.sleep(3000);
+                    // select weather type
+                    Weather weather = (Weather) value;
+                    waitAndClick(Interaction.START_INDEX + weather.offset());
+                    Thread.sleep(3000);
+                case TIME:
+                    waitAndClick(slot);
+                    Thread.sleep(3000);
+                    // select time type
+                    Time time = (Time) value;
+                    waitAndClick(Interaction.START_INDEX + time.offset());
+                    Thread.sleep(3000);
                 default:
                     ChatLib.prefixChat("Unimplemented interaction type: " + type.name());
             }
@@ -220,10 +266,18 @@ public class Importer {
     private @Nullable Object getDefaultValue(@NotNull Field field) {
         if (field.isAnnotationPresent(DefaultInt.class))
             return field.getDeclaredAnnotation(DefaultInt.class).value();
+        else if (field.isAnnotationPresent(DefaultFloat.class))
+            return field.getDeclaredAnnotation(DefaultFloat.class).value();
         else if (field.isAnnotationPresent(DefaultString.class))
             return field.getDeclaredAnnotation(DefaultString.class).value();
         else if (field.isAnnotationPresent(DefaultBoolean.class))
             return field.getDeclaredAnnotation(DefaultBoolean.class).value();
+        else if (field.isAnnotationPresent(DefaultMode.class))
+            return field.getDeclaredAnnotation(DefaultMode.class).value();
+        else if (field.isAnnotationPresent(DefaultNamespace.class))
+            return field.getDeclaredAnnotation(DefaultNamespace.class).value();
+        else if (field.isAnnotationPresent(DefaultTime.class))
+            return field.getDeclaredAnnotation(DefaultTime.class).value();
         else if (field.isAnnotationPresent(Required.class))
             return null;
         else

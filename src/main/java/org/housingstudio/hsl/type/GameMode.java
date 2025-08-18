@@ -9,9 +9,10 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 public enum GameMode {
-    ADVENTURE("Adventure"),
-    SURVIVAL("Survival"),
-    CREATIVE("Creative");
+    ADVENTURE("Adventure", 0),
+    SURVIVAL("Survival", 1),
+    CREATIVE("Creative", 2);
 
     private final @NotNull String format;
+    private final int offset;
 }

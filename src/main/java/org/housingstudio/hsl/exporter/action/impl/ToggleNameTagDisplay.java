@@ -8,6 +8,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.ActionType;
+import org.housingstudio.hsl.importer.interaction.InteractionTarget;
+import org.housingstudio.hsl.importer.interaction.InteractionType;
+import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +20,8 @@ import org.housingstudio.hsl.exporter.action.ActionType;
 public class ToggleNameTagDisplay implements Action {
     private final ActionType type = ActionType.TOGGLE_NAME_TAG_DISPLAY;
 
+    @InteractionTarget(type = InteractionType.TOGGLE, offset = 0)
+    @DefaultBoolean(true)
     @SerializedName("display-name-tag")
     private boolean displayNameTag;
 }

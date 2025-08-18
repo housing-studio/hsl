@@ -9,11 +9,12 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 public enum Mode {
-    SET("Set"),
-    INCREMENT("Increment"),
-    DECREMENT("Decrement"),
-    MULTIPLY("Multiply"),
-    DIVIDE("Divide");
+    SET("Set", 0),
+    INCREMENT("Increment", 1),
+    DECREMENT("Decrement", 2),
+    MULTIPLY("Multiply", 3),
+    DIVIDE("Divide", 4);
 
     private final @NotNull String format;
+    private final int offset;
 }

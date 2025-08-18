@@ -9,26 +9,27 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 public enum Lobby {
-    MAIN("Main"),
-    TOURNAMENT_HALL("TournamentHall"),
-    BLITZ_SG("BlitzSG"),
-    THE_TNT_GAMES("TheTNTGames"),
-    MEGA_WALLS("MegaWalls"),
-    ARCADE_GAMES("ArcadeGames"),
-    COPS_AND_CRIMS("CopsAndCrims"),
-    UHC_CHAMPIONS("UHCChampions"),
-    WARLORDS("Warlords"),
-    SMASH_HEROES("SmashHeroes"),
-    HOUSING("Housing"),
-    SKY_WARS("SkyWars"),
-    SPEED_UHC("SpeedUHC"),
-    CLASSIC_GAMES("ClassicGames"),
-    PROTOTYPE("Prototype"),
-    BED_WARS("BedWars"),
-    MURDER_MYSTERY("MurderMystery"),
-    BUILD_BATTLE("BuildBattle"),
-    DUELS("Duels"),
-    WOOL_WARS("WoolWars");
+    MAIN("Main", 0),
+    TOURNAMENT_HALL("TournamentHall", 1),
+    BLITZ_SG("BlitzSG", 2),
+    THE_TNT_GAMES("TheTNTGames", 3),
+    MEGA_WALLS("MegaWalls", 4),
+    ARCADE_GAMES("ArcadeGames", 5),
+    COPS_AND_CRIMS("CopsAndCrims", 6),
+    UHC_CHAMPIONS("UHCChampions", 7),
+    WARLORDS("Warlords", 8),
+    SMASH_HEROES("SmashHeroes", 9),
+    HOUSING("Housing", 10),
+    SKY_WARS("SkyWars", 11),
+    SPEED_UHC("SpeedUHC", 12),
+    CLASSIC_GAMES("ClassicGames", 13),
+    PROTOTYPE("Prototype", 14),
+    BED_WARS("BedWars", 15),
+    MURDER_MYSTERY("MurderMystery", 16),
+    BUILD_BATTLE("BuildBattle", 17),
+    DUELS("Duels", 18),
+    WOOL_WARS("WoolWars", 19);
 
     private final @NotNull String format;
+    private final int offset;
 }

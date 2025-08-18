@@ -9,8 +9,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 public enum Weather {
-    SUNNY("Sunny"),
-    RAINING("Raining");
+    SUNNY("Sunny", 0),
+    RAINING("Raining", 1);
 
     private final @NotNull String format;
+    private final int offset;
 }

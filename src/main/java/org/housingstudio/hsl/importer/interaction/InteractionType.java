@@ -4,5 +4,12 @@ public enum InteractionType {
     CHAT,
     ANVIL,
     TOGGLE,
-    LOCATION
+    LOCATION,
+    MODE,
+    MODE_WITH_UNSET,
+    LOBBY,
+    NAMESPACE,
+    GAME_MODE,
+    WEATHER,
+    TIME,
 }

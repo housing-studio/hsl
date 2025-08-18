@@ -8,6 +8,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.ActionType;
+import org.housingstudio.hsl.importer.interaction.InteractionTarget;
+import org.housingstudio.hsl.importer.interaction.InteractionType;
+import org.housingstudio.hsl.importer.interaction.defaults.DefaultInt;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,5 +21,7 @@ public class PauseExecution implements Action {
     private final ActionType type = ActionType.PAUSE_EXECUTION;
 
     @SerializedName("ticks-to-wait")
+    @InteractionTarget(type = InteractionType.ANVIL, offset = 0)
+    @DefaultInt(20)
     private int ticksToWait;
 }

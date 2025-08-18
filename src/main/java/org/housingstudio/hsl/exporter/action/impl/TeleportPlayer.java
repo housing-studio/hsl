@@ -25,13 +25,13 @@ import org.jetbrains.annotations.NotNull;
 public class TeleportPlayer implements Action {
     private final ActionType type = ActionType.TELEPORT_PLAYER;
 
-    @JsonAdapter(LocationAdapter.class)
     @InteractionTarget(type = InteractionType.LOCATION, offset = 0)
     @Required
+    @JsonAdapter(LocationAdapter.class)
     private @NotNull Location location;
 
-    @SerializedName("prevent-teleport-inside-blocks")
     @InteractionTarget(type = InteractionType.TOGGLE, offset = 1)
     @DefaultBoolean(false)
+    @SerializedName("prevent-teleport-inside-blocks")
     private boolean preventTeleportInsideBlocks;
 }
