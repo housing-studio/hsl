@@ -57,17 +57,25 @@ public class LiteralParser extends ParserAlgorithm<Value> {
             if (literal.getValueType() != rhs.getValueType()) {
                 context.syntaxError(token, "Operator type mismatch");
                 throw new UnsupportedOperationException(
-                    "Operator type mismatch (lhs: %s, rhs: %s)".formatted(literal.getValueType(), rhs.getValueType())
+                    String.format(
+                        "Operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType(), rhs.getValueType()
+                    )
                 );
             }
 
             BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(literal, operator, rhs);
             if (!operation.supported()) {
                 context.syntaxError(
-                    token, "Operator not supported for types (lhs: %s, rhs: %s)".formatted(literal.getValueType(), rhs.getValueType())
+                    token, String.format(
+                        "Operator not supported for types (lhs: %s, rhs: %s)",
+                        literal.getValueType(), rhs.getValueType()
+                    )
                 );
                 throw new UnsupportedOperationException(
-                    "Operator not supported for types (lhs: %s, rhs: %s)".formatted(literal.getValueType(), rhs.getValueType())
+                    String.format(
+                        "Operator not supported for types (lhs: %s, rhs: %s)",
+                        literal.getValueType(), rhs.getValueType()
+                    )
                 );
             }
 

@@ -57,17 +57,26 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
             if (access.getValueType() != rhs.getValueType()) {
                 context.syntaxError(first, "Operator type mismatch");
                 throw new UnsupportedOperationException(
-                    "Operator type mismatch (lhs: %s, rhs: %s)".formatted(access.getValueType(), rhs.getValueType())
+                    String.format(
+                        "Operator type mismatch (lhs: %s, rhs: %s)",
+                        access.getValueType(), rhs.getValueType()
+                    )
                 );
             }
 
             BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(access, operator, rhs);
             if (!operation.supported()) {
                 context.syntaxError(
-                    first, "Operator not supported for types (lhs: %s, rhs: %s)".formatted(access.getValueType(), rhs.getValueType())
+                    first, String.format(
+                        "Operator not supported for types (lhs: %s, rhs: %s)",
+                        access.getValueType(), rhs.getValueType()
+                    )
                 );
                 throw new UnsupportedOperationException(
-                    "Operator not supported for types (lhs: %s, rhs: %s)".formatted(access.getValueType(), rhs.getValueType())
+                    String.format(
+                        "Operator not supported for types (lhs: %s, rhs: %s)",
+                        access.getValueType(), rhs.getValueType()
+                    )
                 );
             }
 

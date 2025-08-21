@@ -36,7 +36,8 @@ public class VectorValue extends Value {
      */
     @Override
     public @NotNull String asConstantValue() {
-        return "%s %s %s".formatted(
+        return String.format(
+            "%s %s %s",
             vector.x().asConstantValue(),
             vector.y().asConstantValue(),
             vector.z().asConstantValue()
@@ -50,7 +51,8 @@ public class VectorValue extends Value {
      */
     @Override
     public @NotNull String print() {
-        return "Vector::new(%s, %s, %s)".formatted(
+        return String.format(
+            "Vector::new(%s, %s, %s)",
             vector.x().print(),
             vector.y().print(),
             vector.z().print()
