@@ -17,12 +17,14 @@ import org.housingstudio.hsl.exporter.House;
 import org.housingstudio.hsl.exporter.Metadata;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class Compiler {
@@ -77,8 +79,14 @@ public class Compiler {
         return new AstParser(context);
     }
     private @NotNull String readFile(@NotNull File file) {
-        try {
-            return Files.readString(file.toPath());
+        try (BufferedReader reader = Files.newBufferedReader(file.toPath())) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+            }
+            return sb.toString();
         } catch (IOException e) {
             System.err.println("Unable to read source file: " + file.getAbsoluteFile());
             throw new RuntimeException(e);
@@ -91,7 +99,7 @@ public class Compiler {
                 .filter(Files::isRegularFile)
                 .filter(path -> path.toString().endsWith(".hsl"))
                 .map(Path::toFile)
-                .toList();
+                .collect(Collectors.toList());
 
             return new Compiler(metadata, files, new Game());
         } catch (IOException e) {
