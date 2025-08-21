@@ -224,7 +224,7 @@ public class ParserContext {
             int padding = lineSize < longestSize ? longestSize - (longestSize - lineSize) : lineSize;
 
             // display the line number
-            System.err.print(Format.CYAN + " ".repeat(padding + 1));
+            System.err.print(Format.CYAN + repeat(" ", padding + 1));
             System.err.println(" | ");
 
             System.err.print(" " + meta.lineNumber() + " | ");
@@ -240,17 +240,17 @@ public class ParserContext {
             System.err.println(Format.LIGHT_GRAY + line.substring(start, end));
 
             // display the error pointer
-            System.err.print(Format.CYAN + " ".repeat(lineSize + 1));
-            String pointerPad = " ".repeat(lineSize + (meta.lineIndex() - start) - 1);
-            System.err.println(" | " + pointerPad + Format.RED + "^".repeat(meta.endIndex() - meta.beginIndex()));
+            System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
+            String pointerPad = repeat(" ", lineSize + (meta.lineIndex() - start) - 1);
+            System.err.println(" | " + pointerPad + Format.RED + repeat("^", meta.endIndex() - meta.beginIndex()));
 
             // display the expected tokens below the pointer
-            System.err.print(Format.CYAN + " ".repeat(lineSize + 1));
+            System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
             System.err.println(" | " + pointerPad + Format.LIGHT_GRAY + error.message());
         }
 
         // display a final separator
-        System.err.print(Format.CYAN + " ".repeat(longestSize + 1));
+        System.err.print(Format.CYAN + repeat(" ", longestSize + 1));
         System.err.println(" | ");
 
         System.err.print(Format.DEFAULT);
@@ -258,5 +258,12 @@ public class ParserContext {
         // exit the program with the error code
         //System.exit(Errno.UNEXPECTED_TOKEN.code());
         throw new IllegalStateException("AST parse error");
+    }
+
+    private @NotNull String repeat(@NotNull String value, int count) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < count; i++)
+            builder.append(value);
+        return builder.toString();
     }
 }
