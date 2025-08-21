@@ -5,7 +5,7 @@ plugins {
     id("application")
 }
 
-group = "org.housingstudio.hsl"
+group = "org.housingstudio"
 version = System.getenv("VERSION") ?: "1.0-SNAPSHOT"
 
 application {
