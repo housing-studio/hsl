@@ -47,6 +47,7 @@ bin/
 ### BunJS ###
 node_modules/
 
+### HSL ###
 /hsl
 /example
 /deploy.sh
