@@ -22,7 +22,7 @@ public class MethodParseTest {
         Method method = assertDoesNotThrow(parser::nextMethod);
 
         assertEquals(1, method.scope().statements().size());
-        Node node = method.scope().statements().getFirst();
+        Node node = method.scope().statements().get(0);
 
         LocalDeclare local = assertInstanceOf(LocalDeclare.class, node);
         assertEquals("kills", local.name());
@@ -41,7 +41,7 @@ public class MethodParseTest {
         Method method = assertDoesNotThrow(parser::nextMethod);
 
         assertEquals(1, method.scope().statements().size());
-        Node node = method.scope().statements().getFirst();
+        Node node = method.scope().statements().get(0);
 
         LocalDeclareAssign local = assertInstanceOf(LocalDeclareAssign.class, node);
         assertEquals("msg", local.name());
@@ -63,7 +63,7 @@ public class MethodParseTest {
         Method method = assertDoesNotThrow(parser::nextMethod);
 
         assertEquals(1, method.scope().statements().size());
-        Node node = method.scope().statements().getFirst();
+        Node node = method.scope().statements().get(0);
 
         LocalDeclareAssign local = assertInstanceOf(LocalDeclareAssign.class, node);
         assertEquals("health", local.name());
