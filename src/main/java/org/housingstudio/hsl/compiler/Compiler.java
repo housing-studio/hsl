@@ -78,6 +78,7 @@ public class Compiler {
 
         return new AstParser(context);
     }
+
     private @NotNull String readFile(@NotNull File file) {
         try (BufferedReader reader = Files.newBufferedReader(file.toPath())) {
             StringBuilder sb = new StringBuilder();

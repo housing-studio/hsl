@@ -15,7 +15,6 @@ jobs:
             packages: write
 
         steps:
-            # semantic release
             -   uses: actions/checkout@v4
                 with:
                     fetch-depth: 0
@@ -31,4 +30,3 @@ jobs:
             -   run: bun semantic-release
                 env:
                     GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-

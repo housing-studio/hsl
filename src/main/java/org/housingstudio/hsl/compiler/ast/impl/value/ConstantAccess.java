@@ -10,11 +10,14 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Stack;
+
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.CONSTANT_ACCESS)
 public class ConstantAccess extends Value {
+    private final Stack<Value> accessStack = new Stack<>();
     private final @NotNull Token name;
 
     /**
@@ -36,7 +39,19 @@ public class ConstantAccess extends Value {
      */
     @Override
     public @NotNull String asConstantValue() {
-        return load().asConstantValue();
+        Value value = load();
+        if (accessStack.contains(value)) {
+            context.syntaxError(name, "Circular initialization flow");
+            throw new IllegalStateException("Circular initialization flow: " + name.value());
+        }
+
+        accessStack.push(value);
+
+        try {
+            return value.asConstantValue();
+        } finally {
+            accessStack.pop();
+        }
     }
 
     @Override
