@@ -2,8 +2,10 @@ package org.housingstudio.hsl.compiler.ast;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
+import org.housingstudio.hsl.compiler.ast.hierarchy.ChildrenResolver;
 import org.housingstudio.hsl.compiler.ast.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.hierarchy.Parent;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
@@ -13,6 +15,7 @@ import org.housingstudio.hsl.compiler.parser.ParserContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Set;
@@ -112,11 +115,12 @@ public abstract class Node {
      * @return the set of child nodes of the overriding node
      */
     @SuppressWarnings("unchecked")
-    public @NotNull Set<@NotNull Node> children() {
+    @SneakyThrows
+    public @NotNull Set<Node> children() {
         if (children != null)
             return children;
 
-        Set<@NotNull Node> result = new CopyOnWriteArraySet<>();
+        Set<Node> result = new CopyOnWriteArraySet<>();
 
         for (Field field : NodeVisitor.getFields(getClass())) {
             if (!field.isAnnotationPresent(Children.class))
@@ -131,11 +135,23 @@ public abstract class Node {
                 throw new IllegalStateException("Cannot access children field", e);
             }
 
-            if (children instanceof Node)
+            Children annotation = field.getDeclaredAnnotation(Children.class);
+            if (annotation.resolver() != ChildrenResolver.NoResolver.class) {
+                Constructor<?> constructor = annotation.resolver().getDeclaredConstructors()[0];
+                constructor.setAccessible(true);
+                ChildrenResolver resolver = (ChildrenResolver) constructor.newInstance();
+                result.addAll(resolver.resolveChildren(children));
+            }
+
+            else if (children instanceof Node)
                 result.add((Node) children);
 
-            else if (children instanceof Collection<?>)
-                result.addAll((Collection<? extends Node>) children);
+            else if (children instanceof Collection<?>) {
+                for (Object child : ((Collection<?>) children)) {
+                    if (child instanceof Node)
+                        result.add((Node) child);
+                }
+            }
 
             else
                 throw new IllegalStateException(

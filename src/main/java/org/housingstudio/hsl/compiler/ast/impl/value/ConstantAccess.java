@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
+import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +57,15 @@ public class ConstantAccess extends Value {
 
     @Override
     public @NotNull Value load() {
+        // TODO variables and constants should be resolved based on their priority by their depth in the AST tree
+        //  basically whichever one is the "closest" to this node, should be captured in case of "shadowing".
+        //  To achieve this, you might want to make resolveName "generic" for both variables and constants.
+        //  The current implementation of prioritizing variables is invalid - however you need to support anonymous
+        //  constants first, as they are currently package-level only.
+        Variable variable = resolveName(name.value());
+        if (variable != null)
+            return new StatAccess(name, variable);
+
         ConstantDeclare constant = game.constants().get(name.value());
         if (constant == null) {
             context.syntaxError(name, "Constant not found");

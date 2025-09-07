@@ -1,6 +1,7 @@
 package org.housingstudio.hsl.compiler.ast.hierarchy;
 
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,4 +23,5 @@ import java.util.List;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Children {
+    @NotNull Class<? extends ChildrenResolver> resolver() default ChildrenResolver.NoResolver.class;
 }

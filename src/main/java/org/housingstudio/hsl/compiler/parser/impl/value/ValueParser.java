@@ -29,6 +29,12 @@ public class ValueParser extends ParserAlgorithm<Value> {
         if (peek().isLiteral())
             return parser.nextLiteral();
 
+        // handle string interpolation
+        // chat($"stat: {var1}")
+        //      ^^^^^^^^^^^^^^^ string starting with dollar sign is going to be interpolated
+        else if (peek().is(TokenType.OPERATOR, "$"))
+            return parser.nextInterpolation();
+
         // handle builtin value
         // const TEST_LOCATION = Location::Custom(10, 10, 10)
         //                       ^^^^^^^^^^ the identifier follows two colons

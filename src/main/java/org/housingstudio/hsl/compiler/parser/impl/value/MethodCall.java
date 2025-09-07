@@ -3,9 +3,12 @@ package org.housingstudio.hsl.compiler.parser.impl.value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.builder.ActionBuilder;
+import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
+import org.housingstudio.hsl.compiler.ast.hierarchy.ChildrenResolver;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
@@ -36,6 +39,7 @@ public class MethodCall extends Value implements ActionBuilder {
     /**
      * The list of arguments to pass to the method.
      */
+    @Children(resolver = MethodCallChildrenResolver.class)
     private final @NotNull List<Argument> arguments;
 
     /**
@@ -210,5 +214,15 @@ public class MethodCall extends Value implements ActionBuilder {
 
     private @NotNull Action buildFunctionTrigger() {
         throw new UnsupportedOperationException("function trigger not implemented yet");
+    }
+
+    static class MethodCallChildrenResolver implements ChildrenResolver<List<Argument>> {
+        @Override
+        public @NotNull List<Node> resolveChildren(@NotNull List<Argument> children) {
+            return children
+                .stream()
+                .map(Argument::value)
+                .collect(Collectors.toList());
+        }
     }
 }

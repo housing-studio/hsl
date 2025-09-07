@@ -8,13 +8,14 @@ import org.housingstudio.hsl.compiler.token.Token;
 import org.hsl.tokenizer.Tokenizers;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.List;
 
 @UtilityClass
 public class Parsers {
     public @NotNull AstParser of(@NotNull String source) {
         List<Token> tokens = Tokenizers.tokenizeSource(source);
-        ParserContext context = new ParserContext(tokens, source);
+        ParserContext context = new ParserContext(tokens, new File("example.hsl"), source);
         Node.context(context);
 
         return new AstParser(context);

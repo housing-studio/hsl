@@ -17,6 +17,8 @@ public enum NodeType {
     LOCAL_ASSIGN,
 
     CONSTANT_ACCESS,
+    STAT_ACCESS,
+    INTERPOLATED_STRING,
 
     METHOD_CALL,
     RETURN,

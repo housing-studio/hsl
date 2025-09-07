@@ -127,6 +127,10 @@ public class AstParser {
         return BinaryOperatorTree.makeBinaryOperator(lhs, operator, rhs);
     }
 
+    public @NotNull Value nextInterpolation() {
+        return parse(InterpolationParser.class, Value.class);
+    }
+
     public @NotNull ConditionBuilder nextCondition() {
         return parse(ConditionParser.class, ConditionBuilder.class);
     }

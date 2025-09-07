@@ -16,11 +16,11 @@ import java.util.regex.Pattern;
 public class Tokenizer {
     private static final Pattern DURATION_PATTERN = Pattern.compile(
         "^(?:(\\d+(?:_\\d+)*h))?" +                // hours
-            "(?:(\\d+(?:_\\d+)*m))?" +                 // minutes
-            "(?:(\\d+(?:_\\d+)*s))?" +                 // seconds
-            "(?:(\\d+(?:_\\d+)*ms))?" +                // milliseconds
-            "(?:(\\d+(?:_\\d+)*(?:us|µs)))?" +         // microseconds
-            "(?:(\\d+(?:_\\d+)*ns))?$"                 // nanoseconds
+        "(?:(\\d+(?:_\\d+)*m))?" +                 // minutes
+        "(?:(\\d+(?:_\\d+)*s))?" +                 // seconds
+        "(?:(\\d+(?:_\\d+)*ms))?" +                // milliseconds
+        "(?:(\\d+(?:_\\d+)*(?:us|µs)))?" +         // microseconds
+        "(?:(\\d+(?:_\\d+)*ns))?$"                 // nanoseconds
     );
 
     /**
@@ -568,6 +568,8 @@ public class Tokenizer {
      * @return {@code true} if the character is an identifier beginning
      */
     private boolean isIdentifierStart(char c) {
+        if (c == '$')
+            return false; // not an identifier, reserved for string interpolation
         return Character.isJavaIdentifierStart(c);
     }
 
@@ -578,6 +580,8 @@ public class Tokenizer {
      * @return {@code true} if the character is an identifier part
      */
     private boolean isIdentifierPart(char c) {
+        if (c == '\0')
+            return false;
         return Character.isJavaIdentifierPart(c);
     }
 

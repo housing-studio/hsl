@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.token.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.stream.Stream;
  */
 @RequiredArgsConstructor
 @Accessors(fluent = true)
+@Getter
 public class ParserContext {
     /**
      * The list of annotations that are declared by a type/function definition.
@@ -34,6 +36,11 @@ public class ParserContext {
      * The list of tokens received by the {@link Tokenizer}, to be parsed to a tree of {@link Node}s.
      */
     private final @NotNull List<@NotNull Token> tokens;
+
+    /**
+     * The underlying file that was tokenized.
+     */
+    private final @NotNull File file;
 
     /**
      * The content of the source file that is being parsed.

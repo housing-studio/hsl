@@ -43,7 +43,7 @@ public class Compiler {
         for (File sourceFile : sourceFiles) {
             String content = readFile(sourceFile);
             List<Token> tokens = tokenizeFile(sourceFile, content);
-            parsers.add(createParser(tokens, content));
+            parsers.add(createParser(tokens, sourceFile, content));
         }
 
         Node.game(game);
@@ -72,8 +72,8 @@ public class Compiler {
         return new TokenTransformer(tokens).transform();
     }
 
-    private @NotNull AstParser createParser(@NotNull List<Token> tokens, @NotNull String content) {
-        ParserContext context = new ParserContext(tokens, content);
+    private @NotNull AstParser createParser(@NotNull List<Token> tokens, @NotNull File file, @NotNull String content) {
+        ParserContext context = new ParserContext(tokens, file, content);
         Node.context(context);
 
         return new AstParser(context);

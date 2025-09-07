@@ -52,6 +52,7 @@ public class ParserRegistry {
             MethodCallParser.class,
             ConditionParser.class,
             ConditionalParser.class,
+            InterpolationParser.class
         };
 
         for (Class<?> parser : parsers) {
