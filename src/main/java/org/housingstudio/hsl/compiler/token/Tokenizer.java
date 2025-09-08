@@ -749,6 +749,7 @@ public class Tokenizer {
     private boolean isExpression(@NotNull String token) {
         switch (token) {
             case "fn":
+            case "macro":
             case "const":
             case "command":
             case "event":

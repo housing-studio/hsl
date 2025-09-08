@@ -30,6 +30,7 @@ public enum NodeType {
 
     ARGUMENT,
     METHOD,
+    MACRO,
     COMMAND,
     EVENT,
     GAME,

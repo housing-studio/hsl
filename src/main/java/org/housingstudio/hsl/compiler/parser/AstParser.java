@@ -7,10 +7,7 @@ import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.control.ConditionalNode;
-import org.housingstudio.hsl.compiler.ast.impl.declaration.CommandNode;
-import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
-import org.housingstudio.hsl.compiler.ast.impl.declaration.Event;
-import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.*;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
@@ -22,10 +19,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.impl.annotation.AnnotationParser;
 import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionParser;
 import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionalParser;
-import org.housingstudio.hsl.compiler.parser.impl.declaration.CommandParser;
-import org.housingstudio.hsl.compiler.parser.impl.declaration.ConstantParser;
-import org.housingstudio.hsl.compiler.parser.impl.declaration.EventParser;
-import org.housingstudio.hsl.compiler.parser.impl.declaration.MethodParser;
+import org.housingstudio.hsl.compiler.parser.impl.declaration.*;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalDeclareParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.BinaryOperatorTree;
@@ -61,6 +55,10 @@ public class AstParser {
 
     public @NotNull Method nextMethod() {
         return parse(MethodParser.class, Method.class);
+    }
+
+    public @NotNull Macro nextMacro() {
+        return parse(MacroParser.class, Macro.class);
     }
 
     public @NotNull CommandNode nextCommand() {
@@ -112,6 +110,11 @@ public class AstParser {
         return parse(ArgumentListParser.class, List.class);
     }
 
+    @SuppressWarnings("unchecked")
+    public @NotNull List<Parameter> nextParameterList() {
+        return parse(ParameterListParser.class, List.class);
+    }
+
     public @NotNull Type nextType() {
         return parse(TypeParser.class, Type.class);
     }
@@ -156,6 +159,22 @@ public class AstParser {
                 }
 
                 game.functions().put(method.name().value(), method);
+            }
+
+            else if (context.peek().is(TokenType.EXPRESSION, "macro")) {
+                Macro macro = nextMacro();
+
+                if (game.functions().containsKey(macro.name().value())) {
+                    context.error(
+                        Errno.MACRO_ALREADY_DEFINED,
+                        "macro already defined",
+                        macro.name(),
+                        "macro is already declared in this scope"
+                    );
+                    throw new UnsupportedOperationException("Macro name is already in use: " + macro.name().value());
+                }
+
+                game.macros().put(macro.name().value(), macro);
             }
 
             else if (context.peek().is(TokenType.EXPRESSION, "command")) {

@@ -18,6 +18,10 @@ public class Parameter {
     private final @NotNull Type type;
     private final @Nullable Value defaultValue;
 
+    public boolean isRequired() {
+        return defaultValue == null;
+    }
+
     public static @NotNull Parameter required(@NotNull String name, @NotNull Type type) {
         return new Parameter(Token.of(TokenType.IDENTIFIER, name), type, null);
     }

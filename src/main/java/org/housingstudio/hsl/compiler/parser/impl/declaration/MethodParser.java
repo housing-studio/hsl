@@ -24,7 +24,7 @@ import java.util.ArrayList;
  *         chat("Hello, World!")
  *     }
  * </pre>
- * The method `foo` is defined with the body of the method contains the statement {@code chat("Hello, World!")}.
+ * The method `foo` is defined with the body of a statement {@code chat("Hello, World!")}.
  * <p>
  * The method is defined by the return type, the name of the method, the parameter list, and the body of the method.
  * <p>

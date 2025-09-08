@@ -5,10 +5,7 @@ import org.housingstudio.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.housingstudio.hsl.compiler.parser.impl.annotation.AnnotationParser;
 import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionParser;
 import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionalParser;
-import org.housingstudio.hsl.compiler.parser.impl.declaration.CommandParser;
-import org.housingstudio.hsl.compiler.parser.impl.declaration.ConstantParser;
-import org.housingstudio.hsl.compiler.parser.impl.declaration.EventParser;
-import org.housingstudio.hsl.compiler.parser.impl.declaration.MethodParser;
+import org.housingstudio.hsl.compiler.parser.impl.declaration.*;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalDeclareParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.OperatorParser;
@@ -28,12 +25,13 @@ public class ParserRegistry {
     /**
      * The lookup table that maps the parse targets to the parser algorithms.
      */
-    private final @NotNull Map<@NotNull Class<?>, @NotNull ParserAlgorithm<?>> PARSERS = new HashMap<>();
+    private final @NotNull Map<Class<?>, ParserAlgorithm<?>> PARSERS = new HashMap<>();
 
     // initialize the lookup table with the parser algorithms
     static {
         Class<?>[] parsers = {
             MethodParser.class,
+            MacroParser.class,
             CommandParser.class,
             EventParser.class,
             ScopeParser.class,
@@ -47,6 +45,7 @@ public class ParserRegistry {
             ConstantAccessParser.class,
             TypeParser.class,
             ArgumentListParser.class,
+            ParameterListParser.class,
             OperatorParser.class,
             AnnotationParser.class,
             MethodCallParser.class,
