@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,10 +51,17 @@ public class ConditionalParser extends ParserAlgorithm<ConditionalNode> {
         while (!peek().is(TokenType.RPAREN)) {
             conditions.add(parser.nextCondition());
 
+            // TODO check for mixed operators in function actions only - does not effect macros
+
             if (peek().is(TokenType.OPERATOR, "&")) {
                 if (operator == Operator.OR) {
-                    context.syntaxError(peek(), "cannot mix AND and OR operators");
-                    throw new UnsupportedOperationException("cannot mix AND and OR operators");
+                    context.error(
+                        Errno.CANNOT_MIX_OPERATORS,
+                        "illegal sequence of operators",
+                        peek(),
+                        "cannot mix AND and OR operators in condition actions"
+                    );
+                    throw new UnsupportedOperationException("Cannot mix AND and OR operators");
                 }
 
                 get(TokenType.OPERATOR, "&");
@@ -64,8 +72,13 @@ public class ConditionalParser extends ParserAlgorithm<ConditionalNode> {
 
             else if (peek().is(TokenType.OPERATOR, "|")) {
                 if (operator == Operator.AND) {
-                    context.syntaxError(peek(), "cannot mix OR and OR operators");
-                    throw new UnsupportedOperationException("cannot mix OR and OR operators");
+                    context.error(
+                        Errno.CANNOT_MIX_OPERATORS,
+                        "illegal sequence of operators",
+                        peek(),
+                        "cannot mix AND and OR operators in condition actions"
+                    );
+                    throw new UnsupportedOperationException("Cannot mix AND and OR operators");
                 }
 
                 get(TokenType.OPERATOR, "|");

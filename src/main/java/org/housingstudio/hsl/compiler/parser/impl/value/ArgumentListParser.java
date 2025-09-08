@@ -5,6 +5,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +17,9 @@ public class ArgumentListParser extends ParserAlgorithm<List<Argument>> {
     /**
      * Parse the next {@link List<Argument>} node from the token stream.
      *
-     * @param parser  the AST node parser
+     * @param parser the AST node parser
      * @param context the token parser context
+     *
      * @return the next {@link List<Argument>} node from the token stream
      */
     @Override
@@ -39,7 +41,12 @@ public class ArgumentListParser extends ParserAlgorithm<List<Argument>> {
 
             // handle misuse of named arguments
             else if (namedArgsStarted) {
-                context.syntaxError(peek(), "Positional argument after named argument");
+                context.error(
+                    Errno.POSITIONAL_ARGUMENT_AFTER_NAMED_ARGUMENT,
+                    "Positional argument after named argument",
+                    peek(),
+                    "Positional arguments are not allowed after named arguments"
+                );
                 throw new UnsupportedOperationException("Positional argument after named argument");
             }
 

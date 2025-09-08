@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.type.Namespace;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
@@ -28,7 +29,12 @@ public class LocalDeclare extends Variable implements Printable {
     public void init() {
         Variable variable = resolveName(name.value());
         if (variable != null && variable != this) {
-            context.syntaxError(name, "Cannot redeclare variable ");
+            context.error(
+                Errno.CANNOT_REDECLARE_VARIABLE,
+                "Cannot redeclare variable",
+                name,
+                "Variable name is already declared in this scope"
+            );
             throw new UnsupportedOperationException("Cannot redeclare variable: " + name.value());
         }
     }

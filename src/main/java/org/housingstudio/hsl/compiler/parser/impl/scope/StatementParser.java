@@ -65,7 +65,7 @@ public class StatementParser extends ParserAlgorithm<Node> {
             return new Return();
         }
 
-        context.syntaxError(peek(), "Invalid statement");
+        context.syntaxError(peek(), "expected statement, but found " + peek().print());
         throw new UnsupportedOperationException("Not implemented statement: " + peek());
     }
 }

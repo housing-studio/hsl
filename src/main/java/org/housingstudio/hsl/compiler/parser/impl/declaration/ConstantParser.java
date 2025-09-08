@@ -5,6 +5,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,13 @@ public class ConstantParser extends ParserAlgorithm<ConstantDeclare> {
             get();
 
         if (!context.currentAnnotations().isEmpty()) {
-            context.syntaxError(context.currentAnnotations().get(0).name(), "Annotations not allowed for constants");
+            Token token = context.currentAnnotations().get(0).name();
+            context.error(
+                Errno.UNEXPECTED_ANNOTATION_TARGET,
+                "unexpected annotation target",
+                token,
+                "cannot declare annotations for constants"
+            );
             throw new UnsupportedOperationException("Annotations not allowed for constants");
         }
 

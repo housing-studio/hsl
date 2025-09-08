@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,13 +24,13 @@ public class LoopAnnotation extends Annotation {
 
     @Override
     public void init() {
-        if (!(value() instanceof ConstantLiteral)) {
-            context.syntaxError(name(), "Description annotation expects constant literal");
-            throw new UnsupportedOperationException("Description annotation expects constant literal");
-        }
-
-        if (value().getValueType() != Type.INT) {
-            context.syntaxError(name(), "Loop annotation expects int literal");
+        if (!(value() instanceof ConstantLiteral) || value().getValueType() != Type.INT) {
+            context.error(
+                Errno.UNEXPECTED_ANNOTATION_VALUE,
+                "unexpected annotation value",
+                name(),
+                "loop annotation expects int literal"
+            );
             throw new UnsupportedOperationException("Loop annotation expects int literal");
         }
 

@@ -4,6 +4,7 @@ import org.housingstudio.hsl.compiler.ast.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,12 @@ public class ConditionParser extends ParserAlgorithm<ConditionBuilder> {
             return condition;
         }
 
-        context.syntaxError(peek(), "Unexpected condition");
+        context.error(
+            Errno.UNKNOWN_CONDITION,
+            "unexpected condition value",
+            peek(),
+            "expected condition, but found: " + peek().value()
+        );
         throw new UnsupportedOperationException("Unexpected condition");
     }
 }

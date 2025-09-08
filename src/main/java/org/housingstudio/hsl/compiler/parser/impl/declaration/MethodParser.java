@@ -60,8 +60,8 @@ public class MethodParser extends ParserAlgorithm<Method> {
         }
 
         if (returnType != Type.VOID) {
-            context.syntaxError(peek(), "Non-void function return type is currently not supported");
-            throw new UnsupportedOperationException("Non-void function return type is currently not supported");
+            context.syntaxError(at(cursor() - 1), "non-void function return type is currently not supported");
+            throw new UnsupportedOperationException("non-void function return type is currently not supported");
         }
 
         Scope scope = parser.nextScope();

@@ -5,6 +5,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.builtin.*;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.housingstudio.hsl.type.*;
@@ -88,7 +89,13 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case "Permission":
                 return parsePermission(context);
             default:
-                context.syntaxError(type, "Invalid builtin type");
+                context.error(
+                    Errno.INVALID_BUILTIN_TYPE,
+                    "invalid builtin type",
+                    type,
+                    "unrecognized builtin type"
+                );
+                // TODO note: read about builtin types at %docs%
                 throw new UnsupportedOperationException("Invalid builtin type: " + type);
         }
     }
@@ -101,7 +108,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(token, "Invalid slot type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid slot type",
+                token,
+                "unrecognized slot type"
+            );
             throw new UnsupportedOperationException("Invalid slot type: " + token);
         }
 
@@ -137,7 +149,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
                 break;
             }
             default:
-                context.syntaxError(token, "Invalid slot type");
+                context.error(
+                    Errno.INVALID_BUILTIN_TYPE,
+                    "invalid slot type",
+                    token,
+                    "unrecognized slot type"
+                );
                 throw new UnsupportedOperationException("Invalid slot type: " + token);
         }
 
@@ -152,7 +169,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(location, "Invalid location type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid location type",
+                location,
+                "unrecognized location type"
+            );
             throw new UnsupportedOperationException("Invalid location type: " + location);
         }
 
@@ -174,7 +196,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
                 value = new CustomLocation(x, y, z);
                 break;
             default:
-                context.syntaxError(location, "Invalid location type");
+                context.error(
+                    Errno.INVALID_BUILTIN_TYPE,
+                    "invalid location type",
+                    location,
+                    "unrecognized location type"
+                );
                 throw new UnsupportedOperationException("Invalid location type: " + location);
         };
 
@@ -201,7 +228,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(mode, "Invalid game mode type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid game mode type",
+                mode,
+                "unrecognized game mode type"
+            );
             throw new UnsupportedOperationException("Invalid game mode type: " + mode);
         }
 
@@ -216,7 +248,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(target, "Invalid target type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid target type",
+                target,
+                "unrecognized target type"
+            );
             throw new UnsupportedOperationException("Invalid target type: " + target);
         }
 
@@ -231,7 +268,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(weather, "Invalid weather type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid weather type",
+                weather,
+                "unrecognized weather type"
+            );
             throw new UnsupportedOperationException("Invalid weather type: " + weather);
         }
 
@@ -246,7 +288,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(time, "Invalid time type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid time type",
+                time,
+                "unrecognized time type"
+            );
             throw new UnsupportedOperationException("Invalid time type: " + time);
         }
 
@@ -261,7 +308,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(namespace, "Invalid namespace type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid namespace type",
+                namespace,
+                "unrecognized namespace type"
+            );
             throw new UnsupportedOperationException("Invalid namespace type: " + namespace);
         }
 
@@ -276,7 +328,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(effect, "Invalid effect type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid effect type",
+                effect,
+                "unrecognized effect type"
+            );
             throw new UnsupportedOperationException("Invalid effect type: " + effect);
         }
 
@@ -291,7 +348,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(enchant, "Invalid enchant type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid enchant type",
+                enchant,
+                "unrecognized enchant type"
+            );
             throw new UnsupportedOperationException("Invalid enchant type: " + enchant);
         }
 
@@ -306,7 +368,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(mode, "Invalid mode type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid mode type",
+                mode,
+                "unrecognized mode type"
+            );
             throw new UnsupportedOperationException("Invalid mode type: " + mode);
         }
 
@@ -321,7 +388,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(lobby, "Invalid lobby type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid lobby type",
+                lobby,
+                "unrecognized lobby type"
+            );
             throw new UnsupportedOperationException("Invalid lobby type: " + lobby);
         }
 
@@ -336,7 +408,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(sound, "Invalid sound type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid sound type",
+                sound,
+                "unrecognized sound type"
+            );
             throw new UnsupportedOperationException("Invalid sound type: " + sound);
         }
 
@@ -351,7 +428,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(flag, "Invalid flag type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid flag type",
+                flag,
+                "unrecognized flag type"
+            );
             throw new UnsupportedOperationException("Invalid flag type: " + flag);
         }
 
@@ -366,7 +448,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(material, "Invalid material type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid material type",
+                material,
+                "unrecognized material type"
+            );
             throw new UnsupportedOperationException("Invalid material type: " + material);
         }
 
@@ -381,7 +468,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(executor, "Invalid executor type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid executor type",
+                executor,
+                "unrecognized executor type"
+            );
             throw new UnsupportedOperationException("Invalid executor type: " + executor);
         }
 
@@ -396,7 +488,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(comparator, "Invalid comparator type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid comparator type",
+                comparator,
+                "unrecognized comparator type"
+            );
             throw new UnsupportedOperationException("Invalid comparator type: " + comparator);
         }
 
@@ -411,7 +508,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(item, "Invalid item comparator type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid item comparator type",
+                item,
+                "unrecognized item comparator type"
+            );
             throw new UnsupportedOperationException("Invalid item comparator type: " + item);
         }
 
@@ -426,7 +528,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapper == null) {
-            context.syntaxError(comparator, "Invalid comparator target type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid comparator target type",
+                comparator,
+                "unrecognized comparator target type"
+            );
             throw new UnsupportedOperationException("Invalid comparator target type: " + comparator);
         }
 
@@ -441,7 +548,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(amount, "Invalid comparator amount type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid comparator amount type",
+                amount,
+                "unrecognized comparator amount type"
+            );
             throw new UnsupportedOperationException("Invalid comparator amount type: " + amount);
         }
 
@@ -456,7 +568,12 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             .orElse(null);
 
         if (wrapped == null) {
-            context.syntaxError(permission, "Invalid permission type");
+            context.error(
+                Errno.INVALID_BUILTIN_TYPE,
+                "invalid permission type",
+                permission,
+                "unrecognized permission type"
+            );
             throw new UnsupportedOperationException("Invalid permission type: " + permission);
         }
 

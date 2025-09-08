@@ -16,6 +16,7 @@ import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.parser.impl.action.ConditionCodec;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
 import org.housingstudio.hsl.compiler.parser.impl.value.MethodCall;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.exporter.condition.Condition;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,11 +34,17 @@ public class ConditionMethodCall extends Node implements ConditionBuilder, Print
     public @NotNull Condition buildCondition() {
         Method method = BuiltinConditions.LOOKUP.get(call.name().value());
         if (method == null) {
-            context.syntaxError(call.name(), String.format("Condition not found: `%s`", call.name().value()));
+            context.error(
+                Errno.UNKNOWN_CONDITION,
+                "unexpected condition method",
+                call.name(),
+                "unrecognized condition name"
+            );
+            // TODO note: read about conditions at %docs%
             throw new UnsupportedOperationException("Cannot find condition: " + call.name().value());
         }
 
-        Map<String, Value> args = ArgumentParser.parseArguments(method.parameters(), call.arguments());
+        Map<String, Value> args = ArgumentParser.parseArguments(context, call.name(), method.parameters(), call.arguments());
         call.validateArgumentTypes(method.parameters(), args);
 
         return buildBuiltinCondition(new ArgAccess(args));

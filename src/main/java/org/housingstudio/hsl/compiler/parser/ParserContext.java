@@ -189,11 +189,11 @@ public class ParserContext {
             .reduce((a, b) -> a + Format.LIGHT_GRAY + ", " + b)
             .orElse("");
 
-        syntaxError(token, "Expected: " + expectedTokens);
+        syntaxError(token, "expected: " + expectedTokens);
     }
 
     public void syntaxError(@NotNull Token token, @NotNull String message) {
-        error(Errno.UNEXPECTED_TOKEN, "Unexpected token: " + formatToken(token), token, message);
+        error(Errno.UNEXPECTED_TOKEN, "unexpected token: " + formatToken(token), token, message);
     }
 
     public void error(
@@ -214,7 +214,7 @@ public class ParserContext {
         );
         Meta firstMeta = first.token().meta();
         System.err.println(
-            Format.CYAN + " --> " + Format.LIGHT_GRAY + "filename.hsl" + ":" + firstMeta.lineNumber() +
+            Format.CYAN + " --> " + Format.LIGHT_GRAY + file.getName() + ":" + firstMeta.lineNumber() +
             ":" + firstMeta.lineIndex()
         );
 
@@ -253,7 +253,7 @@ public class ParserContext {
 
             // display the expected tokens below the pointer
             System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
-            System.err.println(" | " + pointerPad + Format.LIGHT_GRAY + error.message());
+            System.err.println(" | " + pointerPad + Format.RED + error.message());
         }
 
         // display a final separator

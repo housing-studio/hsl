@@ -4,6 +4,7 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +32,12 @@ public class TypeParser extends ParserAlgorithm<Type> {
             case "any":
                 return Type.ANY;
             default:
-                context.syntaxError(type, "Invalid type name");
+                context.error(
+                    Errno.UNEXPECTED_TYPE,
+                    "unexpected type value",
+                    type,
+                    "invalid type name"
+                );
                 throw new UnsupportedOperationException("Invalid type name: " + type.value());
         }
     }

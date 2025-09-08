@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,12 @@ public class PriorityAnnotation extends Annotation {
     @Override
     public void init() {
         if (!(value() instanceof ConstantLiteral) || value().getValueType() != Type.INT) {
-            context.syntaxError(name(), "Priority annotation expects int value");
+            context.error(
+                Errno.UNEXPECTED_ANNOTATION_VALUE,
+                "unexpected annotation value",
+                name(),
+                "priority annotation expects int value"
+            );
             throw new UnsupportedOperationException("Priority annotation expects int value");
         }
 

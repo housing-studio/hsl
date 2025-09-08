@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +29,24 @@ public class ConstantAccess extends Value {
      */
     @Override
     public @NotNull Type getValueType() {
-        return load().getValueType();
+        Value value = load();
+        if (accessStack.contains(value)) {
+            context.error(
+                Errno.CIRCULAR_REFERENCE,
+                "Illegal circular initialization flow",
+                name,
+                "Two or more constants refer to each other"
+            );
+            throw new IllegalStateException("Circular initialization flow: " + name.value());
+        }
+
+        accessStack.push(value);
+
+        try {
+            return value.getValueType();
+        } finally {
+            accessStack.pop();
+        }
     }
 
     /**
@@ -42,7 +60,12 @@ public class ConstantAccess extends Value {
     public @NotNull String asConstantValue() {
         Value value = load();
         if (accessStack.contains(value)) {
-            context.syntaxError(name, "Circular initialization flow");
+            context.error(
+                Errno.CIRCULAR_REFERENCE,
+                "Illegal circular initialization flow",
+                name,
+                "Two or more constants refer to each other"
+            );
             throw new IllegalStateException("Circular initialization flow: " + name.value());
         }
 
@@ -68,7 +91,12 @@ public class ConstantAccess extends Value {
 
         ConstantDeclare constant = game.constants().get(name.value());
         if (constant == null) {
-            context.syntaxError(name, "Constant not found");
+            context.error(
+                Errno.UNKNOWN_VARIABLE,
+                "cannot resolve name from scope",
+                name,
+                "unknown variable, stat or constant"
+            );
             throw new UnsupportedOperationException("Cannot find constant: " + name.value());
         }
 

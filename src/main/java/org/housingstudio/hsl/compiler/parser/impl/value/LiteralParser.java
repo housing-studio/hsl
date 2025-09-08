@@ -7,6 +7,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +56,15 @@ public class LiteralParser extends ParserAlgorithm<Value> {
             Value rhs = parser.nextValue();
 
             if (literal.getValueType() != rhs.getValueType()) {
-                context.syntaxError(token, "Operator type mismatch");
+                context.error(
+                    Errno.OPERATOR_TYPE_MISMATCH,
+                    "operator type mismatch",
+                    token,
+                    String.format(
+                        "operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType(), rhs.getValueType()
+                    )
+                );
+                // TODO note: consider string(1) + "foo"
                 throw new UnsupportedOperationException(
                     String.format(
                         "Operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType(), rhs.getValueType()
@@ -65,17 +74,14 @@ public class LiteralParser extends ParserAlgorithm<Value> {
 
             BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(literal, operator, rhs);
             if (!operation.supported()) {
-                context.syntaxError(
-                    token, String.format(
-                        "Operator not supported for types (lhs: %s, rhs: %s)",
-                        literal.getValueType(), rhs.getValueType()
-                    )
+                context.error(
+                    Errno.UNEXPECTED_OPERAND,
+                    "unexpected operand",
+                    token,
+                    "operator not supported for type: " + literal.getValueType()
                 );
                 throw new UnsupportedOperationException(
-                    String.format(
-                        "Operator not supported for types (lhs: %s, rhs: %s)",
-                        literal.getValueType(), rhs.getValueType()
-                    )
+                    "Operator not supported for type: " + literal.getValueType()
                 );
             }
 
@@ -107,7 +113,7 @@ public class LiteralParser extends ParserAlgorithm<Value> {
         else if (peek().is(TokenType.RBRACE))
             return literal;
 
-        context.syntaxError(peek(), "Invalid literal value");
+        context.syntaxError(peek(), "expected literal value, but found " + peek().print());
         throw new UnsupportedOperationException("Invalid literal value: " + peek());
     }
 }

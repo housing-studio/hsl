@@ -10,6 +10,7 @@ import org.housingstudio.hsl.compiler.ast.impl.scope.Statement;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.impl.ChangeVariable;
@@ -34,7 +35,12 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
     public @NotNull Action buildAction() {
         Variable variable = resolveName(name.value());
         if (variable == null) {
-            context.syntaxError(name, "Cannot find variable");
+            context.error(
+                Errno.UNKNOWN_VARIABLE,
+                "unknown variable",
+                name,
+                "cannot find variable in this scope"
+            );
             throw new UnsupportedOperationException("Cannot find variable: " + name.value());
         }
 

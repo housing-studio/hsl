@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +56,14 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
             Value rhs = parser.nextValue();
 
             if (access.getValueType() != rhs.getValueType()) {
-                context.syntaxError(first, "Operator type mismatch");
+                context.error(
+                    Errno.OPERATOR_TYPE_MISMATCH,
+                    "operator type mismatch",
+                    first,
+                    String.format(
+                        "operator type mismatch (lhs: %s, rhs: %s)", access.getValueType(), rhs.getValueType()
+                    )
+                );
                 throw new UnsupportedOperationException(
                     String.format(
                         "Operator type mismatch (lhs: %s, rhs: %s)",
@@ -66,17 +74,14 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
 
             BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(access, operator, rhs);
             if (!operation.supported()) {
-                context.syntaxError(
-                    first, String.format(
-                        "Operator not supported for types (lhs: %s, rhs: %s)",
-                        access.getValueType(), rhs.getValueType()
-                    )
+                context.error(
+                    Errno.UNEXPECTED_OPERAND,
+                    "unexpected operand",
+                    first,
+                    "operator not supported for type: " + access.getValueType()
                 );
                 throw new UnsupportedOperationException(
-                    String.format(
-                        "Operator not supported for types (lhs: %s, rhs: %s)",
-                        access.getValueType(), rhs.getValueType()
-                    )
+                    "Operator not supported for type: " + access.getValueType()
                 );
             }
 

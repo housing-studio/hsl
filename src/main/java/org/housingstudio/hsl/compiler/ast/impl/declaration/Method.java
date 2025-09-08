@@ -15,6 +15,7 @@ import org.housingstudio.hsl.compiler.ast.impl.annotation.IconAnnotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.LoopAnnotation;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.exporter.generic.Function;
 import org.housingstudio.hsl.type.Material;
@@ -41,9 +42,14 @@ public class Method extends Node implements Printable, FunctionBuilder {
     public void init() {
         for (Annotation annotation : annotations) {
             if (!annotation.isAllowedForFunctions()) {
-                context.syntaxError(annotation.name(), "This annotation is not allowed in functions");
+                context.error(
+                    Errno.UNEXPECTED_ANNOTATION_TARGET,
+                    "unexpected annotation target",
+                    annotation.name(),
+                    "this annotation is not allowed for functions"
+                );
                 throw new UnsupportedOperationException(
-                    String.format("Annotation '%s' is not allowed in functions", annotation.name().value())
+                    String.format("Annotation '%s' is not allowed for functions", annotation.name().value())
                 );
             }
         }

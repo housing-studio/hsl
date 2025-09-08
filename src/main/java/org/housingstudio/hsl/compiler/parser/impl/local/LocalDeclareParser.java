@@ -3,6 +3,7 @@ package org.housingstudio.hsl.compiler.parser.impl.local;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.type.Namespace;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
@@ -43,7 +44,12 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
                 namespace = Namespace.GLOBAL;
                 break;
             default:
-                context.syntaxError(peek(), "Invalid stat namespace");
+                context.error(
+                    Errno.UNEXPECTED_NAMESPACE,
+                    "invalid namespace `" + peek().value() + "` for stat",
+                    peek(),
+                    "unexpected stat namespace"
+                );
                 throw new UnsupportedOperationException("Invalid stat namespace: " + peek());
         }
         get();
@@ -55,9 +61,11 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
 
         // parse the local variable type
         Type type = null; // if null, infer type
+        Token typeToken = null;
         if (peek().is(TokenType.COLON)) {
             get();
-            switch (peek(TokenType.TYPE).value()) {
+            typeToken = peek(TokenType.TYPE);
+            switch (typeToken.value()) {
                 case "int":
                     type = Type.INT;
                     break;
@@ -74,7 +82,12 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
                     type = Type.ANY;
                     break;
                 default:
-                    context.syntaxError(peek(), "Invalid type");
+                    context.error(
+                        Errno.UNEXPECTED_TYPE,
+                        "unexpected stat type",
+                        peek(),
+                        "unrecognized stat type"
+                    );
                     throw new UnsupportedOperationException("Invalid type: " + peek());
             }
             get();
@@ -82,7 +95,14 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
 
         // check if no explicit type is specified and the declaration does not follow an assignment
         if (type == null && !peek().is(TokenType.OPERATOR, "=")) {
-            context.syntaxError(peek(), "Expected assignment to infer type");
+            context.error(
+                Errno.EXPECTED_ASSIGNMENT_TO_INFER_TYPE,
+                "expected assignment to infer type",
+                peek(),
+                "either specify an explicit type, or specify a value to infer type"
+            );
+            // TODO note: specify an explicit type: stat player foo: int
+            // TODO note: specify a value to infer type: stat player foo = bar
             throw new UnsupportedOperationException("Expected assignment to infer type: " + peek());
         }
 
@@ -97,6 +117,16 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         if (peek().is(TokenType.SEMICOLON))
             get();
 
+        // check if an explicit type is specified and it does not match the inferred type
+        if (type != null && value != null && type != value.getValueType()) {
+            context.error(
+                Errno.INFER_TYPE_MISMATCH,
+                "infer type mismatch",
+                typeToken,
+                "the explicit type does not match the inferred type"
+            );
+        }
+
         // handle local declaration without assignment
         if (value == null) {
             assert type != null;
@@ -106,8 +136,6 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         // infer type from value if no explicit type is specified
         if (type == null)
             type = value.getValueType();
-
-        // TODO handle infer-explicit type mismatch
 
         // handle local declaration with assignment
         return new LocalDeclareAssign(namespace, name, type, value);

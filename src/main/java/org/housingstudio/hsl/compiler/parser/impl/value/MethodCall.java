@@ -18,6 +18,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.parser.impl.action.ActionCodec;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.jetbrains.annotations.NotNull;
@@ -57,11 +58,11 @@ public class MethodCall extends Value implements ActionBuilder {
             method = game.functions().get(name.value());
 
         if (method == null) {
-            context.syntaxError(name, String.format("Method not found: `%s`", name.value()));
+            context.error(Errno.UNKNOWN_METHOD, "Method not found", name, "Cannot find method: " + name.value());
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
 
-        return Type.VOID;//TODO
+        return Type.VOID; // TODO resolve method return type
     }
 
     /**
@@ -73,7 +74,12 @@ public class MethodCall extends Value implements ActionBuilder {
      */
     @Override
     public @NotNull String asConstantValue() {
-        context.syntaxError(name, "Cannot use method call as an expression");
+        context.error(
+            Errno.FUNCTION_TRIGGER_AS_EXPRESSION,
+            "Function trigger used as expression",
+            name,
+            "Function triggers cannot be treated as expressions"
+        );
         throw new UnsupportedOperationException("Cannot use method call as an expression: " + name.value());
     }
 
@@ -90,7 +96,12 @@ public class MethodCall extends Value implements ActionBuilder {
     @Override
     public @NotNull Action buildAction() {
         if (BuiltinConditions.LOOKUP.containsKey(name.value())) {
-            context.syntaxError(name, "Cannot use condition as action or method call");
+            context.error(
+                Errno.UNEXPECTED_CONDITION_TARGET,
+                "Unexpected condition target",
+                name,
+                "Cannot use condition functions as action calls or method calls"
+            );
             throw new UnsupportedOperationException("Cannot use condition as action or method call: " + name.value());
         }
 
@@ -99,18 +110,28 @@ public class MethodCall extends Value implements ActionBuilder {
             method = game.functions().get(name.value());
 
         if (method == null) {
-            context.syntaxError(name, String.format("Method not found: `%s`", name.value()));
+            context.error(
+                Errno.UNKNOWN_METHOD,
+                "Method not found",
+                name,
+                "Cannot find method"
+            );
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
 
         if (BuiltinActions.LOOKUP.containsKey(name.value())) {
-            Map<String, Value> args = ArgumentParser.parseArguments(method.parameters(), arguments);
+            Map<String, Value> args = ArgumentParser.parseArguments(context, name, method.parameters(), arguments);
             validateArgumentTypes(method.parameters(), args);
             return buildBuiltinAction(new ArgAccess(args));
         }
 
         if (!arguments.isEmpty()) {
-            context.syntaxError(name, "Function trigger cannot be used with arguments");
+            context.error(
+                Errno.FUNCTION_TRIGGER_WITH_ARGUMENTS,
+                "Function triggered with arguments",
+                name,
+                "Cannot trigger functions with arguments"
+            );
             throw new UnsupportedOperationException("Function trigger cannot be used with arguments: " + name.value());
         }
 
@@ -124,8 +145,12 @@ public class MethodCall extends Value implements ActionBuilder {
                 continue;
 
             if (parameter.type() != value.getValueType()) {
-                context.syntaxError(
-                    name, String.format("Invalid parameter type: (given: %s, expected: %s)", value.getValueType(), parameter.type())
+                context.error(
+                    Errno.INVALID_ARGUMENT_TYPE,
+                    "Argument type mismatch",
+                    name,
+                    "Parameter `" + parameter.name().value() + "` expects " + parameter.type() + " but found " +
+                    value.getValueType()
                 );
                 throw new UnsupportedOperationException(
                     String.format("Invalid parameter type: (given: %s, expected: %s)", value.getValueType(), parameter.type())

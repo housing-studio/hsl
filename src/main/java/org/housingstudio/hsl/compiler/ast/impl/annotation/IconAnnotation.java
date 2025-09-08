@@ -7,7 +7,9 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.MaterialValue;
+import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
+import org.housingstudio.hsl.compiler.token.TokenError;
 import org.housingstudio.hsl.type.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +26,12 @@ public class IconAnnotation extends Annotation {
     @Override
     public void init() {
         if (!(value() instanceof MaterialValue)) {
-            context.syntaxError(name(), "Icon annotation expects material value");
+            context.error(
+                Errno.UNEXPECTED_ANNOTATION_VALUE,
+                "unexpected annotation value",
+                name(),
+                "icon annotation expects material value"
+            );
             throw new UnsupportedOperationException("Icon annotation expects material value");
         }
 
