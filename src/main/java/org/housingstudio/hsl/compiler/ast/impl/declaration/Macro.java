@@ -6,9 +6,12 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.builder.ActionBuilder;
+import org.housingstudio.hsl.compiler.ast.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Token;
+import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.runtime.Frame;
 import org.housingstudio.hsl.runtime.Instruction;
 import org.housingstudio.hsl.runtime.Invocable;
@@ -33,13 +36,16 @@ public class Macro extends Node implements Invocable {
 
         Frame frame = new Frame(parent, name.value(), 0, 0, length, this);
 
-        for (int index = parameters.size() - 1; index >= 0; index--)
-            frame.locals().set(index, parent.stack().pop());
-
         for (; frame.cursor().get() < length; frame.cursor().incrementAndGet()) {
             Node statement = statements.get(frame.cursor().get());
             if (statement instanceof Instruction)
                 ((Instruction) statement).execute(frame);
+            if (statement instanceof ActionBuilder)
+                frame.actions().add(((ActionBuilder) statement).buildAction());
+            if (statement instanceof ActionListBuilder)
+                frame.actions().addAll(((ActionListBuilder) statement).buildActionList());
         }
+
+        parent.actions().addAll(frame.actions());
     }
 }

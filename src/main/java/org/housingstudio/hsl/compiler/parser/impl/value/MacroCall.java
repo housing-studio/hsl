@@ -16,9 +16,9 @@ import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.exporter.action.Action;
+import org.housingstudio.hsl.runtime.Frame;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -45,11 +45,10 @@ public class MacroCall extends Value implements ActionListBuilder {
      */
     @Override
     public @NotNull Type getValueType() {
-        return load().getValueType();
+        return resolveMacro().returnType();
     }
 
-    @Override
-    public @NotNull Value load() {
+    private @NotNull Macro resolveMacro() {
         Macro macro = game.macros().get(name.value());
         if (macro == null) {
             context.error(
@@ -60,10 +59,37 @@ public class MacroCall extends Value implements ActionListBuilder {
             throw new UnsupportedOperationException("Cannot find macro: " + name.value());
         }
 
+        return macro;
+    }
+
+    public @NotNull Frame invoke(@NotNull Macro macro) {
         Map<String, Value> args = ArgumentParser.parseArguments(context, name, macro.parameters(), arguments);
         validateArgumentTypes(macro.parameters(), args);
 
+        Frame mainFrame = new Frame(null, "main", 0, 0, 0, null);
+        for (Map.Entry<String, Value> entry : args.entrySet())
+            mainFrame.locals().set(entry.getKey(), entry.getValue());
+
+        macro.invoke(mainFrame);
+        return mainFrame;
+    }
+
+    @Override
+    public @NotNull Value load() {
+        Macro macro = resolveMacro();
+        Frame mainFrame = invoke(macro);
+
+        if (macro.returnType() != Type.VOID)
+            return mainFrame.stack().pop();
+
         return new NullValue();
+    }
+
+    @Override
+    public @NotNull List<Action> buildActionList() {
+        Macro macro = resolveMacro();
+        Frame mainFrame = invoke(macro);
+        return mainFrame.actions();
     }
 
     /**
@@ -85,13 +111,7 @@ public class MacroCall extends Value implements ActionListBuilder {
      */
     @Override
     public @NotNull String print() {
-        return "";
-    }
-
-    @Override
-    public @NotNull List<Action> buildActionList() {
-        Value value = load();
-        return Collections.emptyList();
+        return "call! " + name.value();
     }
 
     public void validateArgumentTypes(@NotNull List<Parameter> parameters, @NotNull Map<String, Value> args) {

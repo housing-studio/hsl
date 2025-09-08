@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.ast.impl.value;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.ARGUMENT)
+@ToString
 public class Argument extends Value {
     private final @Nullable Token name;
     private final @NotNull Value value;

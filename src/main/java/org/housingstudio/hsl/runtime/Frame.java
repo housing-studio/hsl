@@ -3,24 +3,34 @@ package org.housingstudio.hsl.runtime;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.exporter.action.Action;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Accessors(fluent = true)
 @Getter
 public class Frame {
-    private final Frame parent;
-    private final String name;
+    private final List<Action> actions = new ArrayList<>();
 
-    private final Stack stack;
-    private final Storage locals;
+    private final @Nullable Frame parent;
+    private final @NotNull String name;
 
-    private final AtomicInteger cursor;
+    private final @NotNull Stack stack;
+    private final @NotNull Storage locals;
+
+    private final @NotNull AtomicInteger cursor;
     private final int length;
 
-    private final Invocable target;
+    private final @Nullable Invocable target;
 
-    public Frame(Frame parent, String name, int stackSize, int localsSize, int length, Invocable target) {
+    public Frame(
+        @Nullable Frame parent, @NotNull String name, int stackSize, int localsSize, int length,
+        @Nullable Invocable target
+    ) {
         this.parent = parent;
         this.name = name;
         stack = new Stack(stackSize);
@@ -32,6 +42,7 @@ public class Frame {
 
     public void returnValue(Value value) {
         cursor.set(length);
-        parent.stack.push(value);
+        if (parent != null)
+            parent.stack.push(value);
     }
 }

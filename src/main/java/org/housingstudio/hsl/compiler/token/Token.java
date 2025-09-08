@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.token;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
+@ToString
 public class Token implements Printable {
     /**
      * The type of the token.

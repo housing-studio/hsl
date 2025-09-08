@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.ast.impl.value;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
@@ -21,6 +22,7 @@ import java.util.regex.Pattern;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.LITERAL)
+@ToString
 public class ConstantLiteral extends Value implements Printable {
     private static final Pattern DURATION_SEGMENT = Pattern.compile("(\\d+(?:_\\d+)*)(ns|us|µs|ms|s|m|h)");
 

@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.parser.impl.value;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.METHOD_CALL)
+@ToString
 public class MethodCall extends Value implements ActionBuilder {
     /**
      * The name of the method to call.
