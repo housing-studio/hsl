@@ -117,27 +117,13 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         if (peek().is(TokenType.SEMICOLON))
             get();
 
-        // check if an explicit type is specified and it does not match the inferred type
-        if (type != null && value != null && type != value.getValueType()) {
-            context.error(
-                Errno.INFER_TYPE_MISMATCH,
-                "infer type mismatch",
-                typeToken,
-                "the explicit type does not match the inferred type"
-            );
-        }
-
         // handle local declaration without assignment
         if (value == null) {
             assert type != null;
             return new LocalDeclare(namespace, name, type);
         }
 
-        // infer type from value if no explicit type is specified
-        if (type == null)
-            type = value.getValueType();
-
         // handle local declaration with assignment
-        return new LocalDeclareAssign(namespace, name, type, value);
+        return new LocalDeclareAssign(namespace, name, type, typeToken, value);
     }
 }

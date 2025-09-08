@@ -2,8 +2,10 @@ package org.housingstudio.hsl.compiler.parser.impl.scope;
 
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.control.Return;
+import org.housingstudio.hsl.compiler.ast.impl.control.ReturnValue;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Statement;
 import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
+import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -65,9 +67,14 @@ public class StatementParser extends ParserAlgorithm<Node> {
         // handle return
         if (peek().is(TokenType.EXPRESSION, "return")) {
             get();
+            if (peek().is(TokenType.SEMICOLON)) {
+                get();
+                return new Return();
+            }
+            Value value = parser.nextValue();
             if (peek().is(TokenType.SEMICOLON))
                 get();
-            return new Return();
+            return new ReturnValue(value);
         }
 
         context.syntaxError(peek(), "expected statement, but found " + peek().print());

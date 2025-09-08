@@ -44,6 +44,11 @@ public class ValueParser extends ParserAlgorithm<Value> {
         )
             return parser.nextBuiltinValue();
 
+        // handle macro call
+        // sum!(10, 20)
+        else if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.OPERATOR, "!"))
+            return parser.nextMacroCall();
+
 
         // handle variable access
         // let name = otherName

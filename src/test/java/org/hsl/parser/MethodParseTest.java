@@ -1,6 +1,7 @@
 package org.hsl.parser;
 
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
@@ -40,6 +41,9 @@ public class MethodParseTest {
         AstParser parser = Parsers.of(source);
         Method method = assertDoesNotThrow(parser::nextMethod);
 
+        NodeVisitor.initHierarchy();
+        NodeVisitor.initLifecycle();
+
         assertEquals(1, method.scope().statements().size());
         Node node = method.scope().statements().get(0);
 
@@ -61,6 +65,9 @@ public class MethodParseTest {
 
         AstParser parser = Parsers.of(source);
         Method method = assertDoesNotThrow(parser::nextMethod);
+
+        NodeVisitor.initHierarchy();
+        NodeVisitor.initLifecycle();
 
         assertEquals(1, method.scope().statements().size());
         Node node = method.scope().statements().get(0);

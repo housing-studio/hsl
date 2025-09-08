@@ -23,6 +23,7 @@ public enum NodeType {
     METHOD_CALL,
     MACRO_CALL,
     RETURN,
+    RETURN_VALUE,
 
     BINARY_OPERATOR,
     PREFIX_UNARY_OPERATOR,
