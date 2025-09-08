@@ -9,8 +9,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.MaterialValue;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.compiler.token.TokenError;
-import org.housingstudio.hsl.type.Material;
+import org.housingstudio.hsl.std.Material;
 import org.jetbrains.annotations.NotNull;
 
 @Accessors(fluent = true)

@@ -11,7 +11,7 @@ import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultInt;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultMode;
-import org.housingstudio.hsl.type.Mode;
+import org.housingstudio.hsl.std.Mode;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

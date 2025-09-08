@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
-import org.housingstudio.hsl.type.Executor;
+import org.housingstudio.hsl.std.Executor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

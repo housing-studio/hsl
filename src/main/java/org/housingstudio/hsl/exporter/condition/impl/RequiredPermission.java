@@ -7,7 +7,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.condition.Condition;
 import org.housingstudio.hsl.exporter.condition.ConditionType;
-import org.housingstudio.hsl.type.Permission;
+import org.housingstudio.hsl.std.Permission;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

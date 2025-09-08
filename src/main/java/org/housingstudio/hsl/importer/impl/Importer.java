@@ -11,10 +11,10 @@ import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.*;
 import org.housingstudio.hsl.importer.platform.*;
-import org.housingstudio.hsl.type.*;
-import org.housingstudio.hsl.type.location.Location;
-import org.housingstudio.hsl.type.location.LocationType;
-import org.housingstudio.hsl.type.location.impl.CustomLocation;
+import org.housingstudio.hsl.std.*;
+import org.housingstudio.hsl.std.location.Location;
+import org.housingstudio.hsl.std.location.LocationType;
+import org.housingstudio.hsl.std.location.impl.CustomLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;

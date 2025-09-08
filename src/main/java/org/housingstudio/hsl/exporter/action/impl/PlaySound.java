@@ -12,10 +12,9 @@ import org.housingstudio.hsl.exporter.adapter.LocationAdapter;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultFloat;
-import org.housingstudio.hsl.importer.interaction.defaults.DefaultInt;
 import org.housingstudio.hsl.importer.interaction.defaults.Required;
-import org.housingstudio.hsl.type.Sound;
-import org.housingstudio.hsl.type.location.Location;
+import org.housingstudio.hsl.std.Sound;
+import org.housingstudio.hsl.std.location.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -10,7 +10,7 @@ import org.housingstudio.hsl.exporter.action.ActionType;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.Required;
-import org.housingstudio.hsl.type.Lobby;
+import org.housingstudio.hsl.std.Lobby;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

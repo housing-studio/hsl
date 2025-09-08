@@ -1,6 +1,6 @@
 package org.housingstudio.hsl.importer.interaction.defaults;
 
-import org.housingstudio.hsl.type.Namespace;
+import org.housingstudio.hsl.std.Namespace;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;

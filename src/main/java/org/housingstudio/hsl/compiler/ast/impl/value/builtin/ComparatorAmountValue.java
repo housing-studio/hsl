@@ -7,7 +7,7 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
-import org.housingstudio.hsl.type.ComparatorAmount;
+import org.housingstudio.hsl.std.ComparatorAmount;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor

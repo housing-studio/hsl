@@ -1,6 +1,6 @@
 package org.housingstudio.hsl.importer.interaction.defaults;
 
-import org.housingstudio.hsl.type.Mode;
+import org.housingstudio.hsl.std.Mode;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;

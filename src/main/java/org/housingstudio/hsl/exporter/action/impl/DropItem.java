@@ -10,8 +10,8 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.ActionType;
 import org.housingstudio.hsl.exporter.adapter.LocationAdapter;
-import org.housingstudio.hsl.type.Material;
-import org.housingstudio.hsl.type.location.Location;
+import org.housingstudio.hsl.std.Material;
+import org.housingstudio.hsl.std.location.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

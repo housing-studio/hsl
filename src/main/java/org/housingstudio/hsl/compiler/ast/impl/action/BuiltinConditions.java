@@ -9,10 +9,10 @@ import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.*;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
-import org.housingstudio.hsl.type.Comparator;
-import org.housingstudio.hsl.type.ComparatorAmount;
-import org.housingstudio.hsl.type.ItemComparator;
-import org.housingstudio.hsl.type.ComparatorTarget;
+import org.housingstudio.hsl.std.Comparator;
+import org.housingstudio.hsl.std.ComparatorAmount;
+import org.housingstudio.hsl.std.ItemComparator;
+import org.housingstudio.hsl.std.ComparatorTarget;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

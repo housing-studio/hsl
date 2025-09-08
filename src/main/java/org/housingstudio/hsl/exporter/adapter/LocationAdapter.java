@@ -2,10 +2,10 @@ package org.housingstudio.hsl.exporter.adapter;
 
 import com.google.gson.*;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
-import org.housingstudio.hsl.type.location.Location;
-import org.housingstudio.hsl.type.location.LocationType;
-import org.housingstudio.hsl.type.location.impl.CustomLocation;
-import org.housingstudio.hsl.type.location.impl.StaticLocation;
+import org.housingstudio.hsl.std.location.Location;
+import org.housingstudio.hsl.std.location.LocationType;
+import org.housingstudio.hsl.std.location.impl.CustomLocation;
+import org.housingstudio.hsl.std.location.impl.StaticLocation;
 
 import java.lang.reflect.Type;
 

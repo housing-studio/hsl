@@ -11,7 +11,7 @@ import org.housingstudio.hsl.exporter.action.ActionType;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.Required;
-import org.housingstudio.hsl.type.GameMode;
+import org.housingstudio.hsl.std.GameMode;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

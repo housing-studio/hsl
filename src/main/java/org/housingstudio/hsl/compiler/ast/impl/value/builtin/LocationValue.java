@@ -7,8 +7,8 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
-import org.housingstudio.hsl.type.location.Location;
-import org.housingstudio.hsl.type.location.impl.CustomLocation;
+import org.housingstudio.hsl.std.location.Location;
+import org.housingstudio.hsl.std.location.impl.CustomLocation;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor

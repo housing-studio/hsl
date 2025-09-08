@@ -1,7 +1,7 @@
 package org.housingstudio.hsl.compiler.ast.impl.local;
 
 import org.housingstudio.hsl.compiler.ast.impl.scope.Statement;
-import org.housingstudio.hsl.type.Namespace;
+import org.housingstudio.hsl.std.Namespace;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,6 +1,6 @@
 package org.housingstudio.hsl.importer.interaction.defaults;
 
-import org.housingstudio.hsl.type.Time;
+import org.housingstudio.hsl.std.Time;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;

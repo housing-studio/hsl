@@ -7,7 +7,7 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
-import org.housingstudio.hsl.type.Enchant;
+import org.housingstudio.hsl.std.Enchant;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor

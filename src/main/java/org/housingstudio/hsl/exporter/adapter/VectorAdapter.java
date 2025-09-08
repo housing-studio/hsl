@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import org.housingstudio.hsl.type.Vector;
+import org.housingstudio.hsl.std.Vector;
 
 import java.lang.reflect.Type;
 

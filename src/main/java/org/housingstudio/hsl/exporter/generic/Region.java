@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
-import org.housingstudio.hsl.type.Flag;
-import org.housingstudio.hsl.type.Vector;
+import org.housingstudio.hsl.std.Flag;
+import org.housingstudio.hsl.std.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

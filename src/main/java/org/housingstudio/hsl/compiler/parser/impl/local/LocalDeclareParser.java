@@ -5,7 +5,7 @@ import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.type.Namespace;
+import org.housingstudio.hsl.std.Namespace;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;

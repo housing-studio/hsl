@@ -7,10 +7,10 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
-import org.housingstudio.hsl.type.slot.Slot;
-import org.housingstudio.hsl.type.slot.impl.CustomSlot;
-import org.housingstudio.hsl.type.slot.impl.HotbarSlot;
-import org.housingstudio.hsl.type.slot.impl.InventorySlot;
+import org.housingstudio.hsl.std.slot.Slot;
+import org.housingstudio.hsl.std.slot.impl.CustomSlot;
+import org.housingstudio.hsl.std.slot.impl.HotbarSlot;
+import org.housingstudio.hsl.std.slot.impl.InventorySlot;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor

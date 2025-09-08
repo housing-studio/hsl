@@ -10,7 +10,7 @@ import org.housingstudio.hsl.exporter.action.ActionType;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultTime;
-import org.housingstudio.hsl.type.Time;
+import org.housingstudio.hsl.std.Time;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

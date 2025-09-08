@@ -13,7 +13,7 @@ import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultInt;
 import org.housingstudio.hsl.importer.interaction.defaults.Required;
-import org.housingstudio.hsl.type.Effect;
+import org.housingstudio.hsl.std.Effect;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

@@ -14,8 +14,8 @@ import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultMode;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultNamespace;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultString;
-import org.housingstudio.hsl.type.Mode;
-import org.housingstudio.hsl.type.Namespace;
+import org.housingstudio.hsl.std.Mode;
+import org.housingstudio.hsl.std.Namespace;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

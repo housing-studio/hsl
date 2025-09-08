@@ -8,10 +8,10 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.condition.Condition;
 import org.housingstudio.hsl.exporter.condition.ConditionType;
-import org.housingstudio.hsl.type.ComparatorAmount;
-import org.housingstudio.hsl.type.ComparatorTarget;
-import org.housingstudio.hsl.type.ItemComparator;
-import org.housingstudio.hsl.type.Material;
+import org.housingstudio.hsl.std.ComparatorAmount;
+import org.housingstudio.hsl.std.ComparatorTarget;
+import org.housingstudio.hsl.std.ItemComparator;
+import org.housingstudio.hsl.std.Material;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

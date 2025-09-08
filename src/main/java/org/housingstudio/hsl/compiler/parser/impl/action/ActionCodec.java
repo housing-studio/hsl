@@ -3,8 +3,8 @@ package org.housingstudio.hsl.compiler.parser.impl.action;
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.impl.*;
-import org.housingstudio.hsl.type.Target;
-import org.housingstudio.hsl.type.Vector;
+import org.housingstudio.hsl.std.Target;
+import org.housingstudio.hsl.std.Vector;
 import org.jetbrains.annotations.NotNull;
 
 @UtilityClass

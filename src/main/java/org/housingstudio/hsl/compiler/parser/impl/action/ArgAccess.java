@@ -3,12 +3,11 @@ package org.housingstudio.hsl.compiler.parser.impl.action;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.housingstudio.hsl.compiler.ast.impl.value.ConstantAccess;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.*;
-import org.housingstudio.hsl.type.*;
-import org.housingstudio.hsl.type.location.Location;
-import org.housingstudio.hsl.type.slot.Slot;
+import org.housingstudio.hsl.std.*;
+import org.housingstudio.hsl.std.location.Location;
+import org.housingstudio.hsl.std.slot.Slot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

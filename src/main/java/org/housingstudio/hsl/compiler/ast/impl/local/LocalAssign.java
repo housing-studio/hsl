@@ -14,7 +14,7 @@ import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.impl.ChangeVariable;
-import org.housingstudio.hsl.type.Mode;
+import org.housingstudio.hsl.std.Mode;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor

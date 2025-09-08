@@ -7,7 +7,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.exporter.action.ActionType;
-import org.housingstudio.hsl.type.Enchant;
+import org.housingstudio.hsl.std.Enchant;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

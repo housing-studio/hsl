@@ -10,7 +10,7 @@ import org.housingstudio.hsl.exporter.adapter.ConditionAdapter;
 import org.housingstudio.hsl.exporter.adapter.LocationAdapter;
 import org.housingstudio.hsl.exporter.condition.Condition;
 import org.housingstudio.hsl.importer.platform.FileLib;
-import org.housingstudio.hsl.type.location.Location;
+import org.housingstudio.hsl.std.location.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
