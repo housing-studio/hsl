@@ -21,6 +21,7 @@ public enum NodeType {
     INTERPOLATED_STRING,
 
     METHOD_CALL,
+    MACRO_CALL,
     RETURN,
 
     BINARY_OPERATOR,

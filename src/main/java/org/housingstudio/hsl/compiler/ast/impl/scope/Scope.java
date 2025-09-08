@@ -54,6 +54,8 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
         for (Node statement : statements) {
             if (statement instanceof ActionBuilder)
                 actions.add(((ActionBuilder) statement).buildAction());
+            else if (statement instanceof ActionListBuilder)
+                actions.addAll(((ActionListBuilder) statement).buildActionList());
         }
         return actions;
     }

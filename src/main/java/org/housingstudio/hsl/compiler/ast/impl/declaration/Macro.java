@@ -3,6 +3,7 @@ package org.housingstudio.hsl.compiler.ast.impl.declaration;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
@@ -16,7 +17,7 @@ import java.util.List;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.MACRO)
-public class Macro {
+public class Macro extends Node {
     private final @NotNull Token name;
     private final @NotNull Type returnType;
     private final List<Parameter> parameters;

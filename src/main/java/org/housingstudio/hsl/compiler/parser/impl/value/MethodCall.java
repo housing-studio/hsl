@@ -3,12 +3,10 @@ package org.housingstudio.hsl.compiler.parser.impl.value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
-import org.housingstudio.hsl.compiler.ast.hierarchy.ChildrenResolver;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
@@ -58,7 +56,12 @@ public class MethodCall extends Value implements ActionBuilder {
             method = game.functions().get(name.value());
 
         if (method == null) {
-            context.error(Errno.UNKNOWN_METHOD, "Method not found", name, "Cannot find method: " + name.value());
+            context.error(
+                Errno.UNKNOWN_MACRO,
+                "method not found",
+                name,
+                "cannot find method: " + name.value()
+            );
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
 
@@ -76,9 +79,9 @@ public class MethodCall extends Value implements ActionBuilder {
     public @NotNull String asConstantValue() {
         context.error(
             Errno.FUNCTION_TRIGGER_AS_EXPRESSION,
-            "Function trigger used as expression",
+            "function trigger used as expression",
             name,
-            "Function triggers cannot be treated as expressions"
+            "function triggers cannot be treated as expressions"
         );
         throw new UnsupportedOperationException("Cannot use method call as an expression: " + name.value());
     }
@@ -98,9 +101,9 @@ public class MethodCall extends Value implements ActionBuilder {
         if (BuiltinConditions.LOOKUP.containsKey(name.value())) {
             context.error(
                 Errno.UNEXPECTED_CONDITION_TARGET,
-                "Unexpected condition target",
+                "unexpected condition target",
                 name,
-                "Cannot use condition functions as action calls or method calls"
+                "cannot use condition functions as action calls or method calls"
             );
             throw new UnsupportedOperationException("Cannot use condition as action or method call: " + name.value());
         }
@@ -112,9 +115,9 @@ public class MethodCall extends Value implements ActionBuilder {
         if (method == null) {
             context.error(
                 Errno.UNKNOWN_METHOD,
-                "Method not found",
+                "method not found",
                 name,
-                "Cannot find method"
+                "cannot find method"
             );
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
@@ -128,9 +131,9 @@ public class MethodCall extends Value implements ActionBuilder {
         if (!arguments.isEmpty()) {
             context.error(
                 Errno.FUNCTION_TRIGGER_WITH_ARGUMENTS,
-                "Function triggered with arguments",
+                "function triggered with arguments",
                 name,
-                "Cannot trigger functions with arguments"
+                "cannot trigger functions with arguments"
             );
             throw new UnsupportedOperationException("Function trigger cannot be used with arguments: " + name.value());
         }
@@ -147,13 +150,15 @@ public class MethodCall extends Value implements ActionBuilder {
             if (parameter.type() != value.getValueType()) {
                 context.error(
                     Errno.INVALID_ARGUMENT_TYPE,
-                    "Argument type mismatch",
+                    "argument type mismatch",
                     name,
-                    "Parameter `" + parameter.name().value() + "` expects " + parameter.type() + " but found " +
-                    value.getValueType()
+                    "parameter `" + parameter.name().value() + "` expects " + parameter.type() +
+                    " but found " + value.getValueType()
                 );
                 throw new UnsupportedOperationException(
-                    String.format("Invalid parameter type: (given: %s, expected: %s)", value.getValueType(), parameter.type())
+                    String.format(
+                        "Invalid parameter type: (given: %s, expected: %s)", value.getValueType(), parameter.type()
+                    )
                 );
             }
         }
@@ -239,15 +244,5 @@ public class MethodCall extends Value implements ActionBuilder {
 
     private @NotNull Action buildFunctionTrigger() {
         throw new UnsupportedOperationException("function trigger not implemented yet");
-    }
-
-    static class MethodCallChildrenResolver implements ChildrenResolver<List<Argument>> {
-        @Override
-        public @NotNull List<Node> resolveChildren(@NotNull List<Argument> children) {
-            return children
-                .stream()
-                .map(Argument::value)
-                .collect(Collectors.toList());
-        }
     }
 }

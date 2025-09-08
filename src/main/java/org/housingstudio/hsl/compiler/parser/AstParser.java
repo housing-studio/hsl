@@ -14,6 +14,7 @@ import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
+import org.housingstudio.hsl.compiler.parser.impl.action.MacroCallParser;
 import org.housingstudio.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.impl.annotation.AnnotationParser;
@@ -103,6 +104,10 @@ public class AstParser {
 
     public @NotNull MethodCall nextMethodCall() {
         return parse(MethodCallParser.class, MethodCall.class);
+    }
+
+    public @NotNull MacroCall nextMacroCall() {
+        return parse(MacroCallParser.class, MacroCall.class);
     }
 
     @SuppressWarnings("unchecked")

@@ -211,7 +211,12 @@ public enum Errno {
     /**
      * `INVALID_BUILTIN_TYPE` indicates, that malformed or invalid builtin type was specified.
      */
-    INVALID_BUILTIN_TYPE(139);
+    INVALID_BUILTIN_TYPE(139),
+
+    /**
+     * `UNKNOWN_MACRO` indicates, that the macro could not be found.
+     */
+    UNKNOWN_MACRO(140);
 
     /**
      * The error code of the token error.

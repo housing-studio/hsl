@@ -53,6 +53,11 @@ public class StatementParser extends ParserAlgorithm<Node> {
             return new MethodCall(method, arguments);
         }
 
+        // handle macro call
+        // println!("Hello, World!")
+        else if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.OPERATOR, "!"))
+            return parser.nextMacroCall();
+
         // handle conditional
         if (peek().is(TokenType.EXPRESSION, "if"))
             return parser.nextConditional();

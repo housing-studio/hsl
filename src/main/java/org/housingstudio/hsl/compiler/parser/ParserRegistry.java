@@ -1,6 +1,7 @@
 package org.housingstudio.hsl.compiler.parser;
 
 import lombok.experimental.UtilityClass;
+import org.housingstudio.hsl.compiler.parser.impl.action.MacroCallParser;
 import org.housingstudio.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.housingstudio.hsl.compiler.parser.impl.annotation.AnnotationParser;
 import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionParser;
@@ -49,6 +50,7 @@ public class ParserRegistry {
             OperatorParser.class,
             AnnotationParser.class,
             MethodCallParser.class,
+            MacroCallParser.class,
             ConditionParser.class,
             ConditionalParser.class,
             InterpolationParser.class
