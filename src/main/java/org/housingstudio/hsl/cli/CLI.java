@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.Main;
 import org.housingstudio.hsl.compiler.Compiler;
+import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.exporter.House;
 import org.housingstudio.hsl.exporter.Metadata;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,7 @@ public class CLI {
                 newProject(args);
                 break;
             case "export":
-                export();
+                export(args);
                 break;
             default:
                 sendHelp();
@@ -70,7 +71,9 @@ public class CLI {
         System.out.println("Created new project: " + projectName);
     }
 
-    private void export() {
+    private void export(String[] args) {
+        boolean verbose = Arrays.asList(args).contains("-v");
+
         File workDir = new File(System.getProperty("user.dir"));
         File buildFile = new File(workDir, "build.toml");
 
@@ -79,22 +82,31 @@ public class CLI {
             return;
         }
 
-        Metadata metadata = Metadata.read(buildFile);
-        System.out.println("Compiling and exporting project: " + metadata.id());
+        try {
+            Metadata metadata = Metadata.read(buildFile);
+            System.out.println(Format.LIGHT_GRAY + "Compiling and exporting project: " + Format.WHITE + metadata.id());
 
-        Compiler compiler = Compiler.create(metadata, workDir);
-        compiler.init();
-        compiler.compileSources();
+            Compiler compiler = Compiler.create(metadata, workDir);
+            compiler.init();
+            compiler.compileSources();
 
-        House export = compiler.export();
-        String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);
+            House export = compiler.export();
+            String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);
 
-        File targetDir = new File(workDir, "target");
-        if (!targetDir.exists())
-            targetDir.mkdirs();
+            File targetDir = new File(workDir, "target");
+            if (!targetDir.exists())
+                targetDir.mkdirs();
 
-        File exportFile = new File(targetDir, metadata.id() + ".json");
-        writeFile(exportFile, json);
+            File exportFile = new File(targetDir, metadata.id() + ".json");
+            writeFile(exportFile, json);
+
+            System.out.println(Format.GREEN + "Compiled and exported project to " + Format.WHITE + exportFile.getName());
+        } catch (Exception e) {
+            System.out.println(Format.RED + "Failed to compile project");
+            if (verbose)
+                e.printStackTrace(System.err);
+            System.exit(1);
+        }
     }
 
     private void writeFile(@NotNull File path, @NotNull String content) {
