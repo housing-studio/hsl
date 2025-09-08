@@ -1,15 +1,17 @@
 package org.housingstudio.hsl.runtime;
 
+import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+
 public class Stack {
-    private Object[] data;
+    private Value[] data;
     private int top;
 
     public Stack(int initSize) {
-        this.data = new Object[initSize];
+        this.data = new Value[initSize];
         this.top = -1;
     }
 
-    public void push(Object value) {
+    public void push(Value value) {
         if (top + 1 >= data.length) {
             resize(top + 1 + 1); // make room for one more element
         }
@@ -18,25 +20,25 @@ public class Stack {
     }
 
     private void resize(int newSize) {
-        Object[] newData = new Object[newSize];
+        Value[] newData = new Value[newSize];
         System.arraycopy(data, 0, newData, 0, data.length);
         data = newData;
     }
 
-    public Object pop() {
-        if (isEmpty()) {
+    public Value pop() {
+        if (isEmpty())
             throw new RuntimeException("stack underflow");
-        }
-        Object value = data[top];
+
+        Value value = data[top];
         data[top] = null; // help GC
         top--;
         return value;
     }
 
     public Object peek() {
-        if (isEmpty()) {
+        if (isEmpty())
             throw new RuntimeException("empty stack");
-        }
+
         return data[top];
     }
 
