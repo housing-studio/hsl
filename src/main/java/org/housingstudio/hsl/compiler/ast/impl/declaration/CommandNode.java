@@ -7,6 +7,7 @@ import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.builder.CommandBuilder;
+import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.ExecutorAnnotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.ListedAnnotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.PriorityAnnotation;
@@ -29,6 +30,8 @@ import java.util.List;
 public class CommandNode extends Node implements Printable, CommandBuilder {
     private final List<Annotation> annotations;
     private final @NotNull Token name;
+
+    @Children
     private final @NotNull Scope scope;
 
     @Override

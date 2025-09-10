@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
@@ -17,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 @NodeInfo(type = NodeType.CONSTANT)
 public class ConstantDeclare implements Printable {
     private final @NotNull Token name;
+
+    @Children
     private final @NotNull Value value;
 
     /**

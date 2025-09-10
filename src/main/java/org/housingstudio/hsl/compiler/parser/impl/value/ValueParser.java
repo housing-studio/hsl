@@ -16,7 +16,7 @@ public class ValueParser extends ParserAlgorithm<Value> {
     /**
      * Parse the next {@link Value} node from the token stream.
      *
-     * @param parser  the AST node parser
+     * @param parser the AST node parser
      * @param context the token parser context
      *
      * @return the next {@link Value} node from the token stream

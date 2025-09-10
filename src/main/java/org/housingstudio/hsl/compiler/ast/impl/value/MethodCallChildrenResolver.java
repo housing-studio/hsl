@@ -1,8 +1,7 @@
-package org.housingstudio.hsl.compiler.parser.impl.value;
+package org.housingstudio.hsl.compiler.ast.impl.value;
 
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.hierarchy.ChildrenResolver;
-import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

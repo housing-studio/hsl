@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -16,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 @NodeInfo(type = NodeType.STAT_ACCESS)
 public class StatAccess extends Value {
     private final @NotNull Token name;
+
+    @Children
     private final @NotNull Variable variable;
 
     /**

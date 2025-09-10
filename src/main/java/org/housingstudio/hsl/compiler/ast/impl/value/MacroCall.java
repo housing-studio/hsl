@@ -12,7 +12,6 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
-import org.housingstudio.hsl.compiler.parser.impl.value.MethodCallChildrenResolver;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.exporter.action.Action;

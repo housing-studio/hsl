@@ -16,7 +16,6 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.parser.impl.action.ActionCodec;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
-import org.housingstudio.hsl.compiler.parser.impl.value.MethodCallChildrenResolver;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.exporter.action.Action;

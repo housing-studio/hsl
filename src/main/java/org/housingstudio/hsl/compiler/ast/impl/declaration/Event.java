@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.builder.ActionListBuilder;
+import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
@@ -23,6 +24,8 @@ import java.util.List;
 @NodeInfo(type = NodeType.EVENT)
 public class Event extends Node implements Printable, ActionListBuilder {
     private final @NotNull EventType type;
+
+    @Children
     private final @NotNull Scope scope;
 
     @Override

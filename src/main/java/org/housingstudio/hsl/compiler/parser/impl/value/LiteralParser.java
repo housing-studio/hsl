@@ -18,6 +18,7 @@ public class LiteralParser extends ParserAlgorithm<Value> {
      *
      * @param parser the AST node parser
      * @param context the token parser context
+     *
      * @return the next {@link Value} node from the token stream
      */
     @Override

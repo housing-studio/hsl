@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.ast.builder.ActionListBuilder;
+import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -26,7 +27,11 @@ import java.util.List;
 public class Macro extends Node implements Invocable {
     private final @NotNull Token name;
     private final @NotNull Type returnType;
+
+    @Children(resolver = MethodParameterChildrenResolver.class)
     private final List<Parameter> parameters;
+
+    @Children
     private final @NotNull Scope scope;
 
     @Override

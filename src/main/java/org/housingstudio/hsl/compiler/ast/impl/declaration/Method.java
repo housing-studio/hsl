@@ -7,6 +7,7 @@ import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.builder.FunctionBuilder;
+import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
@@ -32,7 +33,11 @@ public class Method extends Node implements Printable, FunctionBuilder {
     private final List<Annotation> annotations;
     private final @NotNull Token name;
     private final @NotNull Type returnType;
+
+    @Children(resolver = MethodParameterChildrenResolver.class)
     private final List<Parameter> parameters;
+
+    @Children
     private final @NotNull Scope scope;
 
     /**
