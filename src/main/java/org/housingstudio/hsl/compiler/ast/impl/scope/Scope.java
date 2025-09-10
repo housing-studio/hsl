@@ -101,7 +101,7 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
      * @return the list of child scopes of this scope
      */
     @Override
-    public @NotNull List<@NotNull ScopeContainer> getChildrenScopes() {
+    public @NotNull List<ScopeContainer> getChildrenScopes() {
         // purposely checking for `Scope` only and not including anonymous methods,
         // as they work a completely different way
         return statements.stream()

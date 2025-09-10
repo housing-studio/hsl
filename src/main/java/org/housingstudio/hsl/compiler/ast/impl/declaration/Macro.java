@@ -10,21 +10,23 @@ import org.housingstudio.hsl.compiler.ast.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.ast.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
+import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.exporter.action.Action;
 import org.housingstudio.hsl.runtime.Frame;
 import org.housingstudio.hsl.runtime.Instruction;
 import org.housingstudio.hsl.runtime.Invocable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.MACRO)
-public class Macro extends Node implements Invocable {
+public class Macro extends ScopeContainer implements Invocable {
     private final @NotNull Token name;
     private final @NotNull Type returnType;
 
@@ -52,5 +54,29 @@ public class Macro extends Node implements Invocable {
         }
 
         parent.actions().addAll(frame.actions());
+    }
+
+    /**
+     * Retrieve the parent scope of this scope.
+     * <p>
+     * This method will return {@code null}, only if {@code this} scope is the root scope.
+     *
+     * @return the parent scope of this scope, or {@code null} if {@code this} scope is the root scope
+     */
+    @Override
+    public @Nullable ScopeContainer getParentScope() {
+        return null;
+    }
+
+    /**
+     * Retrieve the list of child scopes of this scope.
+     * <p>
+     * If {@code this} scope has no child scopes, this method will return an empty list.
+     *
+     * @return the list of child scopes of this scope
+     */
+    @Override
+    public @NotNull List<ScopeContainer> getChildrenScopes() {
+        return Collections.singletonList(scope);
     }
 }

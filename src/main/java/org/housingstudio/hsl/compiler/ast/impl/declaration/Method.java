@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.builder.FunctionBuilder;
 import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
+import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.DescriptionAnnotation;
@@ -23,13 +24,14 @@ import org.housingstudio.hsl.std.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.METHOD)
-public class Method extends Node implements Printable, FunctionBuilder {
+public class Method extends ScopeContainer implements Printable, FunctionBuilder {
     private final List<Annotation> annotations;
     private final @NotNull Token name;
     private final @NotNull Type returnType;
@@ -122,5 +124,29 @@ public class Method extends Node implements Printable, FunctionBuilder {
 
         builder.append(Format.LIGHT_GRAY).append('}');
         return builder.toString();
+    }
+
+    /**
+     * Retrieve the parent scope of this scope.
+     * <p>
+     * This method will return {@code null}, only if {@code this} scope is the root scope.
+     *
+     * @return the parent scope of this scope, or {@code null} if {@code this} scope is the root scope
+     */
+    @Override
+    public @Nullable ScopeContainer getParentScope() {
+        return null;
+    }
+
+    /**
+     * Retrieve the list of child scopes of this scope.
+     * <p>
+     * If {@code this} scope has no child scopes, this method will return an empty list.
+     *
+     * @return the list of child scopes of this scope
+     */
+    @Override
+    public @NotNull List<ScopeContainer> getChildrenScopes() {
+        return Collections.singletonList(scope);
     }
 }

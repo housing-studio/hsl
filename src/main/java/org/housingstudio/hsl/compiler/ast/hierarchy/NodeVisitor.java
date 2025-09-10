@@ -23,7 +23,7 @@ public class NodeVisitor {
     /**
      * The set of nodes that are registered for the node hierarchy.
      */
-    private final @NotNull Set<@NotNull Node> NODES = new CopyOnWriteArraySet<>();
+    private final @NotNull Set<Node> NODES = new CopyOnWriteArraySet<>();
 
     /**
      * Register the node to the node hierarchy.
@@ -98,7 +98,7 @@ public class NodeVisitor {
             field.setAccessible(true);
             try {
                 field.set(child, parent);
-            } catch (IllegalAccessException e) {
+            } catch (Exception e) {
                 throw new IllegalStateException("Cannot access parent field", e);
             }
         }

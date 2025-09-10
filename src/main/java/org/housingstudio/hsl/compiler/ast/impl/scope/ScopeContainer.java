@@ -26,5 +26,5 @@ public abstract class ScopeContainer extends Node {
      *
      * @return the list of child scopes of this scope
      */
-    public abstract @NotNull List<@NotNull ScopeContainer> getChildrenScopes();
+    public abstract @NotNull List<ScopeContainer> getChildrenScopes();
 }
