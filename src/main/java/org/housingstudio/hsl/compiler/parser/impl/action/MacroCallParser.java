@@ -4,7 +4,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
-import org.housingstudio.hsl.compiler.parser.impl.value.MacroCall;
+import org.housingstudio.hsl.compiler.ast.impl.value.MacroCall;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;

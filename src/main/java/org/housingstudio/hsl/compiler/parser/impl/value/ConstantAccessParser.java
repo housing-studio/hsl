@@ -4,6 +4,7 @@ import org.housingstudio.hsl.compiler.ast.impl.operator.BinaryOperator;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
 import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantAccess;
+import org.housingstudio.hsl.compiler.ast.impl.value.MethodCall;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;

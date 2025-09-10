@@ -15,7 +15,7 @@ import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.parser.impl.action.ConditionCodec;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
-import org.housingstudio.hsl.compiler.parser.impl.value.MethodCall;
+import org.housingstudio.hsl.compiler.ast.impl.value.MethodCall;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.exporter.condition.Condition;
 import org.jetbrains.annotations.NotNull;
