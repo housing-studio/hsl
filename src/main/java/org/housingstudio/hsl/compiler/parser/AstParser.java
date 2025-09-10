@@ -146,6 +146,10 @@ public class AstParser {
         return parse(ConditionalParser.class, ConditionalNode.class);
     }
 
+    public @NotNull Value nextGroup() {
+        return parse(GroupParser.class, Value.class);
+    }
+
     public void parseGame(@NotNull Game game) {
         while (context.peek().hasNext()) {
             if (context.peek().is(TokenType.EXPRESSION, "fn")) {

@@ -39,6 +39,7 @@ public class ParserRegistry {
             StatementParser.class,
             LiteralParser.class,
             ValueParser.class,
+            GroupParser.class,
             LocalDeclareParser.class,
             LocalAssignParser.class,
             ConstantParser.class,

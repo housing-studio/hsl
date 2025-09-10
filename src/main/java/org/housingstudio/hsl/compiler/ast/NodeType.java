@@ -19,6 +19,7 @@ public enum NodeType {
     CONSTANT_ACCESS,
     STAT_ACCESS,
     INTERPOLATED_STRING,
+    GROUP,
 
     METHOD_CALL,
     MACRO_CALL,

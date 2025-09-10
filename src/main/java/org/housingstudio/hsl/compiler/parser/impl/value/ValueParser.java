@@ -49,14 +49,19 @@ public class ValueParser extends ParserAlgorithm<Value> {
         else if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.OPERATOR, "!"))
             return parser.nextMacroCall();
 
-
         // handle variable access
-        // let name = otherName
+        // stat player name = otherName
         //            ^^^^^^^^^ the identifier token indicates, that a value is expected
         // foo()
         //    ^^ function calls have a similar signature, except there are parentheses at the end
         else if (peek().is(TokenType.IDENTIFIER))
             return parser.nextConstantAccess();
+
+        // handle group expression
+        // stat player value = (1 + 2) + 3
+        //                      ^ the opening paren indicates, that a group assignment start
+        else if (peek().is(TokenType.LPAREN))
+            return parser.nextGroup();
 
         context.syntaxError(peek(), "expected value, but found " + peek().print());
         throw new UnsupportedOperationException("Unsupported value type: " + peek());
