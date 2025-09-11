@@ -7,13 +7,13 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.compiler.ast.builder.ActionListBuilder;
-import org.housingstudio.hsl.compiler.ast.hierarchy.Children;
+import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
+import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
-import org.housingstudio.hsl.exporter.action.Action;
-import org.housingstudio.hsl.exporter.generic.EventType;
+import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
+import org.housingstudio.hsl.compiler.codegen.impl.generic.EventType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

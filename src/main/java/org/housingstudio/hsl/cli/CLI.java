@@ -5,8 +5,8 @@ import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.Main;
 import org.housingstudio.hsl.compiler.Compiler;
 import org.housingstudio.hsl.compiler.debug.Format;
-import org.housingstudio.hsl.exporter.House;
-import org.housingstudio.hsl.exporter.Metadata;
+import org.housingstudio.hsl.compiler.codegen.impl.house.House;
+import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;

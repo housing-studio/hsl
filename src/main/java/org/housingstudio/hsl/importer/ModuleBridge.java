@@ -1,6 +1,6 @@
 package org.housingstudio.hsl.importer;
 
-import org.housingstudio.hsl.exporter.Metadata;
+import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

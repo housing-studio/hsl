@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.compiler.ast.builder.ConditionBuilder;
+import org.housingstudio.hsl.compiler.codegen.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
@@ -17,7 +17,7 @@ import org.housingstudio.hsl.compiler.parser.impl.action.ConditionCodec;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
 import org.housingstudio.hsl.compiler.ast.impl.value.MethodCall;
 import org.housingstudio.hsl.compiler.token.Errno;
-import org.housingstudio.hsl.exporter.condition.Condition;
+import org.housingstudio.hsl.compiler.codegen.impl.condition.Condition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

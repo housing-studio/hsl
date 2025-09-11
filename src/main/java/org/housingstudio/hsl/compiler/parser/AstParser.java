@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
-import org.housingstudio.hsl.compiler.ast.builder.ConditionBuilder;
+import org.housingstudio.hsl.compiler.codegen.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.control.ConditionalNode;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.*;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;

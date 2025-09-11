@@ -3,18 +3,17 @@ package org.hsl.parser;
 import com.google.gson.GsonBuilder;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
-import org.housingstudio.hsl.compiler.ast.hierarchy.NodeVisitor;
+import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.parser.AstParser;
-import org.housingstudio.hsl.exporter.Exporter;
-import org.housingstudio.hsl.exporter.House;
-import org.housingstudio.hsl.exporter.Metadata;
+import org.housingstudio.hsl.compiler.codegen.Exporter;
+import org.housingstudio.hsl.compiler.codegen.impl.house.House;
+import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

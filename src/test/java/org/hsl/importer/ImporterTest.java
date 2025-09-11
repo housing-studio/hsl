@@ -2,11 +2,11 @@ package org.hsl.importer;
 
 import com.google.gson.GsonBuilder;
 import lombok.SneakyThrows;
-import org.housingstudio.hsl.exporter.House;
-import org.housingstudio.hsl.exporter.action.Action;
-import org.housingstudio.hsl.exporter.adapter.ActionAdapter;
-import org.housingstudio.hsl.exporter.adapter.ConditionAdapter;
-import org.housingstudio.hsl.exporter.condition.Condition;
+import org.housingstudio.hsl.compiler.codegen.impl.house.House;
+import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
+import org.housingstudio.hsl.compiler.codegen.impl.adapter.ActionAdapter;
+import org.housingstudio.hsl.compiler.codegen.impl.adapter.ConditionAdapter;
+import org.housingstudio.hsl.compiler.codegen.impl.condition.Condition;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;

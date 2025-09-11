@@ -2,8 +2,8 @@ package org.housingstudio.hsl.importer.impl;
 
 import com.qibergames.futura.concurrent.future.Future;
 import lombok.SneakyThrows;
-import org.housingstudio.hsl.exporter.House;
-import org.housingstudio.hsl.exporter.Metadata;
+import org.housingstudio.hsl.compiler.codegen.impl.house.House;
+import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
 import org.housingstudio.hsl.importer.ModuleBridge;
 import org.housingstudio.hsl.importer.platform.ChatLib;
 import org.housingstudio.hsl.importer.platform.FileLib;

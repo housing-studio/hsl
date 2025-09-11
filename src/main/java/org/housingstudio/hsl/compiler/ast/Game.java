@@ -3,7 +3,7 @@ package org.housingstudio.hsl.compiler.ast;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.*;
-import org.housingstudio.hsl.exporter.generic.EventType;
+import org.housingstudio.hsl.compiler.codegen.impl.generic.EventType;
 
 import java.util.LinkedHashMap;
 import java.util.List;

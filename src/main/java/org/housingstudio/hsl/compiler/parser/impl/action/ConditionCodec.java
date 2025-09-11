@@ -1,8 +1,8 @@
 package org.housingstudio.hsl.compiler.parser.impl.action;
 
 import lombok.experimental.UtilityClass;
-import org.housingstudio.hsl.exporter.condition.Condition;
-import org.housingstudio.hsl.exporter.condition.impl.*;
+import org.housingstudio.hsl.compiler.codegen.impl.condition.Condition;
+import org.housingstudio.hsl.compiler.codegen.impl.condition.impl.*;
 import org.jetbrains.annotations.NotNull;
 
 @UtilityClass

@@ -3,7 +3,7 @@ package org.housingstudio.hsl.runtime;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
-import org.housingstudio.hsl.exporter.action.Action;
+import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

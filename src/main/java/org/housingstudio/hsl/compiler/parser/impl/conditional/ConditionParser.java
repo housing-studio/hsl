@@ -1,6 +1,6 @@
 package org.housingstudio.hsl.compiler.parser.impl.conditional;
 
-import org.housingstudio.hsl.compiler.ast.builder.ConditionBuilder;
+import org.housingstudio.hsl.compiler.codegen.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;

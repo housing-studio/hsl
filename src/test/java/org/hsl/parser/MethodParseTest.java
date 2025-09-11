@@ -1,7 +1,7 @@
 package org.hsl.parser;
 
 import org.housingstudio.hsl.compiler.ast.Node;
-import org.housingstudio.hsl.compiler.ast.hierarchy.NodeVisitor;
+import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
