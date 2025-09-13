@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -47,9 +48,9 @@ public class Macro extends ScopeContainer implements Invocable {
             Node statement = statements.get(frame.cursor().get());
             if (statement instanceof Instruction)
                 ((Instruction) statement).execute(frame);
-            if (statement instanceof ActionBuilder)
+            else if (statement instanceof ActionBuilder)
                 frame.actions().add(((ActionBuilder) statement).buildAction());
-            if (statement instanceof ActionListBuilder)
+            else if (statement instanceof ActionListBuilder)
                 frame.actions().addAll(((ActionListBuilder) statement).buildActionList());
         }
 

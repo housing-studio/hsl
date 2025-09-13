@@ -33,7 +33,7 @@ public class StatementParser extends ParserAlgorithm<Node> {
     public @NotNull Node parse(@NotNull AstParser parser, @NotNull ParserContext context) {
         // handle local variable declaration
         if (peek().is(TokenType.EXPRESSION, "stat"))
-            return parser.nextLocalDeclaration();
+            return (Node) parser.nextLocalDeclaration();
 
         // handle variable assignment
         // foo = 123

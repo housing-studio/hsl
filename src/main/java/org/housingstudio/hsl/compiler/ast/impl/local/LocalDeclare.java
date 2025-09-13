@@ -3,6 +3,7 @@ package org.housingstudio.hsl.compiler.ast.impl.local;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.token.Errno;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.LOCAL_DECLARE)
-public class LocalDeclare extends Variable implements Printable {
+public class LocalDeclare extends Node implements Variable, Printable {
     private final @NotNull Namespace namespace;
     private final @NotNull Token name;
     private final @NotNull Type type;

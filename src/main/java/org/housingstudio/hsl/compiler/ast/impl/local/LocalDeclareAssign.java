@@ -3,6 +3,7 @@ package org.housingstudio.hsl.compiler.ast.impl.local;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.LOCAL_DECLARE_ASSIGN)
-public class LocalDeclareAssign extends Variable implements Printable, ActionBuilder {
+public class LocalDeclareAssign extends Node implements Variable, Printable, ActionBuilder {
     private final @NotNull Namespace namespace;
     private final @NotNull Token name;
     private final @Nullable Type explicitType;

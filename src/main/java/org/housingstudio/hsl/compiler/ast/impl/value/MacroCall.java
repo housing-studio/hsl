@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
+import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
@@ -17,6 +19,7 @@ import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.runtime.Frame;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -89,6 +92,29 @@ public class MacroCall extends Value implements ActionListBuilder {
         Macro macro = resolveMacro();
         Frame mainFrame = invoke(macro);
         return mainFrame.actions();
+    }
+
+    /**
+     * Resolve a local variable or a global constant by its specified name.
+     * <p>
+     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent()}
+     * node.
+     * <p>
+     * A {@link Scope} will initially try to resolve the value from itself, and then from the parent scope.
+     *
+     * @param name the name of the variable or constant to resolve
+     * @return the value of the variable or constant, or {@code null} if the name is not found
+     */
+    @Override
+    public @Nullable Variable resolveName(@NotNull String name) {
+        System.err.println("RES NAME: " + name);
+        Macro macro = resolveMacro();
+        Map<String, Value> args = ArgumentParser.parseArguments(context, this.name, macro.parameters(), arguments);
+        validateArgumentTypes(macro.parameters(), args);
+        Value value = args.get(name);
+        if (value != null)
+            return new ParameterAccessor(name, value.getValueType(), value);
+        return super.resolveName(name);
     }
 
     /**

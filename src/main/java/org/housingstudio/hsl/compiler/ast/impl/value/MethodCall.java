@@ -19,6 +19,8 @@ import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
+import org.housingstudio.hsl.runtime.Frame;
+import org.housingstudio.hsl.runtime.Instruction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
 @Getter
 @NodeInfo(type = NodeType.METHOD_CALL)
 @ToString
-public class MethodCall extends Value implements ActionBuilder {
+public class MethodCall extends Value implements ActionBuilder, Instruction {
     /**
      * The name of the method to call.
      */
@@ -95,6 +97,58 @@ public class MethodCall extends Value implements ActionBuilder {
     @Override
     public @NotNull String print() {
         return name.value() + "(" + arguments.stream().map(Argument::print).collect(Collectors.joining(", ")) + ")";
+    }
+
+    @Override
+    public void execute(@NotNull Frame frame) {
+        if (BuiltinConditions.LOOKUP.containsKey(name.value())) {
+            context.error(
+                Errno.UNEXPECTED_CONDITION_TARGET,
+                "unexpected condition target",
+                name,
+                "cannot use condition functions as action calls or method calls"
+            );
+            throw new UnsupportedOperationException("Cannot use condition as action or method call: " + name.value());
+        }
+
+        Method method = BuiltinActions.LOOKUP.get(name.value());
+        if (method == null)
+            method = game.functions().get(name.value());
+
+        if (method == null) {
+            context.error(
+                Errno.UNKNOWN_METHOD,
+                "method not found",
+                name,
+                "cannot find method"
+            );
+            throw new UnsupportedOperationException("Cannot find method: " + name.value());
+        }
+
+        // TODO figure out how to properly pass arguments from stack frame to method call
+        if (BuiltinActions.LOOKUP.containsKey(name.value())) {
+            Map<String, Value> args = ArgumentParser.parseArguments(context, name, method.parameters(), arguments);
+            for (String parameter : args.keySet()) {
+                Value value = frame.locals().get(parameter);
+                if (value != null)
+                    args.put(parameter, value);
+            }
+            validateArgumentTypes(method.parameters(), args);
+            Action action = buildBuiltinAction(new ArgAccess(args));
+            frame.actions().add(action);
+        }
+
+        if (!arguments.isEmpty()) {
+            context.error(
+                Errno.FUNCTION_TRIGGER_WITH_ARGUMENTS,
+                "function triggered with arguments",
+                name,
+                "cannot trigger functions with arguments"
+            );
+            throw new UnsupportedOperationException("Function trigger cannot be used with arguments: " + name.value());
+        }
+
+        //return buildFunctionTrigger();
     }
 
     @Override

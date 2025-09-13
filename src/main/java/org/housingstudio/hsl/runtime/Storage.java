@@ -2,6 +2,7 @@ package org.housingstudio.hsl.runtime;
 
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class Storage {
         data.put(key, value);
     }
 
-    public @NotNull Value get(@NotNull String key) {
+    public @Nullable Value get(@NotNull String key) {
         return data.get(key);
     }
 }
