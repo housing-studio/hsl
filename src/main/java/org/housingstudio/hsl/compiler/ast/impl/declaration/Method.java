@@ -6,6 +6,8 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.builder.FunctionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
@@ -34,7 +36,7 @@ import java.util.List;
 public class Method extends ScopeContainer implements Printable, FunctionBuilder {
     private final List<Annotation> annotations;
     private final @NotNull Token name;
-    private final @NotNull BaseType returnType;
+    private final @NotNull Type returnType;
 
     @Children(resolver = MethodParameterChildrenResolver.class)
     private final List<Parameter> parameters;
@@ -110,8 +112,8 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
         StringBuilder builder = new StringBuilder(Format.RED + "fn " + Format.BLUE + name.value());
         builder.append(Format.CYAN).append("()");
 
-        if (returnType != BaseType.VOID)
-            builder.append(" -> ").append(Format.RED).append(returnType.name().toLowerCase());
+        if (!returnType.matches(Types.VOID))
+            builder.append(" -> ").append(Format.RED).append(returnType.print());
 
         builder.append(Format.LIGHT_GRAY).append(" {").append('\n');
 

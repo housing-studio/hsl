@@ -7,6 +7,7 @@ public enum BaseType {
     STRING,
     BOOL,
     ANY,
+    ARRAY,
     NIL,
 
     SLOT,

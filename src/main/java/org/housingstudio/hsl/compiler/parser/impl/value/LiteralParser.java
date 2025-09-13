@@ -56,7 +56,7 @@ public class LiteralParser extends ParserAlgorithm<Value> {
             // TODO handle non-binary operators
             Value rhs = parser.nextValue();
 
-            if (literal.getValueType() != rhs.getValueType()) {
+            if (!literal.getValueType().matches(rhs.getValueType())) {
                 context.error(
                     Errno.OPERATOR_TYPE_MISMATCH,
                     "operator type mismatch",

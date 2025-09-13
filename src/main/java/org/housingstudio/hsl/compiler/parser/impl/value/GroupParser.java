@@ -38,7 +38,7 @@ public class GroupParser extends ParserAlgorithm<Value> {
             // TODO handle non-binary operators
             Value rhs = parser.nextValue();
 
-            if (group.getValueType() != rhs.getValueType()) {
+            if (!group.getValueType().matches(rhs.getValueType())) {
                 context.error(
                     Errno.OPERATOR_TYPE_MISMATCH,
                     "operator type mismatch",

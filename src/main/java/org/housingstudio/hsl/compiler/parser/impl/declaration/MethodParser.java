@@ -3,6 +3,8 @@ package org.housingstudio.hsl.compiler.parser.impl.declaration;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
@@ -52,15 +54,17 @@ public class MethodParser extends ParserAlgorithm<Method> {
         get(TokenType.LPAREN);
         get(TokenType.RPAREN);
 
-        BaseType returnType = BaseType.VOID;
+        Type returnType = Types.VOID;
         if (peek().is(TokenType.OPERATOR, "-") && at(cursor() + 1).is(TokenType.OPERATOR, ">")) {
             get();
             get();
             returnType = parser.nextType();
         }
 
-        if (returnType != BaseType.VOID) {
-            context.syntaxError(at(cursor() - 1), "non-void function return type is currently not supported");
+        if (!returnType.matches(Types.VOID)) {
+            context.syntaxError(
+                at(cursor() - 1), "non-void function return type is currently not supported"
+            );
             throw new UnsupportedOperationException("non-void function return type is currently not supported");
         }
 

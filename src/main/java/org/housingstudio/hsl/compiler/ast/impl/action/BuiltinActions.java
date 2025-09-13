@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.*;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -73,8 +73,8 @@ public class BuiltinActions {
 
     public final Method SET_GROUP = createAction(
         "setGroup",
-        Parameter.required("group", BaseType.STRING),
-        Parameter.optional("protection", BaseType.BOOL, ConstantLiteral.ofBool(true))
+        Parameter.required("group", Types.STRING),
+        Parameter.optional("protection", Types.BOOL, ConstantLiteral.ofBool(true))
     );
 
     public final Method KILL = createAction("kill");
@@ -83,151 +83,151 @@ public class BuiltinActions {
 
     public final Method TITLE = createAction(
         "title",
-        Parameter.required("title", BaseType.STRING),
-        Parameter.optional("subtitle", BaseType.STRING, ConstantLiteral.ofString("")),
-        Parameter.optional("fadein", BaseType.INT, ConstantLiteral.ofInt(1)),
-        Parameter.optional("stay", BaseType.INT, ConstantLiteral.ofInt(5)),
-        Parameter.optional("fadeout", BaseType.INT, ConstantLiteral.ofInt(1))
+        Parameter.required("title", Types.STRING),
+        Parameter.optional("subtitle", Types.STRING, ConstantLiteral.ofString("")),
+        Parameter.optional("fadein", Types.INT, ConstantLiteral.ofInt(1)),
+        Parameter.optional("stay", Types.INT, ConstantLiteral.ofInt(5)),
+        Parameter.optional("fadeout", Types.INT, ConstantLiteral.ofInt(1))
     );
 
-    public final Method ACTIONBAR = createAction("actionbar", Parameter.required("message", BaseType.STRING));
+    public final Method ACTIONBAR = createAction("actionbar", Parameter.required("message", Types.STRING));
 
     public final Method RESET_INVENTORY = createAction("resetInventory");
 
     public final Method CHANGE_MAX_HEALTH = createAction(
         "changeMaxHealth",
-        Parameter.optional("maxHealth", BaseType.INT, ConstantLiteral.ofInt(20)),
-        Parameter.optional("mode", BaseType.MODE, new ModeValue(Mode.SET)),
-        Parameter.optional("healOnChange", BaseType.BOOL, ConstantLiteral.ofBool(true))
+        Parameter.optional("maxHealth", Types.INT, ConstantLiteral.ofInt(20)),
+        Parameter.optional("mode", Types.MODE, new ModeValue(Mode.SET)),
+        Parameter.optional("healOnChange", Types.BOOL, ConstantLiteral.ofBool(true))
     );
 
     public final Method PARKOUR_CHECKPOINT = createAction("parkourCheckpoint");
 
     public final Method GIVE_ITEM = createAction(
         "giveItem",
-        Parameter.required("item", BaseType.MATERIAL),
-        Parameter.optional("allowMultiple", BaseType.BOOL, ConstantLiteral.ofBool(false)),
-        Parameter.optional("slot", BaseType.SLOT, new SlotValue(new StaticSlot(SlotType.FIRST_AVAILABLE))),
-        Parameter.optional("replace", BaseType.BOOL, ConstantLiteral.ofBool(false))
+        Parameter.required("item", Types.MATERIAL),
+        Parameter.optional("allowMultiple", Types.BOOL, ConstantLiteral.ofBool(false)),
+        Parameter.optional("slot", Types.SLOT, new SlotValue(new StaticSlot(SlotType.FIRST_AVAILABLE))),
+        Parameter.optional("replace", Types.BOOL, ConstantLiteral.ofBool(false))
     );
 
-    public final Method REMOVE_ITEM = createAction("removeItem", Parameter.required("item", BaseType.MATERIAL));
+    public final Method REMOVE_ITEM = createAction("removeItem", Parameter.required("item", Types.MATERIAL));
 
-    public final Method CHAT = createAction("chat", Parameter.required("message", BaseType.STRING));
+    public final Method CHAT = createAction("chat", Parameter.required("message", Types.STRING));
 
     public final Method ADD_EFFECT = createAction(
         "addEffect",
-        Parameter.required("effect", BaseType.EFFECT),
-        Parameter.optional("duration", BaseType.INT, ConstantLiteral.ofInt(60)),
-        Parameter.optional("level", BaseType.INT, ConstantLiteral.ofInt(1)),
-        Parameter.optional("override", BaseType.BOOL, ConstantLiteral.ofBool(false)),
-        Parameter.optional("showIcon", BaseType.BOOL, ConstantLiteral.ofBool(true))
+        Parameter.required("effect", Types.EFFECT),
+        Parameter.optional("duration", Types.INT, ConstantLiteral.ofInt(60)),
+        Parameter.optional("level", Types.INT, ConstantLiteral.ofInt(1)),
+        Parameter.optional("override", Types.BOOL, ConstantLiteral.ofBool(false)),
+        Parameter.optional("showIcon", Types.BOOL, ConstantLiteral.ofBool(true))
     );
 
     public final Method CLEAR_EFFECTS = createAction("clearEffects");
 
     public final Method ADD_EXPERIENCE = createAction(
         "addExperience",
-        Parameter.optional("levels", BaseType.INT, ConstantLiteral.ofInt(1))
+        Parameter.optional("levels", Types.INT, ConstantLiteral.ofInt(1))
     );
 
     public final Method SEND_TO_LOBBY = createAction(
         "sendToLobby",
-        Parameter.optional("lobby", BaseType.LOBBY, new LobbyValue(Lobby.HOUSING))
+        Parameter.optional("lobby", Types.LOBBY, new LobbyValue(Lobby.HOUSING))
     );
 
     public final Method CHANGE_VARIABLE = createAction(
         "changeVariable",
-        Parameter.required("namespace", BaseType.NAMESPACE),
-        Parameter.required("variable", BaseType.STRING),
-        Parameter.optional("mode", BaseType.MODE, new ModeValue(Mode.SET)),
-        Parameter.optional("value", BaseType.ANY, ConstantLiteral.ofInt(1)),
-        Parameter.optional("autoUnset", BaseType.BOOL, ConstantLiteral.ofBool(false))
+        Parameter.required("namespace", Types.NAMESPACE),
+        Parameter.required("variable", Types.STRING),
+        Parameter.optional("mode", Types.MODE, new ModeValue(Mode.SET)),
+        Parameter.optional("value", Types.ANY, ConstantLiteral.ofInt(1)),
+        Parameter.optional("autoUnset", Types.BOOL, ConstantLiteral.ofBool(false))
     );
 
     public final Method TELEPORT = createAction(
         "teleport",
-        Parameter.required("location", BaseType.LOCATION),
-        Parameter.optional("prevent", BaseType.BOOL, ConstantLiteral.ofBool(false))
+        Parameter.required("location", Types.LOCATION),
+        Parameter.optional("prevent", Types.BOOL, ConstantLiteral.ofBool(false))
     );
 
     public final Method FAIL_PARKOUR = createAction(
         "failParkour",
-        Parameter.optional("reason", BaseType.STRING, ConstantLiteral.ofString("Failed!"))
+        Parameter.optional("reason", Types.STRING, ConstantLiteral.ofString("Failed!"))
     );
 
     public final Method PLAY_SOUND = createAction(
         "playSound",
-        Parameter.required("sound", BaseType.SOUND),
-        Parameter.optional("volume", BaseType.FLOAT, ConstantLiteral.ofFloat(0.7F)),
-        Parameter.optional("pitch", BaseType.FLOAT, ConstantLiteral.ofFloat(1.0F)),
-        Parameter.optional("location", BaseType.LOCATION, new LocationValue(new StaticLocation(LocationType.INVOKER)))
+        Parameter.required("sound", Types.SOUND),
+        Parameter.optional("volume", Types.FLOAT, ConstantLiteral.ofFloat(0.7F)),
+        Parameter.optional("pitch", Types.FLOAT, ConstantLiteral.ofFloat(1.0F)),
+        Parameter.optional("location", Types.LOCATION, new LocationValue(new StaticLocation(LocationType.INVOKER)))
     );
 
     public final Method SET_COMPASS_TARGET = createAction(
         "setCompassTarget",
-        Parameter.required("location", BaseType.LOCATION)
+        Parameter.required("location", Types.LOCATION)
     );
 
     public final Method SET_GAME_MODE = createAction(
         "setGameMode",
-        Parameter.required("gameMode", BaseType.GAME_MODE)
+        Parameter.required("gameMode", Types.GAME_MODE)
     );
 
     public final Method CHANGE_HEALTH = createAction(
         "changeHealth",
-        Parameter.optional("health", BaseType.INT, ConstantLiteral.ofInt(20)),
-        Parameter.optional("mode", BaseType.MODE, new ModeValue(Mode.SET))
+        Parameter.optional("health", Types.INT, ConstantLiteral.ofInt(20)),
+        Parameter.optional("mode", Types.MODE, new ModeValue(Mode.SET))
     );
 
     public final Method CHANGE_HUNGER = createAction(
         "changeHunger",
-        Parameter.optional("hunger", BaseType.INT, ConstantLiteral.ofInt(20)),
-        Parameter.optional("mode", BaseType.MODE, new ModeValue(Mode.SET))
+        Parameter.optional("hunger", Types.INT, ConstantLiteral.ofInt(20)),
+        Parameter.optional("mode", Types.MODE, new ModeValue(Mode.SET))
     );
 
     // TODO random action
 
     public final Method TRIGGER_FUNCTION = createAction(
         "triggerFunction",
-        Parameter.required("function", BaseType.STRING),
-        Parameter.required("target", BaseType.TARGET)
+        Parameter.required("function", Types.STRING),
+        Parameter.required("target", Types.TARGET)
     );
 
     public final Method APPLY_INVENTORY_LAYOUT = createAction(
         "applyInventoryLayout",
-        Parameter.required("layout", BaseType.STRING)
+        Parameter.required("layout", Types.STRING)
     );
 
     public final Method ENCHANT_HELD_ITEM = createAction(
         "enchantHeldItem",
-        Parameter.required("enchant", BaseType.ENCHANT),
-        Parameter.optional("level", BaseType.INT, ConstantLiteral.ofInt(1))
+        Parameter.required("enchant", Types.ENCHANT),
+        Parameter.optional("level", Types.INT, ConstantLiteral.ofInt(1))
     );
 
     public final Method SLEEP = createAction(
         "sleep",
-        Parameter.optional("ticks", BaseType.INT, ConstantLiteral.ofInt(20))
+        Parameter.optional("ticks", Types.INT, ConstantLiteral.ofInt(20))
     );
 
     public final Method SET_TEAM = createAction(
         "setTeam",
-        Parameter.required("team", BaseType.STRING)
+        Parameter.required("team", Types.STRING)
     );
 
     public final Method DROP_ITEM = createAction(
         "dropItem",
-        Parameter.required("item", BaseType.MATERIAL),
-        Parameter.required("location", BaseType.LOCATION),
-        Parameter.optional("naturally", BaseType.BOOL, ConstantLiteral.ofBool(true)),
-        Parameter.optional("disableMerging", BaseType.BOOL, ConstantLiteral.ofBool(false)),
-        Parameter.optional("prioritizePlayers", BaseType.BOOL, ConstantLiteral.ofBool(false)),
-        Parameter.optional("fallbackToInventory", BaseType.BOOL, ConstantLiteral.ofBool(false))
+        Parameter.required("item", Types.MATERIAL),
+        Parameter.required("location", Types.LOCATION),
+        Parameter.optional("naturally", Types.BOOL, ConstantLiteral.ofBool(true)),
+        Parameter.optional("disableMerging", Types.BOOL, ConstantLiteral.ofBool(false)),
+        Parameter.optional("prioritizePlayers", Types.BOOL, ConstantLiteral.ofBool(false)),
+        Parameter.optional("fallbackToInventory", Types.BOOL, ConstantLiteral.ofBool(false))
     );
 
     public final Method CHANGE_VELOCITY = createAction(
         "changeVelocity",
-        Parameter.optional("velocity", BaseType.VECTOR, new VectorValue(new Vector(
+        Parameter.optional("velocity", Types.VECTOR, new VectorValue(new Vector(
             ConstantLiteral.ofInt(10),
             ConstantLiteral.ofInt(10),
             ConstantLiteral.ofInt(10)
@@ -236,30 +236,30 @@ public class BuiltinActions {
 
     public final Method LAUNCH_TO_TARGET = createAction(
         "launchToTarget",
-        Parameter.required("location", BaseType.LOCATION),
-        Parameter.optional("strength", BaseType.INT, ConstantLiteral.ofInt(2))
+        Parameter.required("location", Types.LOCATION),
+        Parameter.optional("strength", Types.INT, ConstantLiteral.ofInt(2))
     );
 
     public final Method SET_PLAYER_WEATHER = createAction(
         "setPlayerWeather",
-        Parameter.required("weather", BaseType.WEATHER)
+        Parameter.required("weather", Types.WEATHER)
     );
 
     public final Method SET_PLAYER_TIME = createAction(
         "setPlayerTime",
-        Parameter.required("time", BaseType.TIME)
+        Parameter.required("time", Types.TIME)
     );
 
     public final Method TOGGLE_NAME_TAG_DISPLAY = createAction(
         "toggleNameTagDisplay",
-        Parameter.required("shown", BaseType.BOOL)
+        Parameter.required("shown", Types.BOOL)
     );
 
     public final Method CANCEL_EVENT = createAction("cancelEvent");
 
     public final Method OPEN_MENU = createAction(
         "openMenu",
-        Parameter.required("menu", BaseType.STRING)
+        Parameter.required("menu", Types.STRING)
     );
 
     public final Method CLOSE_MENU = createAction("closeMenu");
@@ -268,7 +268,7 @@ public class BuiltinActions {
         return new Method(
             Collections.emptyList(),
             Token.of(TokenType.IDENTIFIER, name),
-            BaseType.VOID,
+            Types.VOID,
             Arrays.asList(parameters),
             Scope.EMPTY
         );

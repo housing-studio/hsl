@@ -6,10 +6,10 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.std.Namespace;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class LocalDeclare extends Node implements Variable, Printable {
     private final @NotNull Namespace namespace;
     private final @NotNull Token name;
-    private final @NotNull BaseType type;
+    private final @NotNull Type type;
 
     /**
      * Initialize node logic before the nodes are visited and the code is generated.
@@ -49,7 +49,7 @@ public class LocalDeclare extends Node implements Variable, Printable {
     public @NotNull String print() {
         return Format.RED + "stat " +
             Format.LIGHT_YELLOW + namespace.name().toLowerCase() + " " +
-            Format.WHITE + name.value() + Format.YELLOW + ": " + Format.RED + type.name().toLowerCase();
+            Format.WHITE + name.value() + Format.YELLOW + ": " + Format.RED + type.print();
     }
 
     @Override

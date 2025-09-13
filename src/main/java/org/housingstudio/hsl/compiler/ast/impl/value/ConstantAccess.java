@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,7 @@ public class ConstantAccess extends Value {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull BaseType getValueType() {
+    public @NotNull Type getValueType() {
         Value value = load();
         if (accessStack.contains(value)) {
             context.error(

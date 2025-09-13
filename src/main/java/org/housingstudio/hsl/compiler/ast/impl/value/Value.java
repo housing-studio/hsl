@@ -1,7 +1,7 @@
 package org.housingstudio.hsl.compiler.ast.impl.value;
 
 import org.housingstudio.hsl.compiler.ast.Node;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.debug.Constant;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ public abstract class Value extends Node implements Printable, Constant {
      *
      * @return the resolved value of the type
      */
-    public abstract @NotNull BaseType getValueType();
+    public abstract @NotNull Type getValueType();
 
     public @NotNull Value load() {
         return this;

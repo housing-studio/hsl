@@ -7,11 +7,12 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
 import org.housingstudio.hsl.compiler.token.Errno;
@@ -46,7 +47,7 @@ public class MacroCall extends Value implements ActionListBuilder {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull BaseType getValueType() {
+    public @NotNull Type getValueType() {
         return resolveMacro().returnType();
     }
 
@@ -81,7 +82,8 @@ public class MacroCall extends Value implements ActionListBuilder {
         Macro macro = resolveMacro();
         Frame mainFrame = invoke(macro);
 
-        if (macro.returnType() != BaseType.VOID)
+        // pull return value from the call stack, if the macro returns a value
+        if (!macro.returnType().matches(Types.VOID))
             return mainFrame.stack().pop();
 
         return new NullValue();
@@ -142,7 +144,7 @@ public class MacroCall extends Value implements ActionListBuilder {
     public void validateArgumentTypes(@NotNull List<Parameter> parameters, @NotNull Map<String, Value> args) {
         for (Parameter parameter : parameters) {
             Value value = args.get(parameter.name().value());
-            if (parameter.type() == BaseType.ANY)
+            if (!parameter.type().matches(Types.ANY))
                 continue;
 
             if (parameter.type() != value.getValueType()) {

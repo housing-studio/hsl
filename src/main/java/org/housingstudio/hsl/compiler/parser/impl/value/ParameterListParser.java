@@ -1,7 +1,7 @@
 package org.housingstudio.hsl.compiler.parser.impl.value;
 
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
@@ -30,7 +30,7 @@ public class ParameterListParser extends ParserAlgorithm<List<Parameter>> {
         while (!peek().is(TokenType.RPAREN)) {
             Token name = get(TokenType.IDENTIFIER);
             get(TokenType.COLON);
-            BaseType type = parser.nextType();
+            Type type = parser.nextType();
 
             Value defaultValue = null;
             if (peek().is(TokenType.OPERATOR, "=")) {

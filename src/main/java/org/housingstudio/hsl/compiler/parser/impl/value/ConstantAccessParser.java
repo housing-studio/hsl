@@ -56,7 +56,7 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
             // TODO handle non-binary operators
             Value rhs = parser.nextValue();
 
-            if (access.getValueType() != rhs.getValueType()) {
+            if (!access.getValueType().matches(rhs.getValueType())) {
                 context.error(
                     Errno.OPERATOR_TYPE_MISMATCH,
                     "operator type mismatch",

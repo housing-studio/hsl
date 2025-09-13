@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
@@ -24,7 +24,7 @@ public class ListedAnnotation extends Annotation {
 
     @Override
     public void init() {
-        if (!(value() instanceof ConstantLiteral) || value().getValueType() != BaseType.BOOL) {
+        if (!(value() instanceof ConstantLiteral) || !value().getValueType().matches(Types.BOOL)) {
             context.error(
                 Errno.UNEXPECTED_ANNOTATION_VALUE,
                 "unexpected annotation value",

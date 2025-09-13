@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.control.ConditionalNode;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.*;
@@ -118,8 +119,8 @@ public class AstParser {
         return parse(ParameterListParser.class, List.class);
     }
 
-    public @NotNull BaseType nextType() {
-        return parse(TypeParser.class, BaseType.class);
+    public @NotNull Type nextType() {
+        return parse(TypeParser.class, Type.class);
     }
 
     public @NotNull Operator nextOperator() {

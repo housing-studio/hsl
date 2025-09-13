@@ -1,11 +1,11 @@
 package org.hsl.parser;
 
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +28,7 @@ public class MethodParseTest {
         LocalDeclare local = assertInstanceOf(LocalDeclare.class, node);
         assertEquals("kills", local.name());
 
-        assertEquals(BaseType.INT, local.type());
+        assertTrue(local.type().matches(Types.INT));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class MethodParseTest {
         LocalDeclareAssign local = assertInstanceOf(LocalDeclareAssign.class, node);
         assertEquals("msg", local.name());
 
-        assertEquals(BaseType.STRING, local.type());
+        assertTrue(local.type().matches(Types.STRING));
         ConstantLiteral literal = assertInstanceOf(ConstantLiteral.class, local.value());
 
         assertEquals("hello", literal.token().value());
@@ -75,7 +75,7 @@ public class MethodParseTest {
         LocalDeclareAssign local = assertInstanceOf(LocalDeclareAssign.class, node);
         assertEquals("health", local.name());
 
-        assertEquals(BaseType.INT, local.type());
+        assertTrue(local.type().matches(Types.INT));
         ConstantLiteral literal = assertInstanceOf(ConstantLiteral.class, local.value());
 
         assertEquals("123", literal.token().value());

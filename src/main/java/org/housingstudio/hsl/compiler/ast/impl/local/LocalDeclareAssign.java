@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.token.Errno;
@@ -21,6 +22,9 @@ import org.housingstudio.hsl.compiler.debug.Printable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
@@ -28,25 +32,24 @@ import org.jetbrains.annotations.Nullable;
 public class LocalDeclareAssign extends Node implements Variable, Printable, ActionBuilder {
     private final @NotNull Namespace namespace;
     private final @NotNull Token name;
-    private final @Nullable BaseType explicitType;
-    private final @Nullable Token typeToken;
+    private final @Nullable Type explicitType;
 
     @Children
     private final @NotNull Value value;
 
-    private BaseType type;
+    private Type type;
 
     @Override
     public void init() {
-        BaseType valueType = value.load().getValueType();
+        Type valueType = value.load().getValueType();
 
         // check if an explicit type is specified and it does not match the inferred type
-        if (explicitType != null && valueType != explicitType) {
-            assert typeToken != null;
+        if (explicitType != null && !valueType.matches(explicitType)) {
+            List<Token> tokens = explicitType.tokens();
             context.error(
                 Errno.INFER_TYPE_MISMATCH,
                 "infer type mismatch",
-                typeToken,
+                tokens.get(tokens.size() - 1),
                 "the explicit type does not match the inferred type"
             );
             throw new IllegalStateException("Explicit type does not match inferred type");
@@ -70,7 +73,7 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
     @Override
     public @NotNull String print() {
         return Format.RED + "stat " + Format.LIGHT_YELLOW + namespace.name().toLowerCase() + " " +
-            Format.WHITE + name.value() + Format.YELLOW + ": " + Format.RED + type.name().toLowerCase() +
+            Format.WHITE + name.value() + Format.YELLOW + ": " + Format.RED + type.print() +
             Format.YELLOW + " = " + Format.WHITE + value.print();
     }
 

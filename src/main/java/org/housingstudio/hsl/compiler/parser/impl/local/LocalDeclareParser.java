@@ -3,10 +3,10 @@ package org.housingstudio.hsl.compiler.parser.impl.local;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.std.Namespace;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
@@ -60,37 +60,10 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         Token name = get(TokenType.IDENTIFIER);
 
         // parse the local variable type
-        BaseType type = null; // if null, infer type
-        Token typeToken = null;
+        Type type = null; // if null, infer type
         if (peek().is(TokenType.COLON)) {
-            get();
-            typeToken = peek(TokenType.TYPE);
-            switch (typeToken.value()) {
-                case "int":
-                    type = BaseType.INT;
-                    break;
-                case "float":
-                    type = BaseType.FLOAT;
-                    break;
-                case "bool":
-                    type = BaseType.BOOL;
-                    break;
-                case "string":
-                    type = BaseType.STRING;
-                    break;
-                case "any":
-                    type = BaseType.ANY;
-                    break;
-                default:
-                    context.error(
-                        Errno.UNEXPECTED_TYPE,
-                        "unexpected stat type",
-                        peek(),
-                        "unrecognized stat type"
-                    );
-                    throw new UnsupportedOperationException("Invalid type: " + peek());
-            }
-            get();
+            get(TokenType.COLON);
+            type = parser.nextType();
         }
 
         // check if no explicit type is specified and the declaration does not follow an assignment
@@ -124,6 +97,6 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         }
 
         // handle local declaration with assignment
-        return new LocalDeclareAssign(namespace, name, type, typeToken, value);
+        return new LocalDeclareAssign(namespace, name, type, value);
     }
 }

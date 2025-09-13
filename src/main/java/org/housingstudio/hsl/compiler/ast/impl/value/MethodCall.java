@@ -6,6 +6,8 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
@@ -50,9 +52,9 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull BaseType getValueType() {
+    public @NotNull Type getValueType() {
         if (BuiltinConditions.LOOKUP.containsKey(name.value()))
-            return BaseType.BOOL;
+            return Types.BOOL;
 
         Method method = BuiltinActions.LOOKUP.get(name.value());
         if (method == null)
@@ -68,7 +70,7 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
 
-        return BaseType.VOID; // TODO resolve method return type
+        return Types.VOID; // TODO resolve method return type
     }
 
     /**
@@ -133,6 +135,7 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
                 if (value != null)
                     args.put(parameter, value);
             }
+
             validateArgumentTypes(method.parameters(), args);
             Action action = buildBuiltinAction(new ArgAccess(args));
             frame.actions().add(action);
@@ -200,7 +203,7 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
     public void validateArgumentTypes(@NotNull List<Parameter> parameters, @NotNull Map<String, Value> args) {
         for (Parameter parameter : parameters) {
             Value value = args.get(parameter.name().value());
-            if (parameter.type() == BaseType.ANY)
+            if (parameter.type().matches(Types.ANY))
                 continue;
 
             if (parameter.type() != value.getValueType()) {
