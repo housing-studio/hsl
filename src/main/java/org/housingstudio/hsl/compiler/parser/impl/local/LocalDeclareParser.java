@@ -6,7 +6,7 @@ import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.std.Namespace;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
@@ -60,26 +60,26 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         Token name = get(TokenType.IDENTIFIER);
 
         // parse the local variable type
-        Type type = null; // if null, infer type
+        BaseType type = null; // if null, infer type
         Token typeToken = null;
         if (peek().is(TokenType.COLON)) {
             get();
             typeToken = peek(TokenType.TYPE);
             switch (typeToken.value()) {
                 case "int":
-                    type = Type.INT;
+                    type = BaseType.INT;
                     break;
                 case "float":
-                    type = Type.FLOAT;
+                    type = BaseType.FLOAT;
                     break;
                 case "bool":
-                    type = Type.BOOL;
+                    type = BaseType.BOOL;
                     break;
                 case "string":
-                    type = Type.STRING;
+                    type = BaseType.STRING;
                     break;
                 case "any":
-                    type = Type.ANY;
+                    type = BaseType.ANY;
                     break;
                 default:
                     context.error(

@@ -14,7 +14,7 @@ import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.impl.ChangeVariable;
 import org.housingstudio.hsl.std.Mode;
 import org.housingstudio.hsl.std.Namespace;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
@@ -28,17 +28,17 @@ import org.jetbrains.annotations.Nullable;
 public class LocalDeclareAssign extends Node implements Variable, Printable, ActionBuilder {
     private final @NotNull Namespace namespace;
     private final @NotNull Token name;
-    private final @Nullable Type explicitType;
+    private final @Nullable BaseType explicitType;
     private final @Nullable Token typeToken;
 
     @Children
     private final @NotNull Value value;
 
-    private Type type;
+    private BaseType type;
 
     @Override
     public void init() {
-        Type valueType = value.load().getValueType();
+        BaseType valueType = value.load().getValueType();
 
         // check if an explicit type is specified and it does not match the inferred type
         if (explicitType != null && valueType != explicitType) {

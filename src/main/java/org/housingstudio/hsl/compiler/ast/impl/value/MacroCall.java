@@ -11,7 +11,7 @@ import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
 import org.housingstudio.hsl.compiler.token.Errno;
@@ -46,7 +46,7 @@ public class MacroCall extends Value implements ActionListBuilder {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull Type getValueType() {
+    public @NotNull BaseType getValueType() {
         return resolveMacro().returnType();
     }
 
@@ -81,7 +81,7 @@ public class MacroCall extends Value implements ActionListBuilder {
         Macro macro = resolveMacro();
         Frame mainFrame = invoke(macro);
 
-        if (macro.returnType() != Type.VOID)
+        if (macro.returnType() != BaseType.VOID)
             return mainFrame.stack().pop();
 
         return new NullValue();
@@ -142,7 +142,7 @@ public class MacroCall extends Value implements ActionListBuilder {
     public void validateArgumentTypes(@NotNull List<Parameter> parameters, @NotNull Map<String, Value> args) {
         for (Parameter parameter : parameters) {
             Value value = args.get(parameter.name().value());
-            if (parameter.type() == Type.ANY)
+            if (parameter.type() == BaseType.ANY)
                 continue;
 
             if (parameter.type() != value.getValueType()) {

@@ -4,13 +4,12 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.compiler.token.TokenError;
 import org.jetbrains.annotations.NotNull;
 
 @Accessors(fluent = true)
@@ -25,7 +24,7 @@ public class DescriptionAnnotation extends Annotation {
 
     @Override
     public void init() {
-        if (!(value() instanceof ConstantLiteral) || value().getValueType() != Type.STRING) {
+        if (!(value() instanceof ConstantLiteral) || value().getValueType() != BaseType.STRING) {
             context.error(
                 Errno.UNEXPECTED_ANNOTATION_VALUE,
                 "unexpected annotation value",

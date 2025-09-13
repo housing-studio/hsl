@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.std.Permission;
 import org.jetbrains.annotations.NotNull;
@@ -23,8 +23,8 @@ public class PermissionValue extends Value {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull Type getValueType() {
-        return Type.PERMISSION;
+    public @NotNull BaseType getValueType() {
+        return BaseType.PERMISSION;
     }
 
     /**

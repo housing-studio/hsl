@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.*;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -41,40 +41,40 @@ public class BuiltinConditions {
 
     public final Method HAS_GROUP = createCondition(
         "hasGroup",
-        Parameter.required("group", Type.STRING),
-        Parameter.optional("higher", Type.BOOL, ConstantLiteral.ofBool(false))
+        Parameter.required("group", BaseType.STRING),
+        Parameter.optional("higher", BaseType.BOOL, ConstantLiteral.ofBool(false))
     );
 
     public final Method COMPARE_VARIABLE = createCondition(
         "compareVariable",
-        Parameter.required("namespace", Type.NAMESPACE),
-        Parameter.required("variable", Type.STRING),
-        Parameter.required("value", Type.ANY),
-        Parameter.optional("comparator", Type.COMPARATOR, new ComparatorValue(Comparator.EQUAL)),
-        Parameter.optional("fallback", Type.ANY, new NullValue())
+        Parameter.required("namespace", BaseType.NAMESPACE),
+        Parameter.required("variable", BaseType.STRING),
+        Parameter.required("value", BaseType.ANY),
+        Parameter.optional("comparator", BaseType.COMPARATOR, new ComparatorValue(Comparator.EQUAL)),
+        Parameter.optional("fallback", BaseType.ANY, new NullValue())
     );
 
     public final Method HAS_PERMISSION = createCondition(
         "hasPermission",
-        Parameter.required("permission", Type.PERMISSION)
+        Parameter.required("permission", BaseType.PERMISSION)
     );
 
     public final Method WITHIN_REGION = createCondition(
         "withinRegion",
-        Parameter.required("region", Type.STRING)
+        Parameter.required("region", BaseType.STRING)
     );
 
     public final Method HAS_ITEM = createCondition(
         "hasItem",
-        Parameter.required("item", Type.MATERIAL),
-        Parameter.optional("comparator", Type.ITEM_COMPARATOR, new ItemComparatorValue(ItemComparator.METADATA)),
-        Parameter.optional("target", Type.COMPARATOR_TARGET, new ComparatorTargetValue(ComparatorTarget.ANYWHERE)),
-        Parameter.optional("amount", Type.COMPARATOR_AMOUNT, new ComparatorAmountValue(ComparatorAmount.ANY))
+        Parameter.required("item", BaseType.MATERIAL),
+        Parameter.optional("comparator", BaseType.ITEM_COMPARATOR, new ItemComparatorValue(ItemComparator.METADATA)),
+        Parameter.optional("target", BaseType.COMPARATOR_TARGET, new ComparatorTargetValue(ComparatorTarget.ANYWHERE)),
+        Parameter.optional("amount", BaseType.COMPARATOR_AMOUNT, new ComparatorAmountValue(ComparatorAmount.ANY))
     );
 
     public final Method DOING_PARKOUR = createCondition("doingParkour");
 
-    public final Method HAS_EFFECT = createCondition("hasEffect", Parameter.required("effect", Type.EFFECT));
+    public final Method HAS_EFFECT = createCondition("hasEffect", Parameter.required("effect", BaseType.EFFECT));
 
     public final Method IS_SNEAKING = createCondition("isSneaking");
 
@@ -82,46 +82,46 @@ public class BuiltinConditions {
 
     public final Method HAS_HEALTH = createCondition(
         "hasHealth",
-        Parameter.required("health", Type.INT),
-        Parameter.optional("comparator", Type.COMPARATOR, new ComparatorValue(Comparator.EQUAL))
+        Parameter.required("health", BaseType.INT),
+        Parameter.optional("comparator", BaseType.COMPARATOR, new ComparatorValue(Comparator.EQUAL))
     );
 
     private final Method HAS_MAX_HEALTH = createCondition(
         "hasMaxHealth",
-        Parameter.required("maxHealth", Type.INT),
-        Parameter.optional("comparator", Type.COMPARATOR, new ComparatorValue(Comparator.EQUAL))
+        Parameter.required("maxHealth", BaseType.INT),
+        Parameter.optional("comparator", BaseType.COMPARATOR, new ComparatorValue(Comparator.EQUAL))
     );
 
     public final Method HAS_HUNGER = createCondition(
         "hasHunger",
-        Parameter.required("level", Type.INT),
-        Parameter.optional("comparator", Type.COMPARATOR, new ComparatorValue(Comparator.EQUAL))
+        Parameter.required("level", BaseType.INT),
+        Parameter.optional("comparator", BaseType.COMPARATOR, new ComparatorValue(Comparator.EQUAL))
     );
 
     public final Method HAS_GAME_MODE = createCondition(
         "hasGameMode",
-        Parameter.required("gameMode", Type.GAME_MODE)
+        Parameter.required("gameMode", BaseType.GAME_MODE)
     );
 
     public final Method COMPARE_PLACEHOLDER = createCondition(
         "comparePlaceholder",
-        Parameter.required("placeholder", Type.STRING),
-        Parameter.required("value", Type.ANY),
-        Parameter.optional("comparator", Type.COMPARATOR, new ComparatorValue(Comparator.EQUAL))
+        Parameter.required("placeholder", BaseType.STRING),
+        Parameter.required("value", BaseType.ANY),
+        Parameter.optional("comparator", BaseType.COMPARATOR, new ComparatorValue(Comparator.EQUAL))
     );
 
     public final Method HAS_TEAM = createCondition(
         "hasTeam",
-        Parameter.required("team", Type.STRING)
+        Parameter.required("team", BaseType.STRING)
     );
 
     public @NotNull Method createCondition(@NotNull String name, @NotNull Parameter @NotNull ... parameters) {
         List<Parameter> parameterList = new ArrayList<>(Arrays.asList(parameters));
-        parameterList.add(Parameter.optional("invert", Type.BOOL, ConstantLiteral.ofBool(false)));
+        parameterList.add(Parameter.optional("invert", BaseType.BOOL, ConstantLiteral.ofBool(false)));
         return new Method(
             Collections.emptyList(),
             Token.of(TokenType.IDENTIFIER, name),
-            Type.BOOL,
+            BaseType.BOOL,
             parameterList,
             Scope.EMPTY
         );

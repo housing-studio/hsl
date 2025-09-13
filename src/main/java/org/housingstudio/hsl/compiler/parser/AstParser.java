@@ -11,7 +11,7 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.*;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.*;
 import org.housingstudio.hsl.compiler.parser.impl.action.MacroCallParser;
 import org.housingstudio.hsl.compiler.parser.impl.action.MethodCallParser;
@@ -118,8 +118,8 @@ public class AstParser {
         return parse(ParameterListParser.class, List.class);
     }
 
-    public @NotNull Type nextType() {
-        return parse(TypeParser.class, Type.class);
+    public @NotNull BaseType nextType() {
+        return parse(TypeParser.class, BaseType.class);
     }
 
     public @NotNull Operator nextOperator() {

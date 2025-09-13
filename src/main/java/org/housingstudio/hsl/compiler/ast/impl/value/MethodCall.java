@@ -12,7 +12,7 @@ import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.parser.impl.action.ActionCodec;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
@@ -50,9 +50,9 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull Type getValueType() {
+    public @NotNull BaseType getValueType() {
         if (BuiltinConditions.LOOKUP.containsKey(name.value()))
-            return Type.BOOL;
+            return BaseType.BOOL;
 
         Method method = BuiltinActions.LOOKUP.get(name.value());
         if (method == null)
@@ -68,7 +68,7 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
 
-        return Type.VOID; // TODO resolve method return type
+        return BaseType.VOID; // TODO resolve method return type
     }
 
     /**
@@ -136,6 +136,7 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
             validateArgumentTypes(method.parameters(), args);
             Action action = buildBuiltinAction(new ArgAccess(args));
             frame.actions().add(action);
+            return;
         }
 
         if (!arguments.isEmpty()) {
@@ -199,7 +200,7 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
     public void validateArgumentTypes(@NotNull List<Parameter> parameters, @NotNull Map<String, Value> args) {
         for (Parameter parameter : parameters) {
             Value value = args.get(parameter.name().value());
-            if (parameter.type() == Type.ANY)
+            if (parameter.type() == BaseType.ANY)
                 continue;
 
             if (parameter.type() != value.getValueType()) {

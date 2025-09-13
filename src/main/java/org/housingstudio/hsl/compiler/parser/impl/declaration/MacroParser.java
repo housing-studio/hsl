@@ -3,7 +3,7 @@ package org.housingstudio.hsl.compiler.parser.impl.declaration;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -52,7 +52,7 @@ public class MacroParser extends ParserAlgorithm<Macro> {
         // parse the parameter list
         List<Parameter> parameters = parser.nextParameterList();
 
-        Type returnType = Type.VOID;
+        BaseType returnType = BaseType.VOID;
         if (peek().is(TokenType.OPERATOR, "-") && at(cursor() + 1).is(TokenType.OPERATOR, ">")) {
             get();
             get();

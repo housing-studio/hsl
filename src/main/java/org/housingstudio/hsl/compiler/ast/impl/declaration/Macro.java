@@ -11,7 +11,7 @@ import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.runtime.Frame;
 import org.housingstudio.hsl.runtime.Instruction;
@@ -21,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -29,7 +28,7 @@ import java.util.Map;
 @NodeInfo(type = NodeType.MACRO)
 public class Macro extends ScopeContainer implements Invocable {
     private final @NotNull Token name;
-    private final @NotNull Type returnType;
+    private final @NotNull BaseType returnType;
 
     @Children(resolver = MethodParameterChildrenResolver.class)
     private final List<Parameter> parameters;

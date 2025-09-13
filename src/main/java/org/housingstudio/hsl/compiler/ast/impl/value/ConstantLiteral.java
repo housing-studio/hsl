@@ -6,7 +6,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
@@ -37,19 +37,19 @@ public class ConstantLiteral extends Value implements Printable {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull Type getValueType() {
+    public @NotNull BaseType getValueType() {
         switch (token.type()) {
             case STRING:
-                return Type.STRING;
+                return BaseType.STRING;
             case INT:
             case DURATION:
             case HEXADECIMAL:
             case BINARY:
-                return Type.INT;
+                return BaseType.INT;
             case FLOAT:
-                return Type.FLOAT;
+                return BaseType.FLOAT;
             case BOOL:
-                return Type.BOOL;
+                return BaseType.BOOL;
             default:
                 throw new IllegalStateException("Cannot resolve type of token: " + token);
         }

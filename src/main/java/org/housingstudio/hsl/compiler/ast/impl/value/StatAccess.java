@@ -7,7 +7,7 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ public class StatAccess extends Value {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull Type getValueType() {
+    public @NotNull BaseType getValueType() {
         return variable.type();
     }
 

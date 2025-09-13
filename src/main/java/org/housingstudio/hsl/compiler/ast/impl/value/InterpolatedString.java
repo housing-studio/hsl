@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
@@ -35,8 +35,8 @@ public class InterpolatedString extends Value {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull Type getValueType() {
-        return Type.STRING;
+    public @NotNull BaseType getValueType() {
+        return BaseType.STRING;
     }
 
     /**

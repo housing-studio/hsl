@@ -1,6 +1,6 @@
 package org.housingstudio.hsl.compiler.ast.impl.type;
 
-public enum Type {
+public enum BaseType {
     VOID,
     INT,
     FLOAT,

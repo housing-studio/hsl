@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,7 +50,7 @@ public class BinaryOperator extends Value {
      * @return the resolved value of the type
      */
     @Override
-    public @NotNull Type getValueType() {
+    public @NotNull BaseType getValueType() {
         return lhs.getValueType();
     }
 
@@ -65,58 +65,58 @@ public class BinaryOperator extends Value {
     public @NotNull String asConstantValue() {
         switch (operator) {
             case ADD:
-                if (lhs.getValueType().equals(Type.INT)) {
+                if (lhs.getValueType().equals(BaseType.INT)) {
                     int lhs = Integer.parseInt(this.lhs.asConstantValue());
                     int rhs = Integer.parseInt(this.rhs.asConstantValue());
                     return String.valueOf(lhs + rhs);
                 }
 
-                else if (lhs.getValueType().equals(Type.FLOAT)) {
+                else if (lhs.getValueType().equals(BaseType.FLOAT)) {
                     float lhs = Float.parseFloat(this.lhs.asConstantValue());
                     float rhs = Float.parseFloat(this.rhs.asConstantValue());
                     return String.valueOf(lhs + rhs);
                 }
 
-                else if (lhs.getValueType().equals(Type.STRING)) {
+                else if (lhs.getValueType().equals(BaseType.STRING)) {
                     String lhs = this.lhs.asConstantValue();
                     String rhs = this.rhs.asConstantValue();
                     return lhs + rhs;
                 }
 
             case NEGATE_OR_SUBTRACT:
-                if (lhs.getValueType().equals(Type.INT)) {
+                if (lhs.getValueType().equals(BaseType.INT)) {
                     int lhs = Integer.parseInt(this.lhs.asConstantValue());
                     int rhs = Integer.parseInt(this.rhs.asConstantValue());
                     return String.valueOf(lhs - rhs);
                 }
 
-                else if (lhs.getValueType().equals(Type.FLOAT)) {
+                else if (lhs.getValueType().equals(BaseType.FLOAT)) {
                     float lhs = Float.parseFloat(this.lhs.asConstantValue());
                     float rhs = Float.parseFloat(this.rhs.asConstantValue());
                     return String.valueOf(lhs - rhs);
                 }
 
             case MULTIPLY:
-                if (lhs.getValueType().equals(Type.INT)) {
+                if (lhs.getValueType().equals(BaseType.INT)) {
                     int lhs = Integer.parseInt(this.lhs.asConstantValue());
                     int rhs = Integer.parseInt(this.rhs.asConstantValue());
                     return String.valueOf(lhs * rhs);
                 }
 
-                else if (lhs.getValueType().equals(Type.FLOAT)) {
+                else if (lhs.getValueType().equals(BaseType.FLOAT)) {
                     float lhs = Float.parseFloat(this.lhs.asConstantValue());
                     float rhs = Float.parseFloat(this.rhs.asConstantValue());
                     return String.valueOf(lhs * rhs);
                 }
 
             case DIVIDE:
-                if (lhs.getValueType().equals(Type.INT)) {
+                if (lhs.getValueType().equals(BaseType.INT)) {
                     int lhs = Integer.parseInt(this.lhs.asConstantValue());
                     int rhs = Integer.parseInt(this.rhs.asConstantValue());
                     return String.valueOf(lhs / rhs);
                 }
 
-                else if (lhs.getValueType().equals(Type.FLOAT)) {
+                else if (lhs.getValueType().equals(BaseType.FLOAT)) {
                     float lhs = Float.parseFloat(this.lhs.asConstantValue());
                     float rhs = Float.parseFloat(this.rhs.asConstantValue());
                     return String.valueOf(lhs / rhs);
@@ -127,18 +127,18 @@ public class BinaryOperator extends Value {
     }
 
     public boolean supported() {
-        Type type = lhs.getValueType();
+        BaseType type = lhs.getValueType();
 
         switch (operator) {
             case ADD:
-                return type.isNumber() || type == Type.STRING;
+                return type.isNumber() || type == BaseType.STRING;
             case NEGATE_OR_SUBTRACT:
             case DIVIDE:
             case MULTIPLY:
                 return type.isNumber();
             case AND:
             case OR:
-                return type == Type.BOOL;
+                return type == BaseType.BOOL;
             default:
                 return false;
         }

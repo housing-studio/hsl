@@ -10,7 +10,7 @@ import org.housingstudio.hsl.compiler.codegen.builder.FunctionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.DescriptionAnnotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.IconAnnotation;
@@ -34,7 +34,7 @@ import java.util.List;
 public class Method extends ScopeContainer implements Printable, FunctionBuilder {
     private final List<Annotation> annotations;
     private final @NotNull Token name;
-    private final @NotNull Type returnType;
+    private final @NotNull BaseType returnType;
 
     @Children(resolver = MethodParameterChildrenResolver.class)
     private final List<Parameter> parameters;
@@ -110,7 +110,7 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
         StringBuilder builder = new StringBuilder(Format.RED + "fn " + Format.BLUE + name.value());
         builder.append(Format.CYAN).append("()");
 
-        if (returnType != Type.VOID)
+        if (returnType != BaseType.VOID)
             builder.append(" -> ").append(Format.RED).append(returnType.name().toLowerCase());
 
         builder.append(Format.LIGHT_GRAY).append(" {").append('\n');
