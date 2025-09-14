@@ -22,7 +22,7 @@ public class ErrorPrinter {
                 return total;
             })
             .stream()
-            .map(token -> token.meta().lineIndex())
+            .map(token -> token.meta().lineNumber())
             .map(String::valueOf)
             .map(String::length)
             .max(Integer::compare)
