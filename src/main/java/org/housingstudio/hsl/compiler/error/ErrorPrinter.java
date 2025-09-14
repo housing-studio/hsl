@@ -34,7 +34,7 @@ public class ErrorPrinter {
             .orElse(0);
     }
 
-    public void print(@NotNull ErrorContainer container) {
+    public void print(@NotNull Notification container) {
         if (isDuplicate(container))
             return;
 
@@ -101,7 +101,11 @@ public class ErrorPrinter {
             throw new IllegalStateException("AST parse error");
     }
 
-    private boolean isDuplicate(@NotNull ErrorContainer container) {
+    private boolean isDuplicate(@NotNull Notification container) {
+        // cannot check for untagged errors, that were not emitted by a node
+        if (container.id() == -1)
+            return false;
+
         switch (container.type()) {
             case WARNING: {
                 Integer code = warnings.get(container.id());
@@ -124,7 +128,7 @@ public class ErrorPrinter {
         return false;
     }
 
-    private void printNotes(@NotNull ErrorContainer container) {
+    private void printNotes(@NotNull Notification container) {
         for (String note : container.notes()) {
             System.err.print(Format.GREEN + "note: ");
             System.err.println(Format.LIGHT_GRAY + note);

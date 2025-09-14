@@ -2,7 +2,7 @@ package org.housingstudio.hsl.compiler.parser.impl.declaration;
 
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Event;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
-import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -40,7 +40,7 @@ public class EventParser extends ParserAlgorithm<Event> {
 
         if (type == null) {
             context.errorPrinter().print(
-                ErrorContainer.error(Errno.UNEXPECTED_EVENT_TYPE, "invalid event kind")
+                Notification.error(Errno.UNEXPECTED_EVENT_TYPE, "invalid event kind")
                     .error("unexpected event type", typeToken)
                     .note(
                         "read about event triggers at",

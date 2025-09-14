@@ -19,7 +19,7 @@ import org.housingstudio.hsl.compiler.ast.impl.annotation.LoopAnnotation;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.error.Errno;
-import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.NamingConvention;
 import org.housingstudio.hsl.compiler.error.Warning;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -30,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -60,7 +59,7 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
         for (Annotation annotation : annotations) {
             if (!annotation.isAllowedForFunctions()) {
                 context.errorPrinter().print(
-                    ErrorContainer.error(Errno.UNEXPECTED_ANNOTATION_TARGET, "unexpected annotation target")
+                    Notification.error(Errno.UNEXPECTED_ANNOTATION_TARGET, "unexpected annotation target", this)
                         .error("this annotation is not allowed for functions", annotation.name())
                 );
                 throw new UnsupportedOperationException(
@@ -73,7 +72,7 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
     private void validateName() {
         if (!NamingConvention.FUNCTIONS.test(name.value())) {
             context.errorPrinter().print(
-                ErrorContainer.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
+                Notification.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
                     .error("not preferred function name", name)
                     .note("use `lowerCamelCase` style to name functions")
             );

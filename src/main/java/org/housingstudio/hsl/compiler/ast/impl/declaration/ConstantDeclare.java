@@ -10,7 +10,7 @@ import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
-import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.NamingConvention;
 import org.housingstudio.hsl.compiler.error.Warning;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -30,7 +30,7 @@ public class ConstantDeclare extends Node implements Printable {
     public void init() {
         if (!NamingConvention.CONSTANTS.test(name.value())) {
             context.errorPrinter().print(
-                ErrorContainer.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
+                Notification.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
                     .error("not preferred constant name", name)
                     .note("use `UPPER_CASE_WITH_UNDERSCORES` style to name constants")
             );

@@ -12,7 +12,7 @@ import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
-import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.NamingConvention;
 import org.housingstudio.hsl.compiler.error.Warning;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -24,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -64,7 +63,7 @@ public class Macro extends ScopeContainer implements Invocable {
     public void init() {
         if (!NamingConvention.FUNCTIONS.test(name.value())) {
             context.errorPrinter().print(
-                ErrorContainer.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
+                Notification.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
                     .error("not preferred macro name", name)
                     .note("use `lowerCamelCase` style to name macros")
             );

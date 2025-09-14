@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class ErrorContainer {
+public class Notification {
     private final List<TokenError> errors = new ArrayList<>();
     private final List<String> notes = new ArrayList<>();
 
@@ -24,31 +24,35 @@ public class ErrorContainer {
     private final @NotNull String title;
     private final @NotNull ErrorType type;
 
-    public @NotNull ErrorContainer error(@NotNull String message, @NotNull Token @NotNull ... tokens) {
+    public @NotNull Notification error(@NotNull String message, @NotNull Token @NotNull ... tokens) {
         errors.add(new TokenError(Arrays.asList(tokens), message));
         return this;
     }
 
-    public @NotNull ErrorContainer error(@NotNull String message, @NotNull List<Token> tokens) {
+    public @NotNull Notification error(@NotNull String message, @NotNull List<Token> tokens) {
         errors.add(new TokenError(tokens, message));
         return this;
     }
 
-    public @NotNull ErrorContainer note(@NotNull String message) {
+    public @NotNull Notification note(@NotNull String message) {
         notes.add(message);
         return this;
     }
 
-    public @NotNull ErrorContainer note(@NotNull String message, @NotNull String example) {
+    public @NotNull Notification note(@NotNull String message, @NotNull String example) {
         notes.add(message + ": " + Format.LIGHT_BLUE + example);
         return this;
     }
 
-    public static @NotNull ErrorContainer error(@NotNull Errno error, @NotNull String title) {
-        return new ErrorContainer(error.code(), 0, title, ErrorType.ERROR);
+    public static @NotNull Notification error(@NotNull Errno error, @NotNull String title, @NotNull Node node) {
+        return new Notification(error.code(), node.id(), title, ErrorType.ERROR);
     }
 
-    public static @NotNull ErrorContainer warning(@NotNull Warning warning, @NotNull String title, @NotNull Node node) {
-        return new ErrorContainer(warning.code(), node.id(), title, ErrorType.WARNING);
+    public static @NotNull Notification error(@NotNull Errno error, @NotNull String title) {
+        return new Notification(error.code(), -1, title, ErrorType.ERROR);
+    }
+
+    public static @NotNull Notification warning(@NotNull Warning warning, @NotNull String title, @NotNull Node node) {
+        return new Notification(warning.code(), node.id(), title, ErrorType.WARNING);
     }
 }

@@ -8,7 +8,7 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
-import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +41,7 @@ public class Conversion extends Value {
     public @NotNull String asConstantValue() {
         if (!value.isConstant()) {
             context.errorPrinter().print(
-                ErrorContainer.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion")
+                Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
                     .error(
                         "cannot convert value, because its value may not be known at compile-time",
                         explicitType.tokens()
@@ -52,7 +52,7 @@ public class Conversion extends Value {
 
         if (!explicitType.base().primitive()) {
             context.errorPrinter().print(
-                ErrorContainer.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion")
+                Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
                     .error(
                         "cannot convert to non-primitive type",
                         explicitType.tokens()
@@ -63,7 +63,7 @@ public class Conversion extends Value {
 
         if (explicitType.base() == BaseType.VOID || explicitType.base() == BaseType.NIL) {
             context.errorPrinter().print(
-                ErrorContainer.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion")
+                Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
                     .error(
                         "this special type cannot be converted to",
                         explicitType.tokens()
@@ -74,7 +74,7 @@ public class Conversion extends Value {
 
         if (!value.getValueType().base().primitive()) {
             context.errorPrinter().print(
-                ErrorContainer.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion")
+                Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
                     .error(
                         "cannot convert from non-primitive type",
                         value.getValueType().tokens()
@@ -85,7 +85,7 @@ public class Conversion extends Value {
 
         if (value.getValueType().base() == BaseType.VOID || value.getValueType().base() == BaseType.NIL) {
             context.errorPrinter().print(
-                ErrorContainer.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion")
+                Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
                     .error(
                         "this special type cannot be converted from",
                         explicitType.tokens()
@@ -109,7 +109,7 @@ public class Conversion extends Value {
         }
 
         context.errorPrinter().print(
-            ErrorContainer.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion")
+            Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
                 .error(
                     "cannot convert type " + value.getValueType().print() + " to " + explicitType.print(),
                     explicitType.tokens()

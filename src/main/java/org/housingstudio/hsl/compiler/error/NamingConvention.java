@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class NamingConvention {
     public final Convention FUNCTIONS = Convention.of("^[a-z][a-zA-Z0-9]*$");
-    public final Convention LOCALS = Convention.of("^[a-z][a-zA-Z0-9]*$");
+    public final Convention LOCALS    = Convention.of("^[a-z][a-zA-Z0-9]*$");
     public final Convention CONSTANTS = Convention.of("^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$");
 
     @RequiredArgsConstructor

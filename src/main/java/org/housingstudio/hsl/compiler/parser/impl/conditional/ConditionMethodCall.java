@@ -12,7 +12,7 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.debug.Printable;
-import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.parser.impl.action.ConditionCodec;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
@@ -36,7 +36,7 @@ public class ConditionMethodCall extends Node implements ConditionBuilder, Print
         Method method = BuiltinConditions.LOOKUP.get(call.name().value());
         if (method == null) {
             context.errorPrinter().print(
-                ErrorContainer.error(Errno.UNKNOWN_CONDITION, "unexpected condition method")
+                Notification.error(Errno.UNKNOWN_CONDITION, "unexpected condition method", this)
                     .error("unrecognized condition name", call.name())
                     .note(
                         "read about conditions at",
