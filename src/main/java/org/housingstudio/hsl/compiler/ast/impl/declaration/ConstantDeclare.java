@@ -3,12 +3,16 @@ package org.housingstudio.hsl.compiler.ast.impl.declaration;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
+import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.NamingConvention;
+import org.housingstudio.hsl.compiler.error.Warning;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,11 +20,22 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.CONSTANT)
-public class ConstantDeclare implements Printable {
+public class ConstantDeclare extends Node implements Printable {
     private final @NotNull Token name;
 
     @Children
     private final @NotNull Value value;
+
+    @Override
+    public void init() {
+        if (!NamingConvention.CONSTANTS.test(name.value())) {
+            context.errorPrinter().print(
+                ErrorContainer.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
+                    .error("not preferred constant name", name)
+                    .note("use `UPPER_CASE_WITH_UNDERSCORES` style to name constants")
+            );
+        }
+    }
 
     /**
      * Returns a string representation of the implementing class.

@@ -20,6 +20,7 @@ import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.NamingConvention;
 import org.housingstudio.hsl.compiler.error.Warning;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.codegen.impl.generic.Function;
@@ -36,8 +37,6 @@ import java.util.regex.Pattern;
 @Getter
 @NodeInfo(type = NodeType.METHOD)
 public class Method extends ScopeContainer implements Printable, FunctionBuilder {
-    private static final Pattern PREFERRED_NAMING_CONVENTION = Pattern.compile("^[a-z][a-zA-Z0-9]*$");
-
     private final List<Annotation> annotations;
     private final @NotNull Token name;
     private final @NotNull Type returnType;
@@ -72,11 +71,11 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
     }
 
     private void validateName() {
-        if (!PREFERRED_NAMING_CONVENTION.matcher(name.value()).matches()) {
+        if (!NamingConvention.FUNCTIONS.test(name.value())) {
             context.errorPrinter().print(
-                ErrorContainer.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention")
+                ErrorContainer.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
                     .error("not preferred function name", name)
-                    .note("use `lowerCamelCase` to name functions")
+                    .note("use `lowerCamelCase` style to name functions")
             );
         }
     }

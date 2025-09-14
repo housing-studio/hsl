@@ -8,6 +8,9 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.NamingConvention;
+import org.housingstudio.hsl.compiler.error.Warning;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.std.Namespace;
 import org.housingstudio.hsl.compiler.debug.Format;
@@ -28,6 +31,11 @@ public class LocalDeclare extends Node implements Variable, Printable {
      */
     @Override
     public void init() {
+        validateName();
+        validateConvention();
+    }
+
+    private void validateName() {
         Variable variable = resolveName(name.value());
         if (variable != null && variable != this) {
             context.error(
@@ -37,6 +45,16 @@ public class LocalDeclare extends Node implements Variable, Printable {
                 "Variable name is already declared in this scope"
             );
             throw new UnsupportedOperationException("Cannot redeclare variable: " + name.value());
+        }
+    }
+
+    private void validateConvention() {
+        if (!NamingConvention.LOCALS.test(name.value())) {
+            context.errorPrinter().print(
+                ErrorContainer.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
+                    .error("not preferred stat name", name)
+                    .note("use `lowerCamelCase` style to name stats")
+            );
         }
     }
 

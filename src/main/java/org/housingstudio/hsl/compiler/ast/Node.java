@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Represents the base class for all element of the Abstract Syntax Tree.
@@ -37,6 +38,9 @@ public abstract class Node {
 
     @Setter
     protected static ParserContext context;
+
+    private static final AtomicInteger counter = new AtomicInteger();
+    private final int id = counter.incrementAndGet();
 
     /**
      * The type of the node.

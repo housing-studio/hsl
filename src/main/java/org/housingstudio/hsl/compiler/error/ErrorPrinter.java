@@ -8,10 +8,15 @@ import org.housingstudio.hsl.compiler.token.Tokenizer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class ErrorPrinter {
+    private final Map<Integer, Integer> warnings = new HashMap<>();
+    private final Map<Integer, Integer> errors = new HashMap<>();
+
     private final @NotNull ParserContext context;
 
     private int computePadding(@NotNull List<TokenError> errors) {
@@ -30,24 +35,19 @@ public class ErrorPrinter {
     }
 
     public void print(@NotNull ErrorContainer container) {
+        if (isDuplicate(container))
+            return;
+
         List<TokenError> errors = container.errors();
         if (errors.isEmpty())
             throw new IllegalStateException("You must specify at least one token error");
 
         Format color = container.type() == ErrorType.ERROR ? Format.RED : Format.YELLOW;
+        String prefix = container.type() == ErrorType.ERROR ? "error" : "warning";
 
-        switch (container.type()) {
-            case ERROR:
-                System.err.println(
-                    color + "error[E" + container.code() + "]" + Format.WHITE + ": " + container.title()
-                );
-                break;
-            case WARNING:
-                System.err.println(
-                    color + "warning[E" + container.code() + "]" + Format.WHITE + ": " + container.title()
-                );
-                break;
-        }
+        System.err.println(
+            color + prefix + "[E" + container.code() + "]" + Format.WHITE + ": " + container.title()
+        );
 
         Meta firstMeta = errors.get(0).tokens().get(0).meta();
         System.err.println(
@@ -99,6 +99,29 @@ public class ErrorPrinter {
 
         if (container.type() == ErrorType.ERROR)
             throw new IllegalStateException("AST parse error");
+    }
+
+    private boolean isDuplicate(@NotNull ErrorContainer container) {
+        switch (container.type()) {
+            case WARNING: {
+                Integer code = warnings.get(container.id());
+                if (code != null && code == container.code())
+                    return true;
+
+                warnings.put(container.id(), container.code());
+                break;
+            }
+            case ERROR: {
+                Integer code = errors.get(container.id());
+                if (code != null && code == container.code())
+                    return true;
+
+                errors.put(container.id(), container.code());
+                break;
+            }
+        }
+
+        return false;
     }
 
     private void printNotes(@NotNull ErrorContainer container) {

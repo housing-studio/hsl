@@ -3,6 +3,7 @@ package org.housingstudio.hsl.compiler.error;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ public class ErrorContainer {
     private final List<String> notes = new ArrayList<>();
 
     private final int code;
+    private final int id;
     private final @NotNull String title;
     private final @NotNull ErrorType type;
 
@@ -43,10 +45,10 @@ public class ErrorContainer {
     }
 
     public static @NotNull ErrorContainer error(@NotNull Errno error, @NotNull String title) {
-        return new ErrorContainer(error.code(), title, ErrorType.ERROR);
+        return new ErrorContainer(error.code(), 0, title, ErrorType.ERROR);
     }
 
-    public static @NotNull ErrorContainer warning(@NotNull Warning warning, @NotNull String title) {
-        return new ErrorContainer(warning.code(), title, ErrorType.WARNING);
+    public static @NotNull ErrorContainer warning(@NotNull Warning warning, @NotNull String title, @NotNull Node node) {
+        return new ErrorContainer(warning.code(), node.id(), title, ErrorType.WARNING);
     }
 }
