@@ -26,12 +26,12 @@ public class ErrorPrinter {
         Errno code = container.code();
         String title = container.title();
 
-        TokenError first = errors.getFirst();
+        TokenError first = errors.get(0);
 
         System.err.println(
             Format.RED + "error[E" + code.code() + "]" + Format.WHITE + ": " + title
         );
-        Meta firstMeta = first.tokens().getFirst().meta();
+        Meta firstMeta = first.tokens().get(0).meta();
         System.err.println(
             Format.CYAN + " --> " + Format.LIGHT_GRAY + context.file().getName() + ":" + firstMeta.lineNumber() +
             ":" + firstMeta.lineIndex()
@@ -52,7 +52,7 @@ public class ErrorPrinter {
             .orElse(0);
 
         for (TokenError error : errors) {
-            Meta meta = error.tokens().getFirst().meta();
+            Meta meta = error.tokens().get(0).meta();
 
             int lineSize = String.valueOf(meta.lineNumber()).length();
             int padding = lineSize < longestSize ? longestSize - (longestSize - lineSize) : lineSize;
