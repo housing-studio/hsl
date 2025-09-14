@@ -151,6 +151,10 @@ public class AstParser {
         return parse(GroupParser.class, Value.class);
     }
 
+    public @NotNull Value nextConversion() {
+        return parse(ConversionParser.class, Value.class);
+    }
+
     public void parseGame(@NotNull Game game) {
         while (context.peek().hasNext()) {
             if (context.peek().is(TokenType.EXPRESSION, "fn")) {

@@ -7,7 +7,6 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -102,6 +101,23 @@ public class ConstantAccess extends Value {
         }
 
         return constant.value();
+    }
+
+    /**
+     * Indicate, whether the underlying value is a compile-time constant or a dynamically resolved value.
+     * <p>
+     * Some operations may be online applicable for compile-time constants.
+     *
+     * @return {@code true} if the value is a constant, {@code false} otherwise
+     */
+    @Override
+    public boolean isConstant() {
+        Variable variable = resolveName(name.value());
+        if (variable != null)
+            return false;
+
+        ConstantDeclare constant = game.constants().get(name.value());
+        return constant != null;
     }
 
     /**

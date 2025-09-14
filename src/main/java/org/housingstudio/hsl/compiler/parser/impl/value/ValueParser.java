@@ -29,6 +29,10 @@ public class ValueParser extends ParserAlgorithm<Value> {
         if (peek().isLiteral())
             return parser.nextLiteral();
 
+        // handle explicit type conversion
+        if (peek().is(TokenType.TYPE) && at(cursor() + 1).is(TokenType.LPAREN))
+            return parser.nextConversion();
+
         // handle string interpolation
         // chat($"stat: {var1}")
         //      ^^^^^^^^^^^^^^^ string starting with dollar sign is going to be interpolated

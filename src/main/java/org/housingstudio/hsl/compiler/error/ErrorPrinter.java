@@ -3,53 +3,48 @@ package org.housingstudio.hsl.compiler.error;
 import lombok.RequiredArgsConstructor;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
-import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Meta;
-import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.Tokenizer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class ErrorPrinter {
     private final @NotNull ParserContext context;
 
-    public void print(@NotNull ErrorContainer container) {
-        List<TokenError> errors = container.errors();
-        if (errors.isEmpty())
-            throw new IllegalStateException("You must specify at least one token error");
-
-        Errno code = container.code();
-        String title = container.title();
-
-        TokenError first = errors.get(0);
-
-        System.err.println(
-            Format.RED + "error[E" + code.code() + "]" + Format.WHITE + ": " + title
-        );
-        Meta firstMeta = first.tokens().get(0).meta();
-        System.err.println(
-            Format.CYAN + " --> " + Format.LIGHT_GRAY + context.file().getName() + ":" + firstMeta.lineNumber() +
-            ":" + firstMeta.lineIndex()
-        );
-
-        int longestSize = errors.stream()
+    private int computePadding(@NotNull List<TokenError> errors) {
+        return errors.stream()
             .map(TokenError::tokens)
             .reduce(new ArrayList<>(), (total, tokens) -> {
                 total.addAll(tokens);
                 return total;
             })
             .stream()
-            .map(Token::meta)
-            .map(Meta::lineIndex)
+            .map(token -> token.meta().lineIndex())
             .map(String::valueOf)
             .map(String::length)
             .max(Integer::compare)
             .orElse(0);
+    }
+
+    public void print(@NotNull ErrorContainer container) {
+        List<TokenError> errors = container.errors();
+        if (errors.isEmpty())
+            throw new IllegalStateException("You must specify at least one token error");
+
+        System.err.println(
+            Format.RED + "error[E" + container.code().code() + "]" + Format.WHITE + ": " + container.title()
+        );
+
+        Meta firstMeta = errors.get(0).tokens().get(0).meta();
+        System.err.println(
+            Format.CYAN + " --> " + Format.LIGHT_GRAY + context.file().getName() + ":" + firstMeta.lineNumber() +
+            ":" + firstMeta.lineIndex()
+        );
+
+        int longestSize = computePadding(errors);
 
         for (TokenError error : errors) {
             Meta meta = error.tokens().get(0).meta();
@@ -87,14 +82,17 @@ public class ErrorPrinter {
         System.err.print(Format.CYAN + repeat(" ", longestSize + 1));
         System.err.println(" | ");
 
+        printNotes(container);
+
+        System.err.print(Format.DEFAULT);
+        throw new IllegalStateException("AST parse error");
+    }
+
+    private void printNotes(@NotNull ErrorContainer container) {
         for (String note : container.notes()) {
             System.err.print(Format.GREEN + "note: ");
             System.err.println(Format.LIGHT_GRAY + note);
         }
-
-        System.err.print(Format.DEFAULT);
-
-        throw new IllegalStateException("AST parse error");
     }
 
     private @NotNull String repeat(@NotNull String value, int count) {

@@ -20,6 +20,17 @@ public abstract class Value extends Node implements Printable, Constant {
      */
     public abstract @NotNull Type getValueType();
 
+    /**
+     * Indicate, whether the underlying value is a compile-time constant or a dynamically resolved value.
+     * <p>
+     * Some operations may be online applicable for compile-time constants.
+     *
+     * @return {@code true} if the value is a constant, {@code false} otherwise
+     */
+    public boolean isConstant() {
+        return getValueType().base().constant();
+    }
+
     public @NotNull Value load() {
         return this;
     }

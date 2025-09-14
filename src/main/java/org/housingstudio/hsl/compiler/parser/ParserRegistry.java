@@ -54,7 +54,8 @@ public class ParserRegistry {
             MacroCallParser.class,
             ConditionParser.class,
             ConditionalParser.class,
-            InterpolationParser.class
+            InterpolationParser.class,
+            ConversionParser.class,
         };
 
         for (Class<?> parser : parsers) {

@@ -6,7 +6,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.debug.Printable;
@@ -87,6 +86,18 @@ public class ConstantLiteral extends Value implements Printable {
         if (token.type() == TokenType.STRING)
             str = "\"" + str + "\"";
         return str;
+    }
+
+    /**
+     * Indicate, whether the underlying value is a compile-time constant or a dynamically resolved value.
+     * <p>
+     * Some operations may be online applicable for compile-time constants.
+     *
+     * @return {@code true} if the value is a constant, {@code false} otherwise
+     */
+    @Override
+    public boolean isConstant() {
+        return true;
     }
 
     public static long durationToTicks(String input) {

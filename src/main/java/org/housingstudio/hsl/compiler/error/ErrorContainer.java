@@ -27,6 +27,11 @@ public class ErrorContainer {
         return this;
     }
 
+    public @NotNull ErrorContainer error(@NotNull String message, @NotNull List<Token> tokens) {
+        errors.add(new TokenError(tokens, message));
+        return this;
+    }
+
     public @NotNull ErrorContainer note(@NotNull String message) {
         notes.add(message);
         return this;
