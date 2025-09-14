@@ -10,7 +10,7 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.error.ErrorContainer;
-import org.housingstudio.hsl.compiler.token.Errno;
+import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.impl.ChangeVariable;
@@ -69,7 +69,7 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
 
         if (type == null) {
             context.errorPrinter().print(
-                new ErrorContainer(Errno.CANNOT_INFER_TYPE, "cannot infer type")
+                ErrorContainer.error(Errno.CANNOT_INFER_TYPE, "cannot infer type")
                     .error("cannot infer type", name)
                     .note("did you recursively assign a stat?")
             );

@@ -12,14 +12,15 @@ import org.housingstudio.hsl.compiler.codegen.builder.FunctionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.DescriptionAnnotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.IconAnnotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.LoopAnnotation;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
-import org.housingstudio.hsl.compiler.token.Errno;
+import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.ErrorContainer;
+import org.housingstudio.hsl.compiler.error.Warning;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.codegen.impl.generic.Function;
 import org.housingstudio.hsl.std.Material;
@@ -28,12 +29,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.METHOD)
 public class Method extends ScopeContainer implements Printable, FunctionBuilder {
+    private static final Pattern PREFERRED_NAMING_CONVENTION = Pattern.compile("^[a-z][a-zA-Z0-9]*$");
+
     private final List<Annotation> annotations;
     private final @NotNull Token name;
     private final @NotNull Type returnType;
@@ -49,18 +53,31 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
      */
     @Override
     public void init() {
+        validateAnnotations();
+        validateName();
+    }
+
+    private void validateAnnotations() {
         for (Annotation annotation : annotations) {
             if (!annotation.isAllowedForFunctions()) {
-                context.error(
-                    Errno.UNEXPECTED_ANNOTATION_TARGET,
-                    "unexpected annotation target",
-                    annotation.name(),
-                    "this annotation is not allowed for functions"
+                context.errorPrinter().print(
+                    ErrorContainer.error(Errno.UNEXPECTED_ANNOTATION_TARGET, "unexpected annotation target")
+                        .error("this annotation is not allowed for functions", annotation.name())
                 );
                 throw new UnsupportedOperationException(
                     String.format("Annotation '%s' is not allowed for functions", annotation.name().value())
                 );
             }
+        }
+    }
+
+    private void validateName() {
+        if (!PREFERRED_NAMING_CONVENTION.matcher(name.value()).matches()) {
+            context.errorPrinter().print(
+                ErrorContainer.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention")
+                    .error("not preferred function name", name)
+                    .note("use `lowerCamelCase` to name functions")
+            );
         }
     }
 

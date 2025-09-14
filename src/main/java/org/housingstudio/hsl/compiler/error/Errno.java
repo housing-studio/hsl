@@ -1,4 +1,4 @@
-package org.housingstudio.hsl.compiler.token;
+package org.housingstudio.hsl.compiler.error;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

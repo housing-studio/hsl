@@ -7,7 +7,7 @@ import org.housingstudio.hsl.compiler.error.ErrorContainer;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
-import org.housingstudio.hsl.compiler.token.Errno;
+import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.housingstudio.hsl.std.*;
@@ -92,7 +92,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
                 return parsePermission(context);
             default:
                 context.errorPrinter().print(
-                    new ErrorContainer(Errno.INVALID_BUILTIN_TYPE, "invalid builtin type")
+                    ErrorContainer.error(Errno.INVALID_BUILTIN_TYPE, "invalid builtin type")
                         .error("unrecognized builtin type skid", type)
                         .note(
                             "read about builtin types at " + Format.LIGHT_BLUE +

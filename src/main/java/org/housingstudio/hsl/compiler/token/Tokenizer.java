@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.token;
 
 import lombok.RequiredArgsConstructor;
 import org.housingstudio.hsl.compiler.debug.Format;
+import org.housingstudio.hsl.compiler.error.Errno;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

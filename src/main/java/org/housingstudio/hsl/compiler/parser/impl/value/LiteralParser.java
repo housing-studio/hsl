@@ -4,12 +4,11 @@ import org.housingstudio.hsl.compiler.ast.impl.operator.BinaryOperator;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
-import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.error.ErrorContainer;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
-import org.housingstudio.hsl.compiler.token.Errno;
+import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +59,7 @@ public class LiteralParser extends ParserAlgorithm<Value> {
 
             if (!literal.getValueType().matches(rhs.getValueType())) {
                 context.errorPrinter().print(
-                    new ErrorContainer(Errno.OPERATOR_TYPE_MISMATCH, "operator type mismatch")
+                    ErrorContainer.error(Errno.OPERATOR_TYPE_MISMATCH, "operator type mismatch")
                         .error(
                             String.format(
                                 "operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType().print(),

@@ -34,9 +34,20 @@ public class ErrorPrinter {
         if (errors.isEmpty())
             throw new IllegalStateException("You must specify at least one token error");
 
-        System.err.println(
-            Format.RED + "error[E" + container.code().code() + "]" + Format.WHITE + ": " + container.title()
-        );
+        Format color = container.type() == ErrorType.ERROR ? Format.RED : Format.YELLOW;
+
+        switch (container.type()) {
+            case ERROR:
+                System.err.println(
+                    color + "error[E" + container.code() + "]" + Format.WHITE + ": " + container.title()
+                );
+                break;
+            case WARNING:
+                System.err.println(
+                    color + "warning[E" + container.code() + "]" + Format.WHITE + ": " + container.title()
+                );
+                break;
+        }
 
         Meta firstMeta = errors.get(0).tokens().get(0).meta();
         System.err.println(
@@ -71,11 +82,11 @@ public class ErrorPrinter {
             // display the error pointer
             System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
             String pointerPad = repeat(" ", lineSize + (meta.lineIndex() - start) - 1);
-            System.err.println(" | " + pointerPad + Format.RED + repeat("^", meta.endIndex() - meta.beginIndex()));
+            System.err.println(" | " + pointerPad + color + repeat("^", meta.endIndex() - meta.beginIndex()));
 
             // display the expected tokens below the pointer
             System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
-            System.err.println(" | " + pointerPad + Format.RED + error.message());
+            System.err.println(" | " + pointerPad + color + error.message());
         }
 
         // display a final separator
@@ -85,7 +96,9 @@ public class ErrorPrinter {
         printNotes(container);
 
         System.err.print(Format.DEFAULT);
-        throw new IllegalStateException("AST parse error");
+
+        if (container.type() == ErrorType.ERROR)
+            throw new IllegalStateException("AST parse error");
     }
 
     private void printNotes(@NotNull ErrorContainer container) {
