@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
@@ -15,14 +16,16 @@ import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.generic.EventType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.EVENT)
-public class Event extends Node implements Printable, ActionListBuilder {
+public class Event extends ScopeContainer implements Printable, ActionListBuilder {
     private final @NotNull EventType type;
 
     @Children
@@ -52,5 +55,29 @@ public class Event extends Node implements Printable, ActionListBuilder {
 
         builder.append(Format.LIGHT_GRAY).append('}');
         return builder.toString();
+    }
+
+    /**
+     * Retrieve the parent scope of this scope.
+     * <p>
+     * This method will return {@code null}, only if {@code this} scope is the root scope.
+     *
+     * @return the parent scope of this scope, or {@code null} if {@code this} scope is the root scope
+     */
+    @Override
+    public @Nullable ScopeContainer getParentScope() {
+        return null;
+    }
+
+    /**
+     * Retrieve the list of child scopes of this scope.
+     * <p>
+     * If {@code this} scope has no child scopes, this method will return an empty list.
+     *
+     * @return the list of child scopes of this scope
+     */
+    @Override
+    public @NotNull List<ScopeContainer> getChildrenScopes() {
+        return Collections.singletonList(scope);
     }
 }
