@@ -119,7 +119,7 @@ public class CLI {
             else
                 System.out.println(
                     Format.LIGHT_YELLOW + "" + Format.BOLD + "TIP: " + Format.DEFAULT +
-                    Format.LIGHT_GRAY + "Use " + Format.WHITE + "hsl export -v" + Format.LIGHT_GRAY +
+                    Format.LIGHT_GRAY + "Use " + Format.WHITE + "`hsl export -v`" + Format.LIGHT_GRAY +
                     " to get more information"
                 );
             System.exit(1);

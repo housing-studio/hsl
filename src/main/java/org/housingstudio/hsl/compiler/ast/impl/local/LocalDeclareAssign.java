@@ -9,20 +9,19 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
+import org.housingstudio.hsl.compiler.error.ErrorContainer;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.impl.ChangeVariable;
 import org.housingstudio.hsl.std.Mode;
 import org.housingstudio.hsl.std.Namespace;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -39,8 +38,7 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
 
     private Type type;
 
-    @Override
-    public void init() {
+    private void inferType() {
         Type valueType = value.load().getValueType();
 
         // check if an explicit type is specified and it does not match the inferred type
@@ -63,6 +61,20 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
         // infer type from value if no explicit type is specified
         else
             type = valueType;
+    }
+
+    @Override
+    public void init() {
+        inferType();
+
+        if (type == null) {
+            context.errorPrinter().print(
+                new ErrorContainer(Errno.CANNOT_INFER_TYPE, "cannot infer type")
+                    .error("cannot infer type", name)
+                    .note("did you recursively assign a stat?")
+            );
+            throw new IllegalStateException("Cannot infer type for stat: " + name.value());
+        }
     }
 
     /**

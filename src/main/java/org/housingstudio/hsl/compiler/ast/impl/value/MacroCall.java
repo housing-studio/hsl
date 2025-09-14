@@ -109,7 +109,6 @@ public class MacroCall extends Value implements ActionListBuilder {
      */
     @Override
     public @Nullable Variable resolveName(@NotNull String name) {
-        System.err.println("RES NAME: " + name);
         Macro macro = resolveMacro();
         Map<String, Value> args = ArgumentParser.parseArguments(context, this.name, macro.parameters(), arguments);
         validateArgumentTypes(macro.parameters(), args);
@@ -147,7 +146,7 @@ public class MacroCall extends Value implements ActionListBuilder {
             if (!parameter.type().matches(Types.ANY))
                 continue;
 
-            if (parameter.type() != value.getValueType()) {
+            if (!parameter.type().matches(value.getValueType())) {
                 context.error(
                     Errno.INVALID_ARGUMENT_TYPE,
                     "argument type mismatch",

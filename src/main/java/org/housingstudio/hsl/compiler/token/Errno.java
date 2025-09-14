@@ -221,7 +221,12 @@ public enum Errno {
     /**
      * `ILLEGAL_TYPE_CONVERSION` indicates, that the target value cannot be converted to the specified type.
      */
-    ILLEGAL_TYPE_CONVERSION(141),;
+    ILLEGAL_TYPE_CONVERSION(141),
+
+    /**
+     * `CANNOT_INFER_TYPE` indicates, that the declaration could not infer the value type.
+     */
+    CANNOT_INFER_TYPE(142);
 
     /**
      * The error code of the token error.
