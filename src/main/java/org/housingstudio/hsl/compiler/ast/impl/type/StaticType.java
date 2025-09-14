@@ -40,7 +40,8 @@ public class StaticType implements Type {
      */
     @Override
     public @NotNull String print() {
-        return base.name();
+        return base.format()
+            ;
     }
 
     @Override

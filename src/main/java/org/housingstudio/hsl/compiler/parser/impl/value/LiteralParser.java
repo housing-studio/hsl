@@ -4,6 +4,8 @@ import org.housingstudio.hsl.compiler.ast.impl.operator.BinaryOperator;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.debug.Format;
+import org.housingstudio.hsl.compiler.error.ErrorContainer;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -57,18 +59,24 @@ public class LiteralParser extends ParserAlgorithm<Value> {
             Value rhs = parser.nextValue();
 
             if (!literal.getValueType().matches(rhs.getValueType())) {
-                context.error(
-                    Errno.OPERATOR_TYPE_MISMATCH,
-                    "operator type mismatch",
-                    token,
-                    String.format(
-                        "operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType(), rhs.getValueType()
-                    )
+                context.errorPrinter().print(
+                    new ErrorContainer(Errno.OPERATOR_TYPE_MISMATCH, "operator type mismatch")
+                        .error(
+                            String.format(
+                                "operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType().print(),
+                                rhs.getValueType().print()
+                            ),
+                            token
+                        )
+                        .note(
+                            "consider explicit type conversion",
+                            "\"total balance: \" + string(balance)"
+                        )
                 );
-                // TODO note: consider string(1) + "foo"
                 throw new UnsupportedOperationException(
                     String.format(
-                        "Operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType(), rhs.getValueType()
+                        "Operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType().print(),
+                        rhs.getValueType().print()
                     )
                 );
             }
@@ -79,10 +87,10 @@ public class LiteralParser extends ParserAlgorithm<Value> {
                     Errno.UNEXPECTED_OPERAND,
                     "unexpected operand",
                     token,
-                    "operator not supported for type: " + literal.getValueType()
+                    "operator not supported for type: " + literal.getValueType().print()
                 );
                 throw new UnsupportedOperationException(
-                    "Operator not supported for type: " + literal.getValueType()
+                    "Operator not supported for type: " + literal.getValueType().print()
                 );
             }
 

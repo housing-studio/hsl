@@ -4,6 +4,8 @@ import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.debug.Format;
+import org.housingstudio.hsl.compiler.error.ErrorContainer;
 import org.housingstudio.hsl.compiler.token.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.std.Namespace;
@@ -68,14 +70,12 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
 
         // check if no explicit type is specified and the declaration does not follow an assignment
         if (type == null && !peek().is(TokenType.OPERATOR, "=")) {
-            context.error(
-                Errno.EXPECTED_ASSIGNMENT_TO_INFER_TYPE,
-                "expected assignment to infer type",
-                peek(),
-                "either specify an explicit type, or specify a value to infer type"
+            context.errorPrinter().print(
+                new ErrorContainer(Errno.EXPECTED_ASSIGNMENT_TO_INFER_TYPE, "expected assignment to infer type")
+                    .error("either specify an explicit type, or specify a value to infer type", peek())
+                    .note("specify an explicit type: " + Format.LIGHT_BLUE + "stat player foo: int")
+                    .note("specify a value to infer type: " + Format.LIGHT_BLUE + "stat player foo = bar")
             );
-            // TODO note: specify an explicit type: stat player foo: int
-            // TODO note: specify a value to infer type: stat player foo = bar
             throw new UnsupportedOperationException("Expected assignment to infer type: " + peek());
         }
 

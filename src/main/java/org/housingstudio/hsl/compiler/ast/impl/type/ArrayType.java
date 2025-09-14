@@ -48,7 +48,7 @@ public class ArrayType implements Type {
             builder.append("[");
             builder.append("]");
         }
-        return builder.append(elementType.name()).toString();
+        return builder.append(elementType.format()).toString();
     }
 
     @Override

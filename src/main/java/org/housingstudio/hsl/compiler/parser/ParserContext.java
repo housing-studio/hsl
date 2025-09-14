@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.debug.Format;
+import org.housingstudio.hsl.compiler.error.ErrorPrinter;
 import org.housingstudio.hsl.compiler.token.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +27,8 @@ import java.util.stream.Stream;
 @Accessors(fluent = true)
 @Getter
 public class ParserContext {
+    private final ErrorPrinter errorPrinter = new ErrorPrinter(this);
+
     /**
      * The list of annotations that are declared by a type/function definition.
      */
