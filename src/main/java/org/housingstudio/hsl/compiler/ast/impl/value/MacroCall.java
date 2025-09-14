@@ -152,7 +152,7 @@ public class MacroCall extends Value implements ActionListBuilder {
                     Errno.INVALID_ARGUMENT_TYPE,
                     "argument type mismatch",
                     name,
-                    "parameter `" + parameter.name().value() + "` expects " + parameter.type() +
+                    "parameter `" + parameter.name().value() + "` expects type " + parameter.type() +
                     " but found " + value.getValueType()
                 );
                 throw new UnsupportedOperationException(

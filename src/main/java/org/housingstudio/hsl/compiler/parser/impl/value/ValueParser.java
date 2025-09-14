@@ -30,7 +30,14 @@ public class ValueParser extends ParserAlgorithm<Value> {
             return parser.nextLiteral();
 
         // handle explicit type conversion
-        if (peek().is(TokenType.TYPE) && at(cursor() + 1).is(TokenType.LPAREN))
+        if (
+            (
+                // either is a builtin type token
+                peek().is(TokenType.TYPE) ||
+                // or a special identifier that could be a builtin type
+                (peek().is(TokenType.IDENTIFIER) && TypeParser.isTypeIdentifier(peek().value()))
+            ) && at(cursor() + 1).is(TokenType.LPAREN)
+        )
             return parser.nextConversion();
 
         // handle string interpolation

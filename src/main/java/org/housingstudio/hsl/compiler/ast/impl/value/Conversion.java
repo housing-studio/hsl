@@ -120,6 +120,11 @@ public class Conversion extends Value {
         );
     }
 
+    @Override
+    public @NotNull Value load() {
+        return value;
+    }
+
     /**
      * Returns a string representation of the implementing class.
      *

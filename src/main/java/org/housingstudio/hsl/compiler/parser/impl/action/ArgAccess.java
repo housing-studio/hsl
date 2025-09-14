@@ -20,7 +20,16 @@ public class ArgAccess {
     private final @NotNull Map<String, Value> args;
 
     private @NotNull Value get(@NotNull String key) {
-        return args.get(key).load();
+        Value value = args.get(key);
+        // recursively load the visitable value ast, until there is something left to be loaded
+        while (true) {
+            Value loaded = value.load();
+            // loading refers to itself, there is nothing left to load
+            if (value == loaded)
+                break;
+            value = loaded;
+        }
+        return value;
     }
 
     public @NotNull Namespace getNamespace(@NotNull String key) {

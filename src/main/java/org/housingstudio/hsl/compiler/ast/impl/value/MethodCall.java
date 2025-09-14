@@ -206,13 +206,13 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
             if (parameter.type().matches(Types.ANY))
                 continue;
 
-            if (parameter.type() != value.getValueType()) {
+            if (!parameter.type().matches(value.getValueType())) {
                 context.error(
                     Errno.INVALID_ARGUMENT_TYPE,
                     "argument type mismatch",
                     name,
-                    "parameter `" + parameter.name().value() + "` expects " + parameter.type() +
-                    " but found " + value.getValueType()
+                    "parameter `" + parameter.name().value() + "` expects type " + parameter.type().print() +
+                    " but found " + value.getValueType().print()
                 );
                 throw new UnsupportedOperationException(
                     String.format(
