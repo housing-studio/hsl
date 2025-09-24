@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 public enum ActionType {
-    CONDITIONAL             (30, "Conditional",              Conditional.class),
+    CONDITIONAL             (25, "Conditional",              Conditional.class),
     CHANGE_PLAYER_GROUP     (1,  "Change Player's Group",    ChangePlayerGroup.class),
     KILL_PLAYER             (1,  "Kill Player",              KillPlayer.class),
     FULL_HEALTH             (5,  "Full Heal",                FullHealth.class),
@@ -19,8 +19,8 @@ public enum ActionType {
     RESET_INVENTORY         (1,  "Reset Inventory",          ResetInventory.class),
     CHANGE_MAX_HEALTH       (5,  "Change Max Health",        ChangeMaxHealth.class),
     PARKOUR_CHECKPOINT      (1,  "Parkour Checkpoint",       ParkourCheckpoint.class),
-    GIVE_ITEM               (20, "Give Item",                GiveItem.class),
-    REMOVE_ITEM             (20, "Remove Item",              RemoveItem.class),
+    GIVE_ITEM               (40, "Give Item",                GiveItem.class),
+    REMOVE_ITEM             (40, "Remove Item",              RemoveItem.class),
     SEND_CHAT_MESSAGE       (20, "Send a Chat Message",      SendChatMessage.class),
     APPLY_POTION_EFFECT     (22, "Apply Potion Effect",      ApplyPotionEffect.class),
     CLEAR_ALL_POTION_EFFECTS(5,  "Clear All Potion Effects", ClearAllPotionEffects.class),
@@ -34,7 +34,7 @@ public enum ActionType {
     SET_GAME_MODE           (1,  "Set Gamemode",             SetGameMode.class),
     CHANGE_HEALTH           (5,  "Change Health",            ChangeHealth.class),
     CHANGE_HUNGER_LEVEL     (5,  "Change Hunger Level",      ChangeHungerLevel.class),
-    RANDOM_ACTION           (5,  "Random Action",            RandomAction.class),
+    RANDOM_ACTION           (25, "Random Action",            RandomAction.class),
     TRIGGER_FUNCTION        (10, "Trigger Function",         TriggerFunction.class),
     APPLY_INVENTORY_LAYOUT  (5,  "Apply Inventory Layout",   ApplyInventoryLayout.class),
     ENCHANT_HELD_ITEM       (23, "Enchant Held Item",        EnchantHeldItem.class),
