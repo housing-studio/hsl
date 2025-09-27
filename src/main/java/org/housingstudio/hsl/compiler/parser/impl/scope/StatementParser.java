@@ -61,6 +61,16 @@ public class StatementParser extends ParserAlgorithm<Node> {
             return parser.nextPostfixOperator();
 
         // handle operator assignment
+        // foo+=2
+        // ^^^ lhs target operand
+        //    ^^ operator
+        //      ^ rhs operand value
+        if (
+            peek().is(TokenType.IDENTIFIER) && (
+                isAssigmentOperator(at(cursor() + 1)) && at(cursor() + 2).is(TokenType.OPERATOR, "=")
+            )
+        )
+            return parser.nextAssignmentOperator();
 
         // handle method call
         // chat("Hello, World!")
@@ -95,5 +105,20 @@ public class StatementParser extends ParserAlgorithm<Node> {
 
         context.syntaxError(peek(), "expected statement, but found " + peek().print());
         throw new UnsupportedOperationException("Not implemented statement: " + peek());
+    }
+
+    private boolean isAssigmentOperator(@NotNull Token token) {
+        if (!token.is(TokenType.OPERATOR))
+            return false;
+
+        switch (token.value()) {
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+                return true;
+            default:
+                return false;
+        }
     }
 }

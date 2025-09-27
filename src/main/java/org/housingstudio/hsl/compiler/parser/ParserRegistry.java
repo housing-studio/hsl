@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionalParser;
 import org.housingstudio.hsl.compiler.parser.impl.declaration.*;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalDeclareParser;
+import org.housingstudio.hsl.compiler.parser.impl.operator.AssignmentOperatorParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.OperatorParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.PostfixOperatorParser;
 import org.housingstudio.hsl.compiler.parser.impl.scope.ScopeParser;
@@ -58,6 +59,7 @@ public class ParserRegistry {
             InterpolationParser.class,
             ConversionParser.class,
             PostfixOperatorParser.class,
+            AssignmentOperatorParser.class,
         };
 
         for (Class<?> parser : parsers) {

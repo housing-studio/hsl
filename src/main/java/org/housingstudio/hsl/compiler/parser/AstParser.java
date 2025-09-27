@@ -21,6 +21,7 @@ import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionalParser;
 import org.housingstudio.hsl.compiler.parser.impl.declaration.*;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalDeclareParser;
+import org.housingstudio.hsl.compiler.parser.impl.operator.AssignmentOperatorParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.BinaryOperatorTree;
 import org.housingstudio.hsl.compiler.parser.impl.operator.OperatorParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.PostfixOperatorParser;
@@ -157,6 +158,10 @@ public class AstParser {
 
     public @NotNull Node nextPostfixOperator() {
         return parse(PostfixOperatorParser.class, Node.class);
+    }
+
+    public @NotNull Node nextAssignmentOperator() {
+        return parse(AssignmentOperatorParser.class, Node.class);
     }
 
     public void parseGame(@NotNull Game game) {

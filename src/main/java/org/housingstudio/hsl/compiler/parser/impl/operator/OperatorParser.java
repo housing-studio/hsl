@@ -68,8 +68,8 @@ public class OperatorParser extends ParserAlgorithm<Operator> {
     private @NotNull Operator parseOperator(@NotNull StringBuilder operator) {
         Operator result = Operator.of(operator.toString());
         if (result == Operator.UNKNOWN) {
-            useContext().syntaxError(peek(), "Invalid operator: " + operator);
-            throw new ParserException("Invalid operator: " + operator);
+            useContext().syntaxError(peek(), "invalid operator: " + operator);
+            throw new ParserException("invalid operator: " + operator);
         }
         return result;
     }
