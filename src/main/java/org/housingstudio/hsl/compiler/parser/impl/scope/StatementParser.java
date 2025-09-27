@@ -46,6 +46,22 @@ public class StatementParser extends ParserAlgorithm<Node> {
         )
             return parser.nextLocalAssignment();
 
+        // handle prefix operators
+
+        // handle postfix operators
+        // foo++
+        // ^^^ target operand
+        //    ^^ postfix operator
+        if (
+            peek().is(TokenType.IDENTIFIER) && (
+                (at(cursor() + 1).is(TokenType.OPERATOR, "+") && at(cursor() + 2).is(TokenType.OPERATOR, "+")) ||
+                (at(cursor() + 1).is(TokenType.OPERATOR, "-") && at(cursor() + 2).is(TokenType.OPERATOR, "-"))
+            )
+        )
+            return parser.nextPostfixOperator();
+
+        // handle operator assignment
+
         // handle method call
         // chat("Hello, World!")
         //     ^ the parentheses after an identifier indicates, that a method is being called

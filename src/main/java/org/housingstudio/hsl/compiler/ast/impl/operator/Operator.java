@@ -84,6 +84,16 @@ public enum Operator {
      */
     private final int associativity;
 
+    public boolean postfix() {
+        switch (this) {
+            case INCREMENT:
+            case DECREMENT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     /**
      * Find the wrapper for the given operator value.
      * @param value raw operator value

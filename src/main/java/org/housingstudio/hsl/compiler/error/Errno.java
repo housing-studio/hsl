@@ -231,7 +231,22 @@ public enum Errno {
     /**
      * `TOO_MANY_ACTIONS` indicates, that more actions were called by a function than allowed by Hypixel
      */
-    TOO_MANY_ACTIONS(143);
+    TOO_MANY_ACTIONS(143),
+
+    /**
+     * `INVALID_PREFIX_OPERATOR` indicates, that the given operator is not a valid prefix operator.
+     */
+    INVALID_PREFIX_OPERATOR(144),
+
+    /**
+     * `INVALID_POSTFIX_OPERATOR` indicates, that the given operator is not a valid postfix operator.
+     */
+    INVALID_POSTFIX_OPERATOR(145),
+
+    /**
+     * `INVALID_ASSIGNMENT_OPERATOR` indicates, that the given operator is not a valid assignment operator.
+     */
+    INVALID_ASSIGNMENT_OPERATOR(146);
 
     /**
      * The error code of the token error.
