@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
+import org.housingstudio.hsl.compiler.codegen.ActionLimiter;
 import org.housingstudio.hsl.compiler.codegen.builder.FunctionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
@@ -16,6 +17,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.DescriptionAnnotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.IconAnnotation;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.LoopAnnotation;
+import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.error.Errno;
@@ -81,13 +83,17 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
 
     @Override
     public @NotNull Function buildFunction() {
-        return new Function(
+        List<Action> actions = scope.buildActionList();
+        Function function = new Function(
             name.value(),
-            scope.buildActionList(),
+            actions,
             resolveDescription(),
             resolveIcon(),
             resolveAutomaticExecution()
         );
+        ActionLimiter limiter = ActionLimiter.from(context, this, actions);
+        limiter.validate();
+        return function;
     }
 
     private @Nullable String resolveDescription() {

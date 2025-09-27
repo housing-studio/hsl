@@ -226,7 +226,12 @@ public enum Errno {
     /**
      * `CANNOT_INFER_TYPE` indicates, that the declaration could not infer the value type.
      */
-    CANNOT_INFER_TYPE(142);
+    CANNOT_INFER_TYPE(142),
+
+    /**
+     * `TOO_MANY_ACTIONS` indicates, that more actions were called by a function than allowed by Hypixel
+     */
+    TOO_MANY_ACTIONS(143);
 
     /**
      * The error code of the token error.
