@@ -251,7 +251,12 @@ public enum Errno {
     /**
      * `EXPECTED_CONSTANT_VALUE` indicates, that a dynamic value was given, but a constant literal was expected.
      */
-    EXPECTED_CONSTANT_VALUE(147);
+    EXPECTED_CONSTANT_VALUE(147),
+
+    /**
+     * `EXPECTED_COMPARATOR_OPERATOR` indicates, that a comparator operator was expected, but something else ęas given.
+     */
+    EXPECTED_COMPARATOR_OPERATOR(148);
 
     /**
      * The error code of the token error.

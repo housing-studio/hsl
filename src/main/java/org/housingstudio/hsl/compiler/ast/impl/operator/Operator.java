@@ -94,6 +94,20 @@ public enum Operator {
         }
     }
 
+    public boolean comparable() {
+        switch (this) {
+            case EQUAL:
+            case NOT_EQUAL:
+            case GREATER_THAN:
+            case GREATER_OR_EQUAL:
+            case LESS_THAN:
+            case LESS_OR_EQUAL:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     /**
      * Find the wrapper for the given operator value.
      * @param value raw operator value

@@ -139,10 +139,14 @@ public abstract class Node {
                 throw new IllegalStateException("Cannot access children field", e);
             }
 
+            if (children == null)
+                continue;
+
             Children annotation = field.getDeclaredAnnotation(Children.class);
             if (annotation.resolver() != ChildrenResolver.NoResolver.class) {
                 Constructor<?> constructor = annotation.resolver().getDeclaredConstructors()[0];
                 constructor.setAccessible(true);
+                @SuppressWarnings("rawtypes")
                 ChildrenResolver resolver = (ChildrenResolver) constructor.newInstance();
                 result.addAll(resolver.resolveChildren(children));
             }

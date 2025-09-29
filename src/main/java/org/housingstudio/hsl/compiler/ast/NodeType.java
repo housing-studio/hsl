@@ -20,6 +20,7 @@ public enum NodeType {
     STAT_ACCESS,
     INTERPOLATED_STRING,
     GROUP,
+    COMPARATOR,
 
     METHOD_CALL,
     MACRO_CALL,

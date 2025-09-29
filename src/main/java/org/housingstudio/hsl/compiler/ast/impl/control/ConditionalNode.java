@@ -3,33 +3,36 @@ package org.housingstudio.hsl.compiler.ast.impl.control;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
+import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.impl.Conditional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.CONDITIONAL)
-public class ConditionalNode extends Node implements ActionBuilder, Printable {
+public class ConditionalNode extends ScopeContainer implements ActionBuilder, Printable {
+    @Children
     private final @NotNull List<ConditionBuilder> conditions;
 
     private final boolean matchAnyCases;
 
+    @Children
     private final @NotNull Scope ifScope;
+
+    @Children
     private final @Nullable Scope elseScope;
 
     @Override
@@ -72,5 +75,29 @@ public class ConditionalNode extends Node implements ActionBuilder, Printable {
             builder.append(elseScope.print());
         }
         return builder.toString();
+    }
+
+    /**
+     * Retrieve the parent scope of this scope.
+     * <p>
+     * This method will return {@code null}, only if {@code this} scope is the root scope.
+     *
+     * @return the parent scope of this scope, or {@code null} if {@code this} scope is the root scope
+     */
+    @Override
+    public @Nullable ScopeContainer getParentScope() {
+        return (ScopeContainer) parent();
+    }
+
+    /**
+     * Retrieve the list of child scopes of this scope.
+     * <p>
+     * If {@code this} scope has no child scopes, this method will return an empty list.
+     *
+     * @return the list of child scopes of this scope
+     */
+    @Override
+    public @NotNull List<ScopeContainer> getChildrenScopes() {
+        return Arrays.asList(ifScope, elseScope);
     }
 }

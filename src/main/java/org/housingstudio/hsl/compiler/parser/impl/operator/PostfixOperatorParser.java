@@ -30,7 +30,7 @@ public class PostfixOperatorParser extends ParserAlgorithm<Node> {
         if (!operator.postfix()) {
             context.errorPrinter().print(
                 Notification.error(Errno.INVALID_POSTFIX_OPERATOR, "unexpected postfix operator")
-                    .error("expected postfix operator, but given", token)
+                    .error("expected postfix operator, but found", token)
                     .note("use `++` and `--` instead")
             );
             throw new IllegalStateException("Unexpected postfix operator: " + operator);
