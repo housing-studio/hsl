@@ -246,7 +246,12 @@ public enum Errno {
     /**
      * `INVALID_ASSIGNMENT_OPERATOR` indicates, that the given operator is not a valid assignment operator.
      */
-    INVALID_ASSIGNMENT_OPERATOR(146);
+    INVALID_ASSIGNMENT_OPERATOR(146),
+
+    /**
+     * `EXPECTED_CONSTANT_VALUE` indicates, that a dynamic value was given, but a constant literal was expected.
+     */
+    EXPECTED_CONSTANT_VALUE(147);
 
     /**
      * The error code of the token error.

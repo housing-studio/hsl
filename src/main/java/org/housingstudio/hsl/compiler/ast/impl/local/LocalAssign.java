@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Statement;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.error.Notification;
@@ -25,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public class LocalAssign extends Statement implements Printable, ActionBuilder {
     private final @NotNull Token name;
     private final @NotNull Token operator;
+
+    @Children
     private final @NotNull Value value;
 
     /**
@@ -42,6 +45,18 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
                     .note("did you misspell the name, or forgot to declare the variable?")
             );
             throw new UnsupportedOperationException("Cannot find variable: " + name.value());
+        }
+
+        if (!value.isConstant()) {
+            context.errorPrinter().print(
+                Notification.error(Errno.EXPECTED_CONSTANT_VALUE, "cannot assign to non-constant value", this)
+                    .error(
+                        "cannot assign to this stat, because the assigned value may not be known at compile-time",
+                        name // TODO use value.tokens()
+                    )
+                    .note("consider assigning a constant value", "foo = 1234")
+            );
+            throw new UnsupportedOperationException("Cannot assign to non-constant value: " + name.value());
         }
 
         return new ChangeVariable(
