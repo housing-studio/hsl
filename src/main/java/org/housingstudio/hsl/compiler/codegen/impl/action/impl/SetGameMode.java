@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 public class SetGameMode implements Action {
-    private final ActionType type = ActionType.PLAY_SOUND;
+    private final ActionType type = ActionType.SET_GAME_MODE;
 
     @InteractionTarget(type = InteractionType.CHAT, offset = 0)
     @Required

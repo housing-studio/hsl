@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 public class ChangeHealth implements Action {
-    private final ActionType type = ActionType.PLAY_SOUND;
+    private final ActionType type = ActionType.CHANGE_HEALTH;
 
     @InteractionTarget(type = InteractionType.ANVIL, offset = 0)
     @DefaultInt(20)
