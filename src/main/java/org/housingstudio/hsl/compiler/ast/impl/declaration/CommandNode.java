@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
 import org.housingstudio.hsl.compiler.codegen.builder.CommandBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.annotation.ExecutorAnnotation;
@@ -21,13 +22,14 @@ import org.housingstudio.hsl.std.Executor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.COMMAND)
-public class CommandNode extends Node implements Printable, CommandBuilder {
+public class CommandNode extends ScopeContainer implements Printable, CommandBuilder {
     private final List<Annotation> annotations;
     private final @NotNull Token name;
 
@@ -91,5 +93,29 @@ public class CommandNode extends Node implements Printable, CommandBuilder {
 
         builder.append(Format.LIGHT_GRAY).append('}');
         return builder.toString();
+    }
+
+    /**
+     * Retrieve the parent scope of this scope.
+     * <p>
+     * This method will return {@code null}, only if {@code this} scope is the root scope.
+     *
+     * @return the parent scope of this scope, or {@code null} if {@code this} scope is the root scope
+     */
+    @Override
+    public @Nullable ScopeContainer getParentScope() {
+        return (ScopeContainer) parent();
+    }
+
+    /**
+     * Retrieve the list of child scopes of this scope.
+     * <p>
+     * If {@code this} scope has no child scopes, this method will return an empty list.
+     *
+     * @return the list of child scopes of this scope
+     */
+    @Override
+    public @NotNull List<ScopeContainer> getChildrenScopes() {
+        return Collections.singletonList(scope);
     }
 }
