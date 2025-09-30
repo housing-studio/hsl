@@ -17,7 +17,7 @@ public class ConditionParser extends ParserAlgorithm<ConditionBuilder> {
     /**
      * Parse the next {@link ConditionBuilder} node from the token stream.
      *
-     * @param parser  the AST node parser
+     * @param parser the AST node parser
      * @param context the token parser context
      * @return the next {@link ConditionBuilder} node from the token stream
      */
@@ -57,11 +57,9 @@ public class ConditionParser extends ParserAlgorithm<ConditionBuilder> {
             return new StatComparator(lhs, comparator, rhs);
         }
 
-        context.error(
-            Errno.UNKNOWN_CONDITION,
-            "unexpected condition value",
-            peek(),
-            "expected condition, but found: " + peek().value()
+        context.errorPrinter().print(
+            Notification.error(Errno.UNKNOWN_CONDITION, "unexpected condition value")
+                .error("expected condition, but found: " + peek().value(), peek())
         );
         throw new UnsupportedOperationException("Unexpected condition");
     }

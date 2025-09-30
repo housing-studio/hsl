@@ -4,6 +4,7 @@ import org.housingstudio.hsl.compiler.ast.impl.operator.BinaryOperator;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
 import org.housingstudio.hsl.compiler.ast.impl.value.Group;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -39,31 +40,33 @@ public class GroupParser extends ParserAlgorithm<Value> {
             Value rhs = parser.nextValue();
 
             if (!group.getValueType().matches(rhs.getValueType())) {
-                context.error(
-                    Errno.OPERATOR_TYPE_MISMATCH,
-                    "operator type mismatch",
-                    peek(),
-                    String.format(
-                        "operator type mismatch (lhs: %s, rhs: %s)", group.getValueType(), rhs.getValueType()
-                    )
+                context.errorPrinter().print(
+                    Notification.error(Errno.OPERATOR_TYPE_MISMATCH, "operator type mismatch")
+                        .error(
+                            String.format(
+                                "operator type mismatch (lhs: %s, rhs: %s)", group.getValueType().print(),
+                                rhs.getValueType().print()
+                            ),
+                            peek()
+                        )
+                        .note("make sure LHS and RHS are the same type")
                 );
                 throw new UnsupportedOperationException(
                     String.format(
-                        "Operator type mismatch (lhs: %s, rhs: %s)", group.getValueType(), rhs.getValueType()
+                        "Operator type mismatch (lhs: %s, rhs: %s)",
+                        group.getValueType().print(), rhs.getValueType().print()
                     )
                 );
             }
 
             BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(group, operator, rhs);
             if (!operation.supported()) {
-                context.error(
-                    Errno.UNEXPECTED_OPERAND,
-                    "unexpected operand",
-                    peek(),
-                    "operator not supported for type: " + group.getValueType()
+                context.errorPrinter().print(
+                    Notification.error(Errno.UNEXPECTED_OPERAND, "unexpected operand")
+                        .error("operator not supported for type: " + group.getValueType().print(), peek())
                 );
                 throw new UnsupportedOperationException(
-                    "Operator not supported for type: " + group.getValueType()
+                    "Operator not supported for type: " + group.getValueType().print()
                 );
             }
 

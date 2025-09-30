@@ -14,6 +14,7 @@ import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -54,10 +55,10 @@ public class MacroCall extends Value implements ActionListBuilder {
     private @NotNull Macro resolveMacro() {
         Macro macro = game.macros().get(name.value());
         if (macro == null) {
-            context.error(
-                Errno.UNKNOWN_MACRO, "macro not found",
-                name,
-                "cannot find macro: " + name.value()
+            context.errorPrinter().print(
+                Notification.error(Errno.UNKNOWN_MACRO, "macro not found", this)
+                    .error("cannot find macro: " + name.value(), name)
+                    .note("did you misspell the name, or forgot to declare the macro?")
             );
             throw new UnsupportedOperationException("Cannot find macro: " + name.value());
         }
@@ -147,15 +148,18 @@ public class MacroCall extends Value implements ActionListBuilder {
                 continue;
 
             if (!parameter.type().matches(value.getValueType())) {
-                context.error(
-                    Errno.INVALID_ARGUMENT_TYPE,
-                    "argument type mismatch",
-                    name,
-                    "parameter `" + parameter.name().value() + "` expects type " + parameter.type() +
-                    " but found " + value.getValueType()
+                context.errorPrinter().print(
+                    Notification.error(Errno.INVALID_ARGUMENT_TYPE, "argument type mismatch", this)
+                        .error(
+                            "parameter `" + parameter.name().value() + "` expects type " + parameter.type() +
+                                 " but found " + value.getValueType(),
+                            name
+                        )
+                        .note("did you misspell the name, or forgot to declare the variable?")
                 );
                 throw new UnsupportedOperationException(
-                    String.format("Invalid parameter type: (given: %s, expected: %s)", value.getValueType(), parameter.type())
+                    String.format("Invalid parameter type: (given: %s, expected: %s)",
+                    value.getValueType(), parameter.type())
                 );
             }
         }

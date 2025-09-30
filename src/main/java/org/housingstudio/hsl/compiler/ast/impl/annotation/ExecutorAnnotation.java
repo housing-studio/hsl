@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.ExecutorValue;
 import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.std.Executor;
 import org.jetbrains.annotations.NotNull;
@@ -25,11 +26,9 @@ public class ExecutorAnnotation extends Annotation {
     @Override
     public void init() {
         if (!(value() instanceof ExecutorValue)) {
-            context.error(
-                Errno.UNEXPECTED_ANNOTATION_VALUE,
-                "unexpected annotation value",
-                name(),
-                "executor annotation expects executor value"
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_ANNOTATION_VALUE, "unexpected annotation value", this)
+                    .error("executor annotation expects executor value", name())
             );
             throw new UnsupportedOperationException("Executor annotation expects executor value");
         }

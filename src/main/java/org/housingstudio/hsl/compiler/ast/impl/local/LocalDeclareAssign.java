@@ -44,11 +44,10 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
         // check if an explicit type is specified and it does not match the inferred type
         if (explicitType != null && !valueType.matches(explicitType)) {
             List<Token> tokens = explicitType.tokens();
-            context.error(
-                Errno.INFER_TYPE_MISMATCH,
-                "infer type mismatch",
-                tokens.get(tokens.size() - 1),
-                "the explicit type does not match the inferred type"
+            context.errorPrinter().print(
+                Notification.error(Errno.INFER_TYPE_MISMATCH, "infer type mismatch", this)
+                    .error("the explicit type does not match the inferred type", tokens.get(tokens.size() - 1))
+                    .note("make sure the stat's type matches the assigned value's type")
             );
             throw new IllegalStateException("Explicit type does not match inferred type");
         }

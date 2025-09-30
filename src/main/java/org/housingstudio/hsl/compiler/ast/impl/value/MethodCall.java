@@ -14,6 +14,7 @@ import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.parser.impl.action.ActionCodec;
 import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
@@ -60,11 +61,10 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
             method = game.functions().get(name.value());
 
         if (method == null) {
-            context.error(
-                Errno.UNKNOWN_MACRO,
-                "method not found",
-                name,
-                "cannot find method: " + name.value()
+            context.errorPrinter().print(
+                Notification.error(Errno.UNKNOWN_MACRO, "method not found", this)
+                    .error("cannot find method: " + name.value(), name)
+                    .note("did you misspell the name, or forgot to declare the method?")
             );
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
@@ -81,11 +81,10 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
      */
     @Override
     public @NotNull String asConstantValue() {
-        context.error(
-            Errno.FUNCTION_TRIGGER_AS_EXPRESSION,
-            "function trigger used as expression",
-            name,
-            "function triggers cannot be treated as expressions"
+        context.errorPrinter().print(
+            Notification.error(Errno.FUNCTION_TRIGGER_AS_EXPRESSION, "function trigger used as expression", this)
+                .error("function triggers cannot be treated as expressions", name)
+                .note("do not assign to the return value of functions")
         );
         throw new UnsupportedOperationException("Cannot use method call as an expression: " + name.value());
     }
@@ -103,11 +102,10 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
     @Override
     public void execute(@NotNull Frame frame) {
         if (BuiltinConditions.LOOKUP.containsKey(name.value())) {
-            context.error(
-                Errno.UNEXPECTED_CONDITION_TARGET,
-                "unexpected condition target",
-                name,
-                "cannot use condition functions as action calls or method calls"
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_CONDITION_TARGET, "unexpected condition target", this)
+                    .error("cannot use condition functions as action calls or method calls", name)
+                    .note("use condition functions within if() blocks only")
             );
             throw new UnsupportedOperationException("Cannot use condition as action or method call: " + name.value());
         }
@@ -117,11 +115,9 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
             method = game.functions().get(name.value());
 
         if (method == null) {
-            context.error(
-                Errno.UNKNOWN_METHOD,
-                "method not found",
-                name,
-                "cannot find method"
+            context.errorPrinter().print(
+                Notification.error(Errno.UNKNOWN_METHOD, "method not found", this)
+                    .error("cannot find method", name)
             );
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
@@ -142,11 +138,9 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
         }
 
         if (!arguments.isEmpty()) {
-            context.error(
-                Errno.FUNCTION_TRIGGER_WITH_ARGUMENTS,
-                "function triggered with arguments",
-                name,
-                "cannot trigger functions with arguments"
+            context.errorPrinter().print(
+                Notification.error(Errno.FUNCTION_TRIGGER_WITH_ARGUMENTS, "function triggered with arguments", this)
+                    .error("cannot trigger functions with arguments", name)
             );
             throw new UnsupportedOperationException("Function trigger cannot be used with arguments: " + name.value());
         }
@@ -157,11 +151,10 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
     @Override
     public @NotNull Action buildAction() {
         if (BuiltinConditions.LOOKUP.containsKey(name.value())) {
-            context.error(
-                Errno.UNEXPECTED_CONDITION_TARGET,
-                "unexpected condition target",
-                name,
-                "cannot use condition functions as action calls or method calls"
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_CONDITION_TARGET, "unexpected condition target", this)
+                    .error("cannot use condition functions as action calls or method calls", name)
+                    .note("use condition functions within if() blocks only")
             );
             throw new UnsupportedOperationException("Cannot use condition as action or method call: " + name.value());
         }
@@ -171,11 +164,9 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
             method = game.functions().get(name.value());
 
         if (method == null) {
-            context.error(
-                Errno.UNKNOWN_METHOD,
-                "method not found",
-                name,
-                "cannot find method"
+            context.errorPrinter().print(
+                Notification.error(Errno.UNKNOWN_METHOD, "method not found", this)
+                    .error("cannot find method", name)
             );
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
@@ -187,11 +178,9 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
         }
 
         if (!arguments.isEmpty()) {
-            context.error(
-                Errno.FUNCTION_TRIGGER_WITH_ARGUMENTS,
-                "function triggered with arguments",
-                name,
-                "cannot trigger functions with arguments"
+            context.errorPrinter().print(
+                Notification.error(Errno.FUNCTION_TRIGGER_WITH_ARGUMENTS, "function triggered with arguments", this)
+                    .error("cannot trigger functions with arguments", name)
             );
             throw new UnsupportedOperationException("Function trigger cannot be used with arguments: " + name.value());
         }
@@ -206,12 +195,14 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
                 continue;
 
             if (!parameter.type().matches(value.getValueType())) {
-                context.error(
-                    Errno.INVALID_ARGUMENT_TYPE,
-                    "argument type mismatch",
-                    name,
-                    "parameter `" + parameter.name().value() + "` expects type " + parameter.type().print() +
-                    " but found " + value.getValueType().print()
+                context.errorPrinter().print(
+                    Notification.error(Errno.INVALID_ARGUMENT_TYPE, "argument type mismatch", this)
+                        .error(
+                            "parameter `" + parameter.name().value() + "` expects type " +
+                                parameter.type().print() + " but found " + value.getValueType().print(),
+                            name
+                        )
+                        .note("did you misspell the name, or forgot to declare the variable?")
                 );
                 throw new UnsupportedOperationException(
                     String.format(

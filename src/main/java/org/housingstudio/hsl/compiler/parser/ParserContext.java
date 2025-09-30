@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.ErrorPrinter;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -197,84 +198,9 @@ public class ParserContext {
     }
 
     public void syntaxError(@NotNull Token token, @NotNull String message) {
-        error(Errno.UNEXPECTED_TOKEN, "unexpected token: " + formatToken(token), token, message);
-    }
-
-    public void error(
-        @NotNull Errno code, @NotNull String title, @NotNull Token token, @NotNull String message
-    ) {
-        error(code, title, new TokenError(token, message));
-    }
-
-    public void error(
-        @NotNull Errno code, @NotNull String title, @NotNull TokenError... errors
-    ) {
-        assert errors.length > 0 : "Must specify at least 1 token error";
-
-        TokenError first = errors[0];
-
-        System.err.println(
-            Format.RED + "error[E" + code.code() + "]" + Format.WHITE + ": " + title
+        errorPrinter.print(
+            Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected token: " + formatToken(token))
+                .error(message, tokens)
         );
-        Meta firstMeta = first.token().meta();
-        System.err.println(
-            Format.CYAN + " --> " + Format.LIGHT_GRAY + file.getName() + ":" + firstMeta.lineNumber() +
-            ":" + firstMeta.lineIndex()
-        );
-
-        int longestSize = Stream.of(errors)
-            .map(e -> e.token().meta().lineNumber())
-            .map(n -> String.valueOf(n).length())
-            .max(Integer::compare)
-            .orElse(0);
-
-        for (TokenError error : errors) {
-            Meta meta = error.token().meta();
-
-            int lineSize = String.valueOf(meta.lineNumber()).length();
-            int padding = lineSize < longestSize ? longestSize - (longestSize - lineSize) : lineSize;
-
-            // display the line number
-            System.err.print(Format.CYAN + repeat(" ", padding + 1));
-            System.err.println(" | ");
-
-            System.err.print(" " + meta.lineNumber() + " | ");
-
-            // get the line of the error
-            String line = data.split("\n")[meta.lineNumber() - 1];
-
-            // get the start and end index of the line
-            int start = Math.max(0, meta.lineIndex() - Tokenizer.MAX_ERROR_LINE_LENGTH);
-            int end = Math.min(line.length(), firstMeta.lineIndex() + Tokenizer.MAX_ERROR_LINE_LENGTH);
-
-            // display the line of the error
-            System.err.println(Format.LIGHT_GRAY + line.substring(start, end));
-
-            // display the error pointer
-            System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
-            String pointerPad = repeat(" ", lineSize + (meta.lineIndex() - start) - 1);
-            System.err.println(" | " + pointerPad + Format.RED + repeat("^", meta.endIndex() - meta.beginIndex()));
-
-            // display the expected tokens below the pointer
-            System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
-            System.err.println(" | " + pointerPad + Format.RED + error.message());
-        }
-
-        // display a final separator
-        System.err.print(Format.CYAN + repeat(" ", longestSize + 1));
-        System.err.println(" | ");
-
-        System.err.print(Format.DEFAULT);
-
-        // exit the program with the error code
-        //System.exit(Errno.UNEXPECTED_TOKEN.code());
-        throw new IllegalStateException("AST parse error");
-    }
-
-    private @NotNull String repeat(@NotNull String value, int count) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < count; i++)
-            builder.append(value);
-        return builder.toString();
     }
 }

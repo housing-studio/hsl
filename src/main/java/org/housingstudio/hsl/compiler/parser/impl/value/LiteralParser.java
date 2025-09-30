@@ -82,11 +82,9 @@ public class LiteralParser extends ParserAlgorithm<Value> {
 
             BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(literal, operator, rhs);
             if (!operation.supported()) {
-                context.error(
-                    Errno.UNEXPECTED_OPERAND,
-                    "unexpected operand",
-                    token,
-                    "operator not supported for type: " + literal.getValueType().print()
+                context.errorPrinter().print(
+                    Notification.error(Errno.UNEXPECTED_OPERAND, "unexpected operand")
+                        .error("operator not supported for type: " + literal.getValueType().print(), token)
                 );
                 throw new UnsupportedOperationException(
                     "Operator not supported for type: " + literal.getValueType().print()

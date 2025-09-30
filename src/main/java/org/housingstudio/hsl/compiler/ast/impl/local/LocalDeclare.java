@@ -38,11 +38,10 @@ public class LocalDeclare extends Node implements Variable, Printable {
     private void validateName() {
         Variable variable = resolveName(name.value());
         if (variable != null && variable != this) {
-            context.error(
-                Errno.CANNOT_REDECLARE_VARIABLE,
-                "Cannot redeclare variable",
-                name,
-                "Variable name is already declared in this scope"
+            context.errorPrinter().print(
+                Notification.error(Errno.CANNOT_REDECLARE_VARIABLE, "cannot redeclare variable", this)
+                    .error("variable name is already declared in this scope", name)
+                    .note("you may choose a different variable name")
             );
             throw new UnsupportedOperationException("Cannot redeclare variable: " + name.value());
         }

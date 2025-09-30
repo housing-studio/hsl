@@ -53,13 +53,12 @@ public class EventParser extends ParserAlgorithm<Event> {
         Scope scope = parser.nextScope();
 
         if (!context.currentAnnotations().isEmpty()) {
-            context.error(
-                Errno.UNEXPECTED_ANNOTATION_TARGET,
-                "unexpected annotation target",
-                typeToken,
-                "cannot declare annotations for event actions"
+            Token token = context.currentAnnotations().get(0).name();
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_ANNOTATION_TARGET, "unexpected annotation target")
+                    .error("cannot declare annotations for event actions", token)
+                    .note("remove @" + token.value() + " from this event")
             );
-            // TODO tip: remove the annotations from the event action
             throw new UnsupportedOperationException("Cannot specify annotations for event handler");
         }
 

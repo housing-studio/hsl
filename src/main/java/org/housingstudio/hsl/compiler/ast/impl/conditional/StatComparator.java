@@ -38,7 +38,7 @@ public class StatComparator extends Node implements ConditionBuilder, Condition 
         Variable variable = resolveName(lhs.value());
         if (variable == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.UNKNOWN_VARIABLE, "unknown variable", this)
+                Notification.error(Errno.UNKNOWN_VARIABLE, "cannot resolve name from scope", this)
                     .error("cannot find variable in this scope", lhs)
                     .note("did you misspell the name, or forgot to declare the variable?")
             );

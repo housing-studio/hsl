@@ -13,6 +13,7 @@ import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.value.*;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.impl.action.MacroCallParser;
 import org.housingstudio.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.housingstudio.hsl.compiler.parser.impl.annotation.AnnotationParser;
@@ -170,11 +171,9 @@ public class AstParser {
                 Method method = nextMethod();
 
                 if (game.functions().containsKey(method.name().value())) {
-                    context.error(
-                        Errno.METHOD_ALREADY_DEFINED,
-                        "method already defined",
-                        method.name(),
-                        "method is already declared in this scope"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.METHOD_ALREADY_DEFINED, "method already defined")
+                            .error("method is already declared in this scope", method.name())
                     );
                     throw new UnsupportedOperationException("Method name is already in use: " + method.name().value());
                 }
@@ -186,11 +185,9 @@ public class AstParser {
                 Macro macro = nextMacro();
 
                 if (game.functions().containsKey(macro.name().value())) {
-                    context.error(
-                        Errno.MACRO_ALREADY_DEFINED,
-                        "macro already defined",
-                        macro.name(),
-                        "macro is already declared in this scope"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.MACRO_ALREADY_DEFINED, "macro already defined")
+                            .error("macro is already declared in this scope", macro.name())
                     );
                     throw new UnsupportedOperationException("Macro name is already in use: " + macro.name().value());
                 }
@@ -202,11 +199,9 @@ public class AstParser {
                 CommandNode command = nextCommand();
 
                 if (game.commands().containsKey(command.name().value())) {
-                    context.error(
-                        Errno.COMMAND_ALREADY_DEFINED,
-                        "command already defined",
-                        command.name(),
-                        "command is already declared in this scope"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.COMMAND_ALREADY_DEFINED, "command already defined")
+                            .error("command is already declared in this scope", command.name())
                     );
                     throw new UnsupportedOperationException("Command name is already in use: " + command.name().value());
                 }
@@ -224,11 +219,9 @@ public class AstParser {
                 ConstantDeclare constant = nextConstant();
 
                 if (game.constants().containsKey(constant.name().value())) {
-                    context.error(
-                        Errno.CONSTANT_ALREADY_DEFINED,
-                        "constant already defined",
-                        constant.name(),
-                        "constant is already declared in this scope"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.CONSTANT_ALREADY_DEFINED, "constant already defined")
+                            .error("constant is already declared in this scope", constant.name())
                     );
                     throw new UnsupportedOperationException("Constant name is already in use: " + constant.name().value());
                 }
@@ -244,11 +237,10 @@ public class AstParser {
                         .stream()
                         .anyMatch(a -> a.name().value().equals(annotation.name().value()))
                 ) {
-                    context.error(
-                        Errno.DUPLICATE_ANNOTATION,
-                        "duplicate annotation",
-                        annotation.name(),
-                        "annotation is already declared for this target"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.DUPLICATE_ANNOTATION, "duplicate annotation")
+                            .error("annotation is already declared for this target", annotation.name())
+                            .note("you can only define @" + annotation.name().value() + " only once for this target")
                     );
                     throw new UnsupportedOperationException("Annotation name is already in use: " + annotation.name().value());
                 }
@@ -257,7 +249,10 @@ public class AstParser {
             }
 
             else {
-                context.syntaxError(context.peek(), "expected declaration, but found token " + context.peek().type());
+                context.errorPrinter().print(
+                    Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected token: " + context.peek())
+                        .error("expected declaration, but found token " + context.peek().type(), context.peek())
+                );
                 throw new UnsupportedOperationException("Expected declaration but found " + context.peek().print());
             }
         }

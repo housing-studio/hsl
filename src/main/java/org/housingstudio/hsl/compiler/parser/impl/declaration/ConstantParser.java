@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.parser.impl.declaration;
 
 import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -14,7 +15,7 @@ public class ConstantParser extends ParserAlgorithm<ConstantDeclare> {
     /**
      * Parse the next {@link ConstantDeclare} node from the token stream.
      *
-     * @param parser  the AST node parser
+     * @param parser the AST node parser
      * @param context the token parser context
      * @return the next {@link ConstantDeclare} node from the token stream
      */
@@ -38,11 +39,10 @@ public class ConstantParser extends ParserAlgorithm<ConstantDeclare> {
 
         if (!context.currentAnnotations().isEmpty()) {
             Token token = context.currentAnnotations().get(0).name();
-            context.error(
-                Errno.UNEXPECTED_ANNOTATION_TARGET,
-                "unexpected annotation target",
-                token,
-                "cannot declare annotations for constants"
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_ANNOTATION_TARGET, "unexpected annotation target")
+                    .error("cannot declare annotations for constants", token)
+                    .note("remove @" + token.value() + " from this constant")
             );
             throw new UnsupportedOperationException("Annotations not allowed for constants");
         }

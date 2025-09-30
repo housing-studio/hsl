@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -33,11 +34,9 @@ public class ArgumentParser {
             if (arg.name() == null) {
                 // positional
                 if (seenNamed) {
-                    context.error(
-                        Errno.POSITIONAL_ARGUMENT_AFTER_NAMED_ARGUMENT,
-                        "positional argument after named argument",
-                        name,
-                        "positional arguments are not allowed after named arguments"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.POSITIONAL_ARGUMENT_AFTER_NAMED_ARGUMENT, "positional argument after named argument")
+                            .error("positional arguments are not allowed after named arguments", name)
                     );
                     throw new IllegalArgumentException("Positional argument after a named argument is not allowed.");
                 }
@@ -47,11 +46,9 @@ public class ArgumentParser {
                     nextPosParam++;
 
                 if (nextPosParam >= parameters.size()) {
-                    context.error(
-                        Errno.TOO_MANY_POSITIONAL_ARGUMENTS,
-                        "too many positional arguments",
-                        name,
-                        "expected " + parameters.size() + " positional arguments, but found " + arguments.size()
+                    context.errorPrinter().print(
+                        Notification.error(Errno.TOO_MANY_POSITIONAL_ARGUMENTS, "too many positional arguments")
+                            .error("expected " + parameters.size() + " positional arguments, but found " + arguments.size(), name)
                     );
                     throw new IllegalArgumentException("Too many positional arguments.");
                 }
@@ -63,21 +60,17 @@ public class ArgumentParser {
                 // named
                 seenNamed = true;
                 if (!paramIndex.containsKey(arg.name().value())) {
-                    context.error(
-                        Errno.UNKNOWN_NAMED_ARGUMENT,
-                        "unknown named argument",
-                        name,
-                        "unknown named argument: `" + arg.name().value() + "`"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.UNKNOWN_NAMED_ARGUMENT, "unknown named argument")
+                            .error("unknown named argument: `" + arg.name().value() + "`", name)
                     );
                     throw new IllegalArgumentException("Unknown named argument: " + arg.name().value());
                 }
 
                 if (namedArgs.containsKey(arg.name().value())) {
-                    context.error(
-                        Errno.DUPLICATE_NAMED_ARGUMENT,
-                        "duplicate named argument",
-                        name,
-                        "duplicate named argument: `" + arg.name().value() + "`"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.DUPLICATE_NAMED_ARGUMENT, "duplicate named argument")
+                            .error("duplicate named argument: `" + arg.name().value() + "`", name)
                     );
                     throw new IllegalArgumentException("Duplicate named argument: " + arg.name().value());
                 }
@@ -89,11 +82,9 @@ public class ArgumentParser {
         // 2) apply named args (must not overwrite positional assignments)
         for (Map.Entry<String, Value> e : namedArgs.entrySet()) {
             if (result.containsKey(e.getKey())) {
-                context.error(
-                    Errno.MULTIPLE_ARGUMENT_VALUES,
-                    "multiple argument values",
-                    name,
-                    "parameter `" + e.getKey() + "` received multiple arguments"
+                context.errorPrinter().print(
+                    Notification.error(Errno.MULTIPLE_ARGUMENT_VALUES, "multiple argument values")
+                        .error("parameter `" + e.getKey() + "` received multiple arguments", name)
                 );
                 throw new IllegalArgumentException("Multiple values for argument: " + e.getKey());
             }
@@ -107,11 +98,9 @@ public class ArgumentParser {
                 if (p.defaultValue() != null)
                     result.put(p.name().value(), p.defaultValue());
                 else {
-                    context.error(
-                        Errno.MISSING_REQUIRED_ARGUMENT,
-                        "missing required argument",
-                        name,
-                        "missing required argument: " + p.name().value()
+                    context.errorPrinter().print(
+                        Notification.error(Errno.MISSING_REQUIRED_ARGUMENT, "missing required argument")
+                            .error("missing required argument: " + p.name().value(), name)
                     );
                     throw new IllegalArgumentException("Missing required argument: " + p.name().value());
                 }

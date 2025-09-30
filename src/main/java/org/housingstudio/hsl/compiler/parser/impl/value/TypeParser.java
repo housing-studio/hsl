@@ -4,6 +4,7 @@ import org.housingstudio.hsl.compiler.ast.impl.type.ArrayType;
 import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.type.StaticType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -55,8 +56,9 @@ public class TypeParser extends ParserAlgorithm<Type> {
                     type = BaseType.ANY;
                     break;
                 default:
-                    context.error(
-                        Errno.UNEXPECTED_TYPE, "unexpected type value", typeToken, "invalid type name"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.UNEXPECTED_TYPE, "unexpected type value")
+                            .error("invalid type name", typeToken)
                     );
                     throw new UnsupportedOperationException("Invalid type name: " + typeToken.value());
             }
@@ -127,14 +129,16 @@ public class TypeParser extends ParserAlgorithm<Type> {
                     type = BaseType.PERMISSION;
                     break;
                 default:
-                    context.error(
-                        Errno.UNEXPECTED_TYPE, "expected type identifier", peek(), "invalid type name"
+                    context.errorPrinter().print(
+                        Notification.error(Errno.UNEXPECTED_TYPE, "expected type identifier")
+                            .error("invalid type name", peek())
                     );
                     throw new UnsupportedOperationException("Invalid type name: " + peek().value());
             }
         } else {
-            context.error(
-                Errno.UNEXPECTED_TYPE, "expected type or identifier", peek(), "invalid type name"
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_TYPE, "expected type or identifier")
+                    .error("invalid type name", peek())
             );
             throw new UnsupportedOperationException("Invalid type name: " + peek().value());
         }

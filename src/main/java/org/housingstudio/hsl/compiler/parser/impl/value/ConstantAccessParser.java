@@ -6,6 +6,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantAccess;
 import org.housingstudio.hsl.compiler.ast.impl.value.MethodCall;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -20,7 +21,7 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
     /**
      * Parse the next {@link Value} node from the token stream.
      *
-     * @param parser  the AST node parser
+     * @param parser the AST node parser
      * @param context the token parser context
      * @return the next {@link Value} node from the token stream
      */
@@ -57,32 +58,33 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
             Value rhs = parser.nextValue();
 
             if (!access.getValueType().matches(rhs.getValueType())) {
-                context.error(
-                    Errno.OPERATOR_TYPE_MISMATCH,
-                    "operator type mismatch",
-                    first,
-                    String.format(
-                        "operator type mismatch (lhs: %s, rhs: %s)", access.getValueType(), rhs.getValueType()
-                    )
+                context.errorPrinter().print(
+                    Notification.error(Errno.OPERATOR_TYPE_MISMATCH, "operator type mismatch")
+                        .error(
+                            String.format(
+                                "operator type mismatch (lhs: %s, rhs: %s)", access.getValueType().print(),
+                                rhs.getValueType().print()
+                            ),
+                            first
+                        )
+                        .note("make sure LHS and RHS are the same type")
                 );
                 throw new UnsupportedOperationException(
                     String.format(
                         "Operator type mismatch (lhs: %s, rhs: %s)",
-                        access.getValueType(), rhs.getValueType()
+                        access.getValueType().print(), rhs.getValueType().print()
                     )
                 );
             }
 
             BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(access, operator, rhs);
             if (!operation.supported()) {
-                context.error(
-                    Errno.UNEXPECTED_OPERAND,
-                    "unexpected operand",
-                    first,
-                    "operator not supported for type: " + access.getValueType()
+                context.errorPrinter().print(
+                    Notification.error(Errno.UNEXPECTED_OPERAND, "unexpected operand")
+                        .error("operator not supported for type: " + access.getValueType(), first)
                 );
                 throw new UnsupportedOperationException(
-                    "Operator not supported for type: " + access.getValueType()
+                    "Operator not supported for type: " + access.getValueType().print()
                 );
             }
 

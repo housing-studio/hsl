@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.parser.impl.value;
 
 import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -41,11 +42,9 @@ public class ArgumentListParser extends ParserAlgorithm<List<Argument>> {
 
             // handle misuse of named arguments
             else if (namedArgsStarted) {
-                context.error(
-                    Errno.POSITIONAL_ARGUMENT_AFTER_NAMED_ARGUMENT,
-                    "Positional argument after named argument",
-                    peek(),
-                    "Positional arguments are not allowed after named arguments"
+                context.errorPrinter().print(
+                    Notification.error(Errno.POSITIONAL_ARGUMENT_AFTER_NAMED_ARGUMENT, "positional argument after named argument")
+                        .error("positional arguments are not allowed after named arguments", peek())
                 );
                 throw new UnsupportedOperationException("Positional argument after named argument");
             }

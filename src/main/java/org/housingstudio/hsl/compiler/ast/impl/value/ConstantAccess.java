@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,11 +32,9 @@ public class ConstantAccess extends Value {
     public @NotNull Type getValueType() {
         Value value = load();
         if (accessStack.contains(value)) {
-            context.error(
-                Errno.CIRCULAR_REFERENCE,
-                "Illegal circular initialization flow",
-                name,
-                "Two or more constants refer to each other"
+            context.errorPrinter().print(
+                Notification.error(Errno.CIRCULAR_REFERENCE, "Illegal circular initialization flow", this)
+                    .error("two or more constants refer to each other", name)
             );
             throw new IllegalStateException("Circular initialization flow: " + name.value());
         }
@@ -60,11 +59,9 @@ public class ConstantAccess extends Value {
     public @NotNull String asConstantValue() {
         Value value = load();
         if (accessStack.contains(value)) {
-            context.error(
-                Errno.CIRCULAR_REFERENCE,
-                "Illegal circular initialization flow",
-                name,
-                "Two or more constants refer to each other"
+            context.errorPrinter().print(
+                Notification.error(Errno.CIRCULAR_REFERENCE, "Illegal circular initialization flow", this)
+                    .error("two or more constants refer to each other", name)
             );
             throw new IllegalStateException("Circular initialization flow: " + name.value());
         }
@@ -91,11 +88,9 @@ public class ConstantAccess extends Value {
 
         ConstantDeclare constant = game.constants().get(name.value());
         if (constant == null) {
-            context.error(
-                Errno.UNKNOWN_VARIABLE,
-                "cannot resolve name from scope",
-                name,
-                "unknown variable, stat or constant"
+            context.errorPrinter().print(
+                Notification.error(Errno.UNKNOWN_VARIABLE, "cannot resolve name from scope", this)
+                    .error("unknown variable, stat or constant", name)
             );
             throw new UnsupportedOperationException("Cannot find constant: " + name.value());
         }

@@ -46,11 +46,10 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
                 namespace = Namespace.GLOBAL;
                 break;
             default:
-                context.error(
-                    Errno.UNEXPECTED_NAMESPACE,
-                    "invalid namespace `" + peek().value() + "` for stat",
-                    peek(),
-                    "unexpected stat namespace"
+                context.errorPrinter().print(
+                    Notification.error(Errno.UNEXPECTED_NAMESPACE, "invalid namespace `" + peek().value() + "` for stat")
+                        .error("unexpected stat namespace", peek())
+                        .note("use `player`, `team` or `global`")
                 );
                 throw new UnsupportedOperationException("Invalid stat namespace: " + peek());
         }
