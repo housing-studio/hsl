@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.codegen.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
@@ -33,9 +34,11 @@ public class StatComparator extends Node implements ConditionBuilder, Condition 
 
     private boolean inverted;
 
+    private Variable variable;
+
     @Override
-    public @NotNull Condition buildCondition() {
-        Variable variable = resolveName(lhs.value());
+    public void init() {
+        variable = resolveName(lhs.value());
         if (variable == null) {
             context.errorPrinter().print(
                 Notification.error(Errno.UNKNOWN_VARIABLE, "cannot resolve name from scope", this)
@@ -45,6 +48,30 @@ public class StatComparator extends Node implements ConditionBuilder, Condition 
             throw new UnsupportedOperationException("Cannot find variable: " + lhs.value());
         }
 
+        checkTypes();
+    }
+
+    private void checkTypes() {
+        if (!variable.type().matches(Types.ANY) && !variable.type().matches(rhs.getValueType())) {
+            context.errorPrinter().print(
+                Notification.error(Errno.OPERATOR_TYPE_MISMATCH, "operator type mismatch")
+                    .error(
+                        String.format(
+                            "operator type mismatch (lhs: %s, rhs: %s)", variable.type().print(),
+                            rhs.getValueType().print()
+                        ),
+                        lhs
+                    )
+                    .note(
+                        "consider explicit type conversion",
+                        "\"total balance: \" + string(balance)"
+                    )
+            );
+        }
+    }
+
+    @Override
+    public @NotNull Condition buildCondition() {
         Comparator comparator;
         boolean inverted = this.inverted;
         switch (this.comparator) {
