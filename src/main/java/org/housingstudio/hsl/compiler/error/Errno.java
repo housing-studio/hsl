@@ -271,7 +271,17 @@ public enum Errno {
     /**
      * `RESERVED_MACRO_NAME` indicates, that the chosen macro name is reserved.
      */
-    RESERVED_MACRO_NAME(151);
+    RESERVED_MACRO_NAME(151),
+
+    /**
+     * `RESERVED_FUNCTION_NAME` indicates, that the chosen function name is reserved.
+     */
+    RESERVED_FUNCTION_NAME(152),
+
+    /**
+     * `CANNOT_INVOKE_MAIN_MACRO` indicates, that the main macro was attempted to be called.
+     */
+    CANNOT_INVOKE_MAIN_MACRO(153);
 
     /**
      * The error code of the token error.

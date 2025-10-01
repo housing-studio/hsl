@@ -43,6 +43,18 @@ public class MacroCall extends Value implements ActionListBuilder {
     @Children(resolver = MethodCallChildrenResolver.class)
     private final @NotNull List<Argument> arguments;
 
+    @Override
+    public void init() {
+        if (name.value().equals("main")) {
+            context.errorPrinter().print(
+                Notification.error(Errno.CANNOT_INVOKE_MAIN_MACRO, "cannot invoke main macro", this)
+                    .error("you must not invoke the main macro", name)
+                    .note("this macro is invoked automatically by the runtime")
+            );
+            throw new UnsupportedOperationException("Cannot invoke main macro");
+        }
+    }
+
     /**
      * Retrieve the type of the held value. This result will be used to inter types for untyped variables.
      *
