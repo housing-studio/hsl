@@ -184,7 +184,7 @@ public class AstParser {
             else if (context.peek().is(TokenType.EXPRESSION, "macro")) {
                 Macro macro = nextMacro();
 
-                if (game.functions().containsKey(macro.name().value())) {
+                if (game.macros().containsKey(macro.name().value())) {
                     context.errorPrinter().print(
                         Notification.error(Errno.MACRO_ALREADY_DEFINED, "macro already defined")
                             .error("macro is already declared in this scope", macro.name())
