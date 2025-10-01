@@ -11,6 +11,8 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.token.Token;
+import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -154,5 +156,20 @@ public class BinaryOperator extends Value {
     @Override
     public @NotNull String print() {
         return lhs.print() + " " + operator.value() + " " + rhs.print();
+    }
+
+    public static boolean isBinaryOperator(@NotNull Token token) {
+        if (!token.is(TokenType.OPERATOR))
+            return false;
+
+        switch (token.value()) {
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+                return true;
+            default:
+                return false;
+        }
     }
 }

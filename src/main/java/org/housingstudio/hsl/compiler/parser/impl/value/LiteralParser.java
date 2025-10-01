@@ -51,6 +51,9 @@ public class LiteralParser extends ParserAlgorithm<Value> {
         //                       ^ the operator after a literal indicates, that there are more expressions to be parsed
         //                         the two operands are grouped together by an Operation node
         if (peek().is(TokenType.OPERATOR)) {
+            if (!BinaryOperator.isBinaryOperator(peek()))
+                return literal;
+
             // parse the target operator of the operation
             Operator operator = parser.nextOperator();
 

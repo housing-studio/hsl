@@ -33,6 +33,9 @@ public class GroupParser extends ParserAlgorithm<Value> {
         //                           ^ the operator after a group indicates, that there are more expressions to be parsed
         //                             the two operands are grouped together by an Operation node
         if (peek().is(TokenType.OPERATOR)) {
+            if (!BinaryOperator.isBinaryOperator(peek()))
+                return group;
+
             // parse the target operator of the operation
             Operator operator = parser.nextOperator();
 
