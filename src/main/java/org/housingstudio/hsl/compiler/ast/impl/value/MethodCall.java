@@ -21,8 +21,8 @@ import org.housingstudio.hsl.compiler.parser.impl.value.ArgumentParser;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
-import org.housingstudio.hsl.runtime.Frame;
-import org.housingstudio.hsl.runtime.Instruction;
+import org.housingstudio.hsl.runtime.vm.Frame;
+import org.housingstudio.hsl.runtime.vm.Instruction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

@@ -8,8 +8,8 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.debug.Printable;
-import org.housingstudio.hsl.runtime.Frame;
-import org.housingstudio.hsl.runtime.Instruction;
+import org.housingstudio.hsl.runtime.vm.Frame;
+import org.housingstudio.hsl.runtime.vm.Instruction;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor

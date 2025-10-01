@@ -16,9 +16,9 @@ import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.NamingConvention;
 import org.housingstudio.hsl.compiler.error.Warning;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.runtime.Frame;
-import org.housingstudio.hsl.runtime.Instruction;
-import org.housingstudio.hsl.runtime.Invocable;
+import org.housingstudio.hsl.runtime.vm.Frame;
+import org.housingstudio.hsl.runtime.vm.Instruction;
+import org.housingstudio.hsl.runtime.vm.Invocable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

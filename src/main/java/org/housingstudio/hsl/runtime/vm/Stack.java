@@ -1,4 +1,4 @@
-package org.housingstudio.hsl.runtime;
+package org.housingstudio.hsl.runtime.vm;
 
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 

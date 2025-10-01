@@ -1,7 +1,6 @@
-package org.housingstudio.hsl.compiler.ast.impl.lang;
+package org.housingstudio.hsl.runtime.natives;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
@@ -9,9 +8,8 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
-import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.runtime.Frame;
+import org.housingstudio.hsl.runtime.vm.Frame;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

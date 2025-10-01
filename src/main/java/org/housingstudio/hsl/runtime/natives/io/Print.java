@@ -1,22 +1,13 @@
-package org.housingstudio.hsl.compiler.ast.impl.lang;
+package org.housingstudio.hsl.runtime.natives.io;
 
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.housingstudio.hsl.runtime.natives.MacroBuilder;
 
 @UtilityClass
-public class NativeMacros {
-    public final Map<String, Macro> LOOKUP = new HashMap<>();
-
-    public void init() {
-        LOOKUP.put("println", PRINTLN);
-        LOOKUP.put("print", PRINT);
-    }
-
+public class Print {
     public final Macro PRINTLN = new MacroBuilder()
         .name("println")
         .parameters(Parameter.required("o", Types.STRING))

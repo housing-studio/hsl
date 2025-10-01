@@ -1,4 +1,4 @@
-package org.housingstudio.hsl.compiler.ast.impl.lang;
+package org.housingstudio.hsl.runtime.natives;
 
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;

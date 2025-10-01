@@ -1,4 +1,4 @@
-package org.housingstudio.hsl.runtime;
+package org.housingstudio.hsl.runtime.vm;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;

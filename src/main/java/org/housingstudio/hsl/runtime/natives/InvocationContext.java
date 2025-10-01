@@ -1,8 +1,8 @@
-package org.housingstudio.hsl.compiler.ast.impl.lang;
+package org.housingstudio.hsl.runtime.natives;
 
 import lombok.RequiredArgsConstructor;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
-import org.housingstudio.hsl.runtime.Frame;
+import org.housingstudio.hsl.runtime.vm.Frame;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor

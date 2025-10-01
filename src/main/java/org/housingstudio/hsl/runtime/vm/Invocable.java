@@ -1,4 +1,4 @@
-package org.housingstudio.hsl.runtime;
+package org.housingstudio.hsl.runtime.vm;
 
 import org.jetbrains.annotations.NotNull;
 
