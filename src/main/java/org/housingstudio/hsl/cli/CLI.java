@@ -121,6 +121,7 @@ public class CLI {
             Compiler compiler = Compiler.create(metadata, workDir, ErrorMode.PRETTY_PRINT);
             compiler.init();
             compiler.compileSources();
+            compiler.invokeMain();
 
             House export = compiler.export();
             String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);

@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
+import org.housingstudio.hsl.compiler.ast.impl.lang.NativeMacros;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
@@ -20,6 +22,7 @@ import org.housingstudio.hsl.compiler.codegen.Exporter;
 import org.housingstudio.hsl.compiler.codegen.impl.house.House;
 import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
 import org.housingstudio.hsl.lsp.Diagnostics;
+import org.housingstudio.hsl.runtime.Frame;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -48,6 +51,7 @@ public class Compiler {
 
         BuiltinActions.init();
         BuiltinConditions.init();
+        NativeMacros.init();
     }
 
     public void compileSources() {
@@ -65,6 +69,15 @@ public class Compiler {
 
         NodeVisitor.initHierarchy();
         NodeVisitor.initLifecycle();
+    }
+
+    public void invokeMain() {
+        Macro macro = game.macros().get("main");
+        if (macro == null)
+            return;
+
+        Frame heap = new Frame(null, "main", 0, 0, 0, null);
+        macro.invoke(heap);
     }
 
     public @NotNull House export() {

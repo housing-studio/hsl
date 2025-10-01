@@ -3,6 +3,7 @@ package org.hsl.parser;
 import com.google.gson.GsonBuilder;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.impl.lang.NativeMacros;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
@@ -28,6 +29,7 @@ public class Testing {
 
         BuiltinActions.init();
         BuiltinConditions.init();
+        NativeMacros.init();
         AstParser parser = Parsers.of(source);
 
         Game game = new Game();

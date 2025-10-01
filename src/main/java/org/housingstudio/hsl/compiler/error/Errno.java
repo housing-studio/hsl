@@ -258,9 +258,20 @@ public enum Errno {
      */
     EXPECTED_COMPARATOR_OPERATOR(148),
 
+    /**
+     * `INVALID_INTEGER_VALUE` indicates, that an integer-like value was found with an invalid format.
+     */
     INVALID_INTEGER_VALUE(149),
 
-    INVALID_FLOAT_VALUE(150);
+    /**
+     * `INVALID_FLOAT_VALUE` indicates, that a float-like value was found with an invalid format.
+     */
+    INVALID_FLOAT_VALUE(150),
+
+    /**
+     * `RESERVED_MACRO_NAME` indicates, that the chosen macro name is reserved.
+     */
+    RESERVED_MACRO_NAME(151);
 
     /**
      * The error code of the token error.
