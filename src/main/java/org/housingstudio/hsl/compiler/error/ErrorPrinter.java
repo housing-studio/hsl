@@ -38,6 +38,8 @@ public class ErrorPrinter {
         if (isDuplicate(container))
             return;
 
+        container.file(context.file().getAbsolutePath());
+
         if (context.mode() == ErrorMode.PRETTY_PRINT)
             printPretty(container);
         else

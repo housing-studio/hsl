@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.error;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.debug.Format;
@@ -23,6 +24,9 @@ public class Notification {
     private final int id;
     private final @NotNull String title;
     private final @NotNull ErrorType type;
+
+    @Setter
+    private String file;
 
     public @NotNull Notification error(@NotNull String message, @NotNull Token @NotNull ... tokens) {
         errors.add(new TokenError(Arrays.asList(tokens), message));
