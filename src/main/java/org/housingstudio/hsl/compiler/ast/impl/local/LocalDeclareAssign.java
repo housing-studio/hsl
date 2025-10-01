@@ -67,6 +67,8 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
 
     @Override
     public void init() {
+        validateName();
+        validateConvention();
         inferType();
 
         if (type == null) {
@@ -76,6 +78,28 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
                     .note("did you recursively assign a stat?")
             );
             throw new IllegalStateException("Cannot infer type for stat: " + name.value());
+        }
+    }
+
+    private void validateName() {
+        Variable variable = resolveName(name.value());
+        if (variable != null && variable != this) {
+            context.errorPrinter().print(
+                Notification.error(Errno.CANNOT_REDECLARE_VARIABLE, "cannot redeclare variable", this)
+                    .error("variable name is already declared in this scope", name)
+                    .note("you may choose a different variable name")
+            );
+            throw new UnsupportedOperationException("Cannot redeclare variable: " + name.value());
+        }
+    }
+
+    private void validateConvention() {
+        if (!NamingConvention.LOCALS.test(name.value())) {
+            context.errorPrinter().print(
+                Notification.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
+                    .error("not preferred stat name", name)
+                    .note("use `lowerCamelCase` style to name stats")
+            );
         }
     }
 
