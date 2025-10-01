@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.runtime.natives.NativeMacros;
+import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
@@ -70,7 +70,7 @@ public class MacroCall extends Value implements ActionListBuilder {
     private @NotNull Macro resolveMacro() {
         Macro macro = game.macros().get(name.value());
         if (macro == null)
-            macro = NativeMacros.LOOKUP.get(name.value());
+            macro = NativeDefinitions.MACROS.get(name.value());
 
         if (macro == null) {
             context.errorPrinter().print(

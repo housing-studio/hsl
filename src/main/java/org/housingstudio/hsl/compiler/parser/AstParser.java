@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
-import org.housingstudio.hsl.runtime.natives.NativeMacros;
+import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.builder.ConditionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.control.ConditionalNode;
@@ -185,7 +185,7 @@ public class AstParser {
             else if (context.peek().is(TokenType.EXPRESSION, "macro")) {
                 Macro macro = nextMacro();
 
-                if (NativeMacros.LOOKUP.containsKey(macro.name().value())) {
+                if (NativeDefinitions.MACROS.containsKey(macro.name().value())) {
                     context.errorPrinter().print(
                         Notification.error(Errno.RESERVED_MACRO_NAME, "macro name is reserved")
                             .error("this macro name is not allowed", macro.name())
