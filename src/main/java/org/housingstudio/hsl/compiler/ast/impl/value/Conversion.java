@@ -10,6 +10,8 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.token.Token;
+import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 @Accessors(fluent = true)
@@ -39,6 +41,70 @@ public class Conversion extends Value {
      */
     @Override
     public @NotNull String asConstantValue() {
+        verifyTargets();
+
+        if (explicitType.matches(Types.STRING)) {
+            return value.asConstantValue();
+        }
+
+        else if (explicitType.matches(Types.FLOAT)) {
+            if (value.getValueType().matches(Types.INT))
+                return String.valueOf((float) Integer.parseInt(value.asConstantValue()));
+        }
+
+        else if (explicitType.matches(Types.INT)) {
+            if (value.getValueType().matches(Types.FLOAT))
+                return String.valueOf((int) Float.parseFloat(value.asConstantValue()));
+        }
+
+        context.errorPrinter().print(
+            Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
+                .error(
+                    "cannot convert type " + value.getValueType().print() + " to " + explicitType.print(),
+                    explicitType.tokens()
+                )
+        );
+        throw new UnsupportedOperationException(
+            "Cannot covert type " + value.getValueType().print() + " to " + explicitType.print()
+        );
+    }
+
+    @Override
+    public @NotNull Value load() {
+        verifyTargets();
+
+        ConstantLiteral oldLiteral = (ConstantLiteral) value.load();
+        if (explicitType.matches(Types.STRING))
+            return value;
+
+        else if (explicitType.matches(Types.FLOAT)) {
+            if (value.getValueType().matches(Types.INT)) {
+                String newValue = String.valueOf((float) Integer.parseInt(value.asConstantValue()));
+                return new ConstantLiteral(new Token(TokenType.FLOAT, newValue, oldLiteral.token().meta()));
+            }
+        }
+
+        else if (explicitType.matches(Types.INT)) {
+            if (value.getValueType().matches(Types.FLOAT)) {
+                String newValue = String.valueOf((int) Float.parseFloat(value.asConstantValue()));
+                return new ConstantLiteral(new Token(TokenType.INT, newValue, oldLiteral.token().meta()));
+            }
+        }
+
+        context.errorPrinter().print(
+            Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
+                .error(
+                    "cannot convert type " + value.getValueType().print() + " to " + explicitType.print(),
+                    explicitType.tokens()
+                )
+        );
+        throw new UnsupportedOperationException(
+            "Cannot covert type " + value.getValueType().print() + " to " + explicitType.print()
+        );
+    }
+
+
+    private void verifyTargets() {
         if (!value.isConstant()) {
             context.errorPrinter().print(
                 Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
@@ -93,36 +159,6 @@ public class Conversion extends Value {
                     .note("use another primitive type to convert from", "string(1234)")
             );
         }
-
-        if (explicitType.matches(Types.STRING)) {
-            return value.asConstantValue();
-        }
-
-        else if (explicitType.matches(Types.FLOAT)) {
-            if (value.getValueType().matches(Types.INT))
-                return String.valueOf((float) Integer.parseInt(value.asConstantValue()));
-        }
-
-        else if (explicitType.matches(Types.INT)) {
-            if (value.getValueType().matches(Types.FLOAT))
-                return String.valueOf((int) Float.parseFloat(value.asConstantValue()));
-        }
-
-        context.errorPrinter().print(
-            Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
-                .error(
-                    "cannot convert type " + value.getValueType().print() + " to " + explicitType.print(),
-                    explicitType.tokens()
-                )
-        );
-        throw new UnsupportedOperationException(
-            "Cannot covert type " + value.getValueType().print() + " to " + explicitType.print()
-        );
-    }
-
-    @Override
-    public @NotNull Value load() {
-        return value;
     }
 
     /**

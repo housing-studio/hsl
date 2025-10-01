@@ -9,8 +9,10 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
+import org.housingstudio.hsl.compiler.error.NamingConvention;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.Warning;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.impl.ChangeVariable;
@@ -49,6 +51,7 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
                     .error("the explicit type does not match the inferred type", tokens.get(tokens.size() - 1))
                     .note("make sure the stat's type matches the assigned value's type")
             );
+
             throw new IllegalStateException("Explicit type does not match inferred type");
         }
 
