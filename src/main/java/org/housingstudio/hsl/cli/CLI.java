@@ -7,6 +7,7 @@ import org.housingstudio.hsl.compiler.Compiler;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.codegen.impl.house.House;
 import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
+import org.housingstudio.hsl.compiler.error.ErrorMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -29,6 +30,9 @@ public class CLI {
                 break;
             case "export":
                 export(args);
+                break;
+            case "diagnostics":
+                diagnostics(args);
                 break;
             default:
                 sendHelp();
@@ -71,6 +75,29 @@ public class CLI {
         System.out.println("Created new project: " + projectName);
     }
 
+    private void diagnostics(String[] args) {
+        File workDir = new File(System.getProperty("user.dir"));
+        File buildFile = new File(workDir, "build.toml");
+
+        if (!buildFile.exists()) {
+            System.err.println("Run hsl export from a valid hsl project directory.");
+            System.exit(1);
+            return;
+        }
+
+        Metadata metadata = Metadata.read(buildFile);
+        Compiler compiler = Compiler.create(metadata, workDir, ErrorMode.JSON);
+
+        try {
+            compiler.init();
+            compiler.compileSources();
+        } catch (Exception ignored) {
+            // do not emit compiler stack trace, as errors and warnings are already captured by diagnostics
+        } finally {
+            System.out.println(compiler.diagnostics().export());
+        }
+    }
+
     private void export(String[] args) {
         boolean verbose = Arrays.asList(args).contains("-v");
 
@@ -89,7 +116,7 @@ public class CLI {
                 Format.LIGHT_GRAY + "Compiling and exporting project: " + Format.WHITE + metadata.id()
             );
 
-            Compiler compiler = Compiler.create(metadata, workDir);
+            Compiler compiler = Compiler.create(metadata, workDir, ErrorMode.PRETTY_PRINT);
             compiler.init();
             compiler.compileSources();
 

@@ -1,11 +1,14 @@
 package org.housingstudio.hsl.compiler;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
+import org.housingstudio.hsl.compiler.error.ErrorMode;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -15,6 +18,7 @@ import org.housingstudio.hsl.compiler.token.Tokenizer;
 import org.housingstudio.hsl.compiler.codegen.Exporter;
 import org.housingstudio.hsl.compiler.codegen.impl.house.House;
 import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
+import org.housingstudio.hsl.lsp.Diagnostics;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -27,10 +31,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Accessors(fluent = true)
+@Getter
 public class Compiler {
+    private final @NotNull Diagnostics diagnostics = new Diagnostics();
+
     private final @NotNull Metadata metadata;
     private final @NotNull List<File> sourceFiles;
     private final @NotNull Game game;
+    private final @NotNull ErrorMode mode;
 
     public void init() {
         BuiltinActions.init();
@@ -73,7 +82,7 @@ public class Compiler {
     }
 
     private @NotNull AstParser createParser(@NotNull List<Token> tokens, @NotNull File file, @NotNull String content) {
-        ParserContext context = new ParserContext(tokens, file, content);
+        ParserContext context = new ParserContext(tokens, file, content, diagnostics, mode);
         Node.context(context);
 
         return new AstParser(context);
@@ -94,7 +103,9 @@ public class Compiler {
         }
     }
 
-    public static @NotNull Compiler create(@NotNull Metadata metadata, @NotNull File projectDir) {
+    public static @NotNull Compiler create(
+        @NotNull Metadata metadata, @NotNull File projectDir, @NotNull ErrorMode mode
+    ) {
         try {
             List<File> files = Files.walk(projectDir.toPath())
                 .filter(Files::isRegularFile)
@@ -102,7 +113,7 @@ public class Compiler {
                 .map(Path::toFile)
                 .collect(Collectors.toList());
 
-            return new Compiler(metadata, files, new Game());
+            return new Compiler(metadata, files, new Game(), mode);
         } catch (IOException e) {
             System.err.println("Unable to collect source files");
             throw new RuntimeException(e);

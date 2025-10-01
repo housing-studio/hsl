@@ -2,9 +2,11 @@ package org.hsl.parser;
 
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.error.ErrorMode;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
 import org.housingstudio.hsl.compiler.token.Token;
+import org.housingstudio.hsl.lsp.Diagnostics;
 import org.hsl.tokenizer.Tokenizers;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +17,9 @@ import java.util.List;
 public class Parsers {
     public @NotNull AstParser of(@NotNull String source) {
         List<Token> tokens = Tokenizers.tokenizeSource(source);
-        ParserContext context = new ParserContext(tokens, new File("example.hsl"), source);
+        ParserContext context = new ParserContext(
+            tokens, new File("example.hsl"), source, new Diagnostics(), ErrorMode.PRETTY_PRINT
+        );
         Node.context(context);
 
         return new AstParser(context);

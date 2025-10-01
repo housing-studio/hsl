@@ -129,7 +129,9 @@ public class InterpolationParser extends ParserAlgorithm<Value> {
         tokens.add(Token.of(TokenType.SEMICOLON, "auto"));
         tokens = new TokenTransformer(tokens).transform();
 
-        ParserContext subContext = new ParserContext(tokens, context.file(), content);
+        ParserContext subContext = new ParserContext(
+            tokens, context.file(), content, context.diagnostics(), context.mode()
+        );
         return new AstParser(subContext);
     }
 }

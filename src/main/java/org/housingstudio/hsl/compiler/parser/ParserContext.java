@@ -7,9 +7,11 @@ import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.ErrorMode;
 import org.housingstudio.hsl.compiler.error.ErrorPrinter;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.*;
+import org.housingstudio.hsl.lsp.Diagnostics;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -51,6 +53,9 @@ public class ParserContext {
      * The content of the source file that is being parsed.
      */
     private final @NotNull String data;
+
+    private final @NotNull Diagnostics diagnostics;
+    private final @NotNull ErrorMode mode;
 
     /**
      * The index of the currently parsed token.

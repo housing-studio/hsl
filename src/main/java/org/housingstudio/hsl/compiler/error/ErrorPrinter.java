@@ -38,6 +38,17 @@ public class ErrorPrinter {
         if (isDuplicate(container))
             return;
 
+        if (context.mode() == ErrorMode.PRETTY_PRINT)
+            printPretty(container);
+        else
+            printJson(container);
+    }
+
+    private void printJson(@NotNull Notification container) {
+        context.diagnostics().submit(container);
+    }
+
+    private void printPretty(@NotNull Notification container) {
         List<TokenError> errors = container.errors();
         if (errors.isEmpty())
             throw new IllegalStateException("You must specify at least one token error");
