@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Statement;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
@@ -45,6 +46,20 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
                     .note("did you misspell the name, or forgot to declare the variable?")
             );
             throw new UnsupportedOperationException("Cannot find variable: " + name.value());
+        }
+
+        if (!variable.type().matches(Types.ANY) && !variable.type().matches(value.getValueType())) {
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_TYPE, "invalid assignment type", this)
+                    .error(
+                        "cannot assign " + value.getValueType().print() + " value to " +
+                            variable.type().print() + " stat",
+                        name
+                    )
+                    .note("make sure the stat's type matches the assigned value's type")
+            );
+
+            throw new IllegalStateException("Explicit type does not match inferred type");
         }
 
         if (!value.isConstant()) {
