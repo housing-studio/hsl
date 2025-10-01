@@ -205,8 +205,8 @@ public class ParserContext implements TokenContext {
 
     public void syntaxError(@NotNull Token token, @NotNull String message) {
         errorPrinter.print(
-            Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected token: " + formatToken(token))
-                .error(message, tokens)
+            Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected token: " + token.value())
+                .error(message, token)
         );
     }
 }
