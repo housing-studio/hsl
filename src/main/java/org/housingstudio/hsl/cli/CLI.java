@@ -44,6 +44,7 @@ public class CLI {
         System.err.println(" ");
         System.err.println("  new <project name> - create a new project");
         System.err.println("  export             - compile and export the project");
+        System.err.println("  diagnostics        - compile the project and print compiler diagnostics");
     }
 
     private void newProject(String[] args) {
