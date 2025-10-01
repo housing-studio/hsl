@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
+import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.error.ErrorMode;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -42,6 +43,9 @@ public class Compiler {
     private final @NotNull ErrorMode mode;
 
     public void init() {
+        if (mode == ErrorMode.JSON)
+            Format.setEnabled(false);
+
         BuiltinActions.init();
         BuiltinConditions.init();
     }

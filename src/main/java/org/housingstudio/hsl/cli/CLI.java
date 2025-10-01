@@ -91,7 +91,8 @@ public class CLI {
         try {
             compiler.init();
             compiler.compileSources();
-        } catch (Exception ignored) {
+            compiler.export();
+        } catch (Exception e) {
             // do not emit compiler stack trace, as errors and warnings are already captured by diagnostics
         } finally {
             System.out.println(compiler.diagnostics().export());

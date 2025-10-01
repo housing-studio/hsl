@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.debug;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.awt.*;
 
@@ -36,6 +37,9 @@ public enum Format {
     POSITIVE("Positive", null, 27, -1),
     DEFAULT("Default", null, 0, -1);
 
+    @Setter
+    private static boolean enabled = true;
+
     @Getter
     private final String name;
 
@@ -60,10 +64,14 @@ public enum Format {
     }
 
     public static String foreground(Format format) {
+        if (!enabled)
+            return "";
         return "\033[" + format.foreground + "m";
     }
 
     public static String background(Format format) {
+        if (!enabled)
+            return "";
         return "\033[" + format.background + "m";
     }
 
