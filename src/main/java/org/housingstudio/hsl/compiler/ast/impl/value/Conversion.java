@@ -34,6 +34,20 @@ public class Conversion extends Value {
     }
 
     /**
+     * Initialize node logic before the nodes are visited and the code is generated.
+     */
+    @Override
+    public void init() {
+        Type valueType = value.getValueType();
+        if (explicitType.matches(valueType)) {
+            context.errorPrinter().print(
+                Notification.warning(Warning.TYPE_CONVERSION_TO_ITSELF, "type conversion has no effect", this)
+                    .error("explicit type matches operand type", explicitType.tokens())
+            );
+        }
+    }
+
+    /**
      * Get the constant string representation of the value.
      * <p>
      * Housing variables are handled as string by default, this format is the input for housing variables.
@@ -45,14 +59,6 @@ public class Conversion extends Value {
         verifyTargets();
 
         Type valueType = value.getValueType();
-        if (explicitType.matches(valueType)) {
-            context.errorPrinter().print(
-                Notification.warning(Warning.TYPE_CONVERSION_TO_ITSELF, "type conversion has no effect", this)
-                    .error("explicit type matches operand type", explicitType.tokens())
-            );
-            return value.asConstantValue();
-        }
-
         if (explicitType.matches(Types.STRING) || explicitType.matches(Types.ANY))
             return value.asConstantValue();
 
@@ -82,18 +88,11 @@ public class Conversion extends Value {
     public @NotNull Value load() {
         verifyTargets();
 
+        Type valueType = value.getValueType();
         ConstantLiteral oldLiteral = (ConstantLiteral) value.load();
+
         if (explicitType.matches(Types.STRING) || explicitType.matches(Types.ANY))
             return value;
-
-        Type valueType = value.getValueType();
-        if (explicitType.matches(valueType)) {
-            context.errorPrinter().print(
-                Notification.warning(Warning.TYPE_CONVERSION_TO_ITSELF, "type conversion has no effect", this)
-                    .error("explicit type matches operand type", explicitType.tokens())
-            );
-            return value;
-        }
 
         else if (explicitType.matches(Types.FLOAT)) {
             if (valueType.matches(Types.INT)) {
