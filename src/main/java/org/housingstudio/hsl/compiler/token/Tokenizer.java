@@ -830,6 +830,7 @@ public class Tokenizer implements TokenContext {
             case "float":
             case "any":
             case "string":
+            case "bool":
                 return true;
             default:
                 return false;
