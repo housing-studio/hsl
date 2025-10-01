@@ -122,7 +122,10 @@ public class LiteralParser extends ParserAlgorithm<Value> {
         else if (peek().is(TokenType.RBRACE))
             return literal;
 
-        context.syntaxError(peek(), "expected literal value, but found " + peek().print());
+        context.errorPrinter().print(
+            Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected literal")
+                .error("token " + peek().print() + " is not a literal", peek())
+        );
         throw new UnsupportedOperationException("Invalid literal value: " + peek());
     }
 }

@@ -259,7 +259,7 @@ public class AstParser {
 
             else {
                 context.errorPrinter().print(
-                    Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected token: " + context.peek())
+                    Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected token: " + context.peek().value())
                         .error("expected declaration, but found token " + context.peek().type(), context.peek())
                 );
                 throw new UnsupportedOperationException("Expected declaration but found " + context.peek().print());

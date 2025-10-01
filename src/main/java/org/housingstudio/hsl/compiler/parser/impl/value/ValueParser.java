@@ -1,6 +1,8 @@
 package org.housingstudio.hsl.compiler.parser.impl.value;
 
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -74,7 +76,10 @@ public class ValueParser extends ParserAlgorithm<Value> {
         else if (peek().is(TokenType.LPAREN))
             return parser.nextGroup();
 
-        context.syntaxError(peek(), "expected value, but found " + peek().print());
+        context.errorPrinter().print(
+            Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected value")
+                .error("token " + peek().print() + " is not a value", peek())
+        );
         throw new UnsupportedOperationException("Unsupported value type: " + peek());
     }
 }

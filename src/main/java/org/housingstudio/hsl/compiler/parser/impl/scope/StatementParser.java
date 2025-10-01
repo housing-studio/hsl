@@ -8,6 +8,8 @@ import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Statement;
 import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -112,7 +114,10 @@ public class StatementParser extends ParserAlgorithm<Node> {
             return new Random(scope);
         }
 
-        context.syntaxError(peek(), "expected statement, but found " + peek().print());
+        context.errorPrinter().print(
+            Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected statement")
+                .error("token " + peek().print() + " is not a statement", peek())
+        );
         throw new UnsupportedOperationException("Not implemented statement: " + peek());
     }
 

@@ -1,12 +1,18 @@
 package org.housingstudio.hsl.compiler.parser.impl.operator;
 
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
+import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
 import org.housingstudio.hsl.compiler.parser.ParserException;
+import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a parser algorithm for parsing an {@link Operator} enum from the token stream.
@@ -29,32 +35,42 @@ public class OperatorParser extends ParserAlgorithm<Operator> {
         // loop until the token is an operator
         StringBuilder builder = new StringBuilder();
 
+        List<Token> tokens = new ArrayList<>();
+
         // handle slice and lambda operators
         if (peek().is(TokenType.COLON)) {
-            builder.append(get().value());
-            if (peek().is(TokenType.COLON))
-                builder.append(get().value());
-            return parseOperator(builder);
+            Token first = get();
+            tokens.add(first);
+            builder.append(first.value());
+
+            if (peek().is(TokenType.COLON)) {
+                Token second = get();
+                tokens.add(second);
+                builder.append(second.value());
+            }
+            return parseOperator(context, builder, tokens);
         }
 
         // loop until the token is an operator
         while (peek().is(TokenType.OPERATOR)) {
             // append the token to the final operator
-            String value = get().value();
+            Token token = get();
+            tokens.add(token);
+            String value = token.value();
             builder.append(value);
 
             // check if the built operator should be terminated
             if (shouldOperatorTerminate(builder.toString()))
-                return parseOperator(builder);
+                return parseOperator(context, builder, tokens);
 
             // check if the next operator should terminate the current operator
             String next = peek().value();
             if (shouldOperatorTerminate(builder.toString(), next))
-                return parseOperator(builder);
+                return parseOperator(context, builder, tokens);
         }
 
         // a non-operator token has blocked the operator processing, resolve the built operator
-        return parseOperator(builder);
+        return parseOperator(context, builder, tokens);
     }
 
     /**
@@ -65,10 +81,15 @@ public class OperatorParser extends ParserAlgorithm<Operator> {
      * @param operator the operator builder
      * @return the parsed operator
      */
-    private @NotNull Operator parseOperator(@NotNull StringBuilder operator) {
+    private @NotNull Operator parseOperator(
+        @NotNull ParserContext context, @NotNull StringBuilder operator, @NotNull List<Token> tokens
+    ) {
         Operator result = Operator.of(operator.toString());
         if (result == Operator.UNKNOWN) {
-            useContext().syntaxError(peek(), "invalid operator: " + operator);
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected operator")
+                    .error("token `" + operator + "` is not a valid operator", tokens)
+            );
             throw new ParserException("invalid operator: " + operator);
         }
         return result;

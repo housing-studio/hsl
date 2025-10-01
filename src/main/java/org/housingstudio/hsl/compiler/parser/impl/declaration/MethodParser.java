@@ -6,6 +6,8 @@ import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
+import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -62,8 +64,9 @@ public class MethodParser extends ParserAlgorithm<Method> {
         }
 
         if (!returnType.matches(Types.VOID)) {
-            context.syntaxError(
-                at(cursor() - 1), "non-void function return type is currently not supported"
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_TOKEN, "non-void function return type is not supported")
+                    .error("function must return void", at(cursor() - 1))
             );
             throw new UnsupportedOperationException("non-void function return type is currently not supported");
         }
