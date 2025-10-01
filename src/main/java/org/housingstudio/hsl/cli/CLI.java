@@ -113,10 +113,12 @@ public class CLI {
 
         try {
             Metadata metadata = Metadata.read(buildFile);
-            System.out.println(
-                Format.MAGENTA + "" + Format.BOLD + "HSL: " + Format.DEFAULT +
-                Format.LIGHT_GRAY + "Compiling and exporting project: " + Format.WHITE + metadata.id()
-            );
+
+            if (verbose)
+                System.out.println(
+                    Format.MAGENTA + "" + Format.BOLD + "HSL: " + Format.DEFAULT +
+                    Format.LIGHT_GRAY + "Compiling and exporting project: " + Format.WHITE + metadata.id()
+                );
 
             Compiler compiler = Compiler.create(metadata, workDir, ErrorMode.PRETTY_PRINT);
             compiler.init();
@@ -133,10 +135,11 @@ public class CLI {
             File exportFile = new File(targetDir, metadata.id() + ".json");
             writeFile(exportFile, json);
 
-            System.out.println(
-                Format.MAGENTA + "" + Format.BOLD + "HSL: " + Format.DEFAULT +
-                Format.GREEN + "Compiled and exported project to " + Format.WHITE + exportFile.getName()
-            );
+            if (verbose)
+                System.out.println(
+                    Format.MAGENTA + "" + Format.BOLD + "HSL: " + Format.DEFAULT +
+                    Format.GREEN + "Compiled and exported project to " + Format.WHITE + exportFile.getName()
+                );
         } catch (Exception e) {
             System.out.println(
                 Format.MAGENTA + "" + Format.BOLD + "HSL: " + Format.DEFAULT +
