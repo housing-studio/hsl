@@ -66,7 +66,8 @@ public class TokenTransformer {
         Token.of(TokenType.OPERATOR, "$"),
         Token.of(TokenType.OPERATOR, "."),
         Token.of(TokenType.OPERATOR, "%"),
-        Token.of(TokenType.OPERATOR, "|")
+        Token.of(TokenType.OPERATOR, "|"),
+        Token.of(TokenType.RPAREN,   ")")
     );
 
     /**
