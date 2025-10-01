@@ -46,6 +46,7 @@ public class Conversion extends Value {
                 Notification.warning(Warning.TYPE_CONVERSION_TO_ITSELF, "type conversion has no effect", this)
                     .error("explicit type matches operand type", explicitType.tokens())
             );
+            return;
         }
 
         if (
@@ -79,7 +80,10 @@ public class Conversion extends Value {
         verifyTargets();
 
         Type valueType = value.getValueType();
-        if (explicitType.matches(Types.STRING) || explicitType.matches(Types.ANY))
+        if (explicitType.matches(valueType))
+            return value.asConstantValue();
+
+        else if (explicitType.matches(Types.STRING) || explicitType.matches(Types.ANY))
             return value.asConstantValue();
 
         else if (explicitType.matches(Types.FLOAT)) {
@@ -109,6 +113,9 @@ public class Conversion extends Value {
         verifyTargets();
 
         Type valueType = value.getValueType();
+        if (explicitType.matches(valueType))
+            return value;
+
         ConstantLiteral oldLiteral = (ConstantLiteral) value.load();
 
         if (explicitType.matches(Types.STRING) || explicitType.matches(Types.ANY))
