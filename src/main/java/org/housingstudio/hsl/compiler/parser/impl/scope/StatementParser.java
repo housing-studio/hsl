@@ -1,8 +1,10 @@
 package org.housingstudio.hsl.compiler.parser.impl.scope;
 
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.impl.control.Random;
 import org.housingstudio.hsl.compiler.ast.impl.control.Return;
 import org.housingstudio.hsl.compiler.ast.impl.control.ReturnValue;
+import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Statement;
 import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
@@ -40,7 +42,7 @@ public class StatementParser extends ParserAlgorithm<Node> {
         //     ^ the `=` symbol after an identifier indicates, that a variable is assigned
         //      ^ the `=` symbol must not follow another `=`, as that would be a comparing binary operator
         // ^^^ the identifier must be followed by a `=`
-        if (
+        else if (
             peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.OPERATOR, "=") &&
             !at(cursor() + 2).is(TokenType.OPERATOR, "=")
         )
@@ -52,7 +54,7 @@ public class StatementParser extends ParserAlgorithm<Node> {
         // foo++
         // ^^^ target operand
         //    ^^ postfix operator
-        if (
+        else if (
             peek().is(TokenType.IDENTIFIER) && (
                 (at(cursor() + 1).is(TokenType.OPERATOR, "+") && at(cursor() + 2).is(TokenType.OPERATOR, "+")) ||
                 (at(cursor() + 1).is(TokenType.OPERATOR, "-") && at(cursor() + 2).is(TokenType.OPERATOR, "-"))
@@ -65,7 +67,7 @@ public class StatementParser extends ParserAlgorithm<Node> {
         // ^^^ lhs target operand
         //    ^^ operator
         //      ^ rhs operand value
-        if (
+        else if (
             peek().is(TokenType.IDENTIFIER) && (
                 isAssigmentOperator(at(cursor() + 1)) && at(cursor() + 2).is(TokenType.OPERATOR, "=")
             )
@@ -75,7 +77,7 @@ public class StatementParser extends ParserAlgorithm<Node> {
         // handle method call
         // chat("Hello, World!")
         //     ^ the parentheses after an identifier indicates, that a method is being called
-        if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.LPAREN)) {
+        else if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.LPAREN)) {
             Token method = get();
             List<Argument> arguments = parser.nextArgumentList();
             return new MethodCall(method, arguments);
@@ -87,11 +89,11 @@ public class StatementParser extends ParserAlgorithm<Node> {
             return parser.nextMacroCall();
 
         // handle conditional
-        if (peek().is(TokenType.EXPRESSION, "if"))
+        else if (peek().is(TokenType.EXPRESSION, "if"))
             return parser.nextConditional();
 
         // handle return
-        if (peek().is(TokenType.EXPRESSION, "return")) {
+        else if (peek().is(TokenType.EXPRESSION, "return")) {
             get();
             if (peek().is(TokenType.SEMICOLON)) {
                 get();
@@ -101,6 +103,13 @@ public class StatementParser extends ParserAlgorithm<Node> {
             if (peek().is(TokenType.SEMICOLON))
                 get();
             return new ReturnValue(value);
+        }
+
+        // handle random action
+        else if (peek().is(TokenType.EXPRESSION, "random")) {
+            get(TokenType.EXPRESSION, "random");
+            Scope scope = parser.nextScope();
+            return new Random(scope);
         }
 
         context.syntaxError(peek(), "expected statement, but found " + peek().print());

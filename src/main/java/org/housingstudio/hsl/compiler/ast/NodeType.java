@@ -39,6 +39,7 @@ public enum NodeType {
     MACRO,
     COMMAND,
     EVENT,
+    RANDOM,
     GAME,
 
     CONDITIONAL,

@@ -30,9 +30,14 @@ public class AssignmentOperator extends Statement implements Printable, ActionBu
     @Children
     private final @NotNull Value rhs;
 
+    private Variable variable;
+
+    /**
+     * Initialize node logic before the nodes are visited and the code is generated.
+     */
     @Override
-    public @NotNull Action buildAction() {
-        Variable variable = resolveName(lhs.value());
+    public void init() {
+        variable = resolveName(lhs.value());
         if (variable == null) {
             context.errorPrinter().print(
                 Notification.error(Errno.UNKNOWN_VARIABLE, "unknown variable", this)
@@ -41,7 +46,10 @@ public class AssignmentOperator extends Statement implements Printable, ActionBu
             );
             throw new UnsupportedOperationException("Cannot find variable: " + lhs.value());
         }
+    }
 
+    @Override
+    public @NotNull Action buildAction() {
         Mode mode;
         if (operator == Operator.ADD_EQUAL)
             mode = Mode.INCREMENT;

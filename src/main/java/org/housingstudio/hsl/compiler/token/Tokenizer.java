@@ -811,6 +811,7 @@ public class Tokenizer implements TokenContext {
             case "if":
             case "else":
             case "return":
+            case "random":
                 return true;
             default:
                 return false;

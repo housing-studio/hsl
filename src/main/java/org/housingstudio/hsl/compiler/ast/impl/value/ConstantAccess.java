@@ -24,6 +24,27 @@ public class ConstantAccess extends Value {
     private final @NotNull Token name;
 
     /**
+     * Initialize node logic before the nodes are visited and the code is generated.
+     */
+    @Override
+    public void init() {
+        Variable variable = resolveName(name.value());
+        if (variable != null)
+            return;
+
+        ConstantDeclare constant = game.constants().get(name.value());
+        if (constant != null)
+            return;
+
+        context.errorPrinter().print(
+            Notification.error(Errno.UNKNOWN_VARIABLE, "unknown variable", this)
+                .error("cannot find variable in this scope", name)
+                .note("did you misspell the name, or forgot to declare the variable?")
+        );
+        throw new UnsupportedOperationException("Cannot find variable: " + name.value());
+    }
+
+    /**
      * Retrieve the type of the held value. This result will be used to inter types for untyped variables.
      *
      * @return the resolved value of the type

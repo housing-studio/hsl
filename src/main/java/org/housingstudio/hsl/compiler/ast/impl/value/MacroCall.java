@@ -53,6 +53,8 @@ public class MacroCall extends Value implements ActionListBuilder {
             );
             throw new UnsupportedOperationException("Cannot invoke main macro");
         }
+
+        resolveMacro();
     }
 
     /**
