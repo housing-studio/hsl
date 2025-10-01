@@ -38,6 +38,8 @@ public class Conversion extends Value {
      */
     @Override
     public void init() {
+        verifyTargets();
+
         Type valueType = value.getValueType();
         if (explicitType.matches(valueType)) {
             context.errorPrinter().print(
@@ -45,6 +47,24 @@ public class Conversion extends Value {
                     .error("explicit type matches operand type", explicitType.tokens())
             );
         }
+
+        if (
+            explicitType.matches(Types.STRING) || explicitType.matches(Types.ANY) ||
+            (explicitType.matches(Types.FLOAT) && valueType.matches(Types.INT)) ||
+            (explicitType.matches(Types.INT) && valueType.matches(Types.FLOAT))
+        )
+            return;
+
+        context.errorPrinter().print(
+            Notification.error(Errno.ILLEGAL_TYPE_CONVERSION, "illegal type conversion", this)
+                .error(
+                    "cannot convert type " + valueType.print() + " to " + explicitType.print(),
+                    explicitType.tokens()
+                )
+        );
+        throw new UnsupportedOperationException(
+            "Cannot covert type " + valueType.print() + " to " + explicitType.print()
+        );
     }
 
     /**
