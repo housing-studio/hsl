@@ -7,6 +7,7 @@ import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.error.NamingConvention;
@@ -44,7 +45,7 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
         Type valueType = value.load().getValueType();
 
         // check if an explicit type is specified and it does not match the inferred type
-        if (explicitType != null && !valueType.matches(explicitType)) {
+        if (explicitType != null && !explicitType.matches(Types.ANY) && !valueType.matches(explicitType)) {
             List<Token> tokens = explicitType.tokens();
             context.errorPrinter().print(
                 Notification.error(Errno.INFER_TYPE_MISMATCH, "infer type mismatch", this)
