@@ -1,8 +1,8 @@
 package org.housingstudio.hsl.compiler.error;
 
 import lombok.RequiredArgsConstructor;
+import org.housingstudio.hsl.compiler.TokenContext;
 import org.housingstudio.hsl.compiler.debug.Format;
-import org.housingstudio.hsl.compiler.parser.ParserContext;
 import org.housingstudio.hsl.compiler.token.Meta;
 import org.housingstudio.hsl.compiler.token.Tokenizer;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ public class ErrorPrinter {
     private final Map<Integer, Integer> warnings = new HashMap<>();
     private final Map<Integer, Integer> errors = new HashMap<>();
 
-    private final @NotNull ParserContext context;
+    private final @NotNull TokenContext context;
 
     private int computePadding(@NotNull List<TokenError> errors) {
         return errors.stream()

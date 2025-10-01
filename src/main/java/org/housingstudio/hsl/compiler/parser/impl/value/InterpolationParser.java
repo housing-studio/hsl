@@ -110,7 +110,7 @@ public class InterpolationParser extends ParserAlgorithm<Value> {
     }
 
     private @NotNull AstParser createSubParser(@NotNull ParserContext context, @NotNull String content) {
-        Tokenizer tokenizer = new Tokenizer(context.file(), content);
+        Tokenizer tokenizer = new Tokenizer(context.file(), content, context.diagnostics(), context.mode());
         List<Token> tokens = new ArrayList<>();
         Token token;
 

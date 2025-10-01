@@ -256,7 +256,11 @@ public enum Errno {
     /**
      * `EXPECTED_COMPARATOR_OPERATOR` indicates, that a comparator operator was expected, but something else ęas given.
      */
-    EXPECTED_COMPARATOR_OPERATOR(148);
+    EXPECTED_COMPARATOR_OPERATOR(148),
+
+    INVALID_INTEGER_VALUE(149),
+
+    INVALID_FLOAT_VALUE(150);
 
     /**
      * The error code of the token error.

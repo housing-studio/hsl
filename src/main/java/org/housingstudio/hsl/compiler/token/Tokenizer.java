@@ -1,8 +1,15 @@
 package org.housingstudio.hsl.compiler.token;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.TokenContext;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.ErrorMode;
+import org.housingstudio.hsl.compiler.error.ErrorPrinter;
+import org.housingstudio.hsl.compiler.error.Notification;
+import org.housingstudio.hsl.lsp.Diagnostics;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -14,7 +21,9 @@ import java.util.regex.Pattern;
  * @author AdvancedAntiSkid
  */
 @RequiredArgsConstructor
-public class Tokenizer {
+@Accessors(fluent = true)
+@Getter
+public class Tokenizer implements TokenContext {
     private static final Pattern DURATION_PATTERN = Pattern.compile(
         "^(?:(\\d+(?:_\\d+)*h))?" +                // hours
         "(?:(\\d+(?:_\\d+)*m))?" +                 // minutes
@@ -29,6 +38,8 @@ public class Tokenizer {
      */
     public static final int MAX_ERROR_LINE_LENGTH = 30;
 
+    private final ErrorPrinter errorPrinter = new ErrorPrinter(this);
+
     /**
      * The source file that is being parsed.
      */
@@ -38,6 +49,9 @@ public class Tokenizer {
      * The content of the source file that is being parsed.
      */
     private final @NotNull String data;
+
+    private final @NotNull Diagnostics diagnostics;
+    private final @NotNull ErrorMode mode;
 
     /**
      * The current cursor position in the source file.
@@ -154,8 +168,12 @@ public class Tokenizer {
         else if (isStringStart(peek()))
             return nextString();
 
-        syntaxError(Errno.UNEXPECTED_CHARACTER, "unexpected character: `" + peek() + "`");
-        return makeToken(TokenType.UNEXPECTED);
+        Token token = makeToken(TokenType.UNEXPECTED);
+        errorPrinter.print(
+            Notification.error(Errno.UNEXPECTED_CHARACTER, "unexpected character: `" + peek() + "`")
+                .error("unrecognized token start", token)
+        );
+        return token;
     }
 
     /**
@@ -327,21 +345,23 @@ public class Tokenizer {
                 // check if the floating-point number contains multiple dot symbols
                 if (!integer) {
                     tokenLineIndex += cursor - begin;
-                    syntaxError(
-                        Errno.MULTIPLE_DECIMAL_POINTS,
-                        "floating point number cannot have multiple dot symbols"
+                    Token token = makeToken(TokenType.UNEXPECTED);
+                    errorPrinter.print(
+                        Notification.error(Errno.MULTIPLE_DECIMAL_POINTS, "floating point number cannot have multiple dot symbols")
+                            .error("unexpected contents for float value", token)
                     );
-                    return makeToken(TokenType.UNEXPECTED);
+                    return token;
                 }
                 integer = false;
 
                 // check if duration value contains decimal points
                 if (duration) {
-                    syntaxError(
-                        Errno.CANNOT_HAVE_DECIMAL_POINT,
-                        "duration number cannot have decimal points"
+                    Token token = makeToken(TokenType.UNEXPECTED);
+                    errorPrinter.print(
+                        Notification.error(Errno.CANNOT_HAVE_DECIMAL_POINT, "duration number cannot have decimal points")
+                            .error("unexpected contents for duration value", token)
                     );
-                    return makeToken(TokenType.UNEXPECTED);
+                    return token;
                 }
             }
 
@@ -362,14 +382,44 @@ public class Tokenizer {
 
         if (duration) {
             if (value.isEmpty() || !DURATION_PATTERN.matcher(value).matches()) {
-                syntaxError(Errno.INVALID_DURATION_VALUE, "invalid duration value");
-                return makeToken(TokenType.UNEXPECTED);
+                Token token = makeToken(TokenType.UNEXPECTED);
+                errorPrinter.print(
+                    Notification.error(Errno.INVALID_DURATION_VALUE, "invalid duration value")
+                        .error("unexpected contents for duration value", token)
+                );
+                return token;
             }
 
             return makeToken(TokenType.DURATION, value);
         }
 
-        return makeToken(integer ? TokenType.INT : TokenType.FLOAT, value);
+        if (integer) {
+            try {
+                Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                Token token = makeToken(TokenType.UNEXPECTED);
+                errorPrinter.print(
+                    Notification.error(Errno.INVALID_INTEGER_VALUE, "invalid integer value")
+                        .error("unexpected contents for integer value", token)
+                );
+                return token;
+            }
+
+            return makeToken(TokenType.INT, value);
+        }
+
+        try {
+            Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            Token token = makeToken(TokenType.UNEXPECTED);
+            errorPrinter.print(
+                Notification.error(Errno.INVALID_FLOAT_VALUE, "invalid float value")
+                    .error("unexpected contents for float value", token)
+            );
+            return token;
+        }
+
+        return makeToken(TokenType.FLOAT, value);
     }
 
     /**
@@ -421,9 +471,9 @@ public class Tokenizer {
                             content.append(peek());
                         else {
                             tokenLineIndex += content.length() + 1;
-                            syntaxError(
-                                Errno.INVALID_ESCAPE_SEQUENCE, "invalid escape sequence: `\\" + peek() +
-                                "`"
+                            errorPrinter.print(
+                                Notification.error(Errno.INVALID_ESCAPE_SEQUENCE, "invalid escape sequence: `\\" + peek() + "`")
+                                    .error("expected special character to be escaped", makeToken(TokenType.UNEXPECTED))
                             );
                         }
                 }
@@ -458,11 +508,12 @@ public class Tokenizer {
         //  multiline comments should be similar to Java's `"""` syntax
 
         // handle unexpected end of a string literal
-        syntaxError(
-            Errno.MISSING_STRING_TERMINATOR,
-            "missing trailing `\"` symbol to terminate the string literal"
+        Token token = makeToken(TokenType.UNEXPECTED);
+        errorPrinter.print(
+            Notification.error(Errno.MISSING_STRING_TERMINATOR, "missing trailing `\"` symbol to terminate the string literal")
+                .error("expected `\"` char to terminate string literal", token)
         );
-        return makeToken(TokenType.UNEXPECTED);
+        return token;
     }
 
     /**
@@ -844,51 +895,5 @@ public class Tokenizer {
      */
     private @NotNull Token makeToken(@NotNull TokenType type) {
         return makeToken(type, "");
-    }
-
-    private @NotNull String repeat(@NotNull String value, int count) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < count; i++)
-            builder.append(value);
-        return builder.toString();
-    }
-
-    /**
-     * Display a syntax error in the standard error output with the with some debug information.
-     *
-     * @param error the token error
-     * @param message the short error message
-     */
-    private void syntaxError(@NotNull Errno error, @NotNull String message) {
-        System.err.println(Format.RED + "error[E" + error.code() + "]" + Format.WHITE + ": " + message);
-        System.err.println(
-            Format.CYAN + " --> " + Format.LIGHT_GRAY + file.getName() + ":" + tokenLineNumber + ":" +
-            tokenLineIndex
-        );
-
-        int lineSize = String.valueOf(tokenLineNumber).length();
-
-        // display the line number
-        System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
-        System.err.println(" | ");
-
-        System.err.print(" " + tokenLineNumber + " | ");
-
-        // get the line of the error
-        String line = Format.WHITE + data.split("\n")[tokenLineNumber - 1];
-
-        // get the start and end index of the line
-        int start = Math.max(0, tokenLineIndex - MAX_ERROR_LINE_LENGTH);
-        int end = Math.min(line.length(), tokenLineIndex + MAX_ERROR_LINE_LENGTH);
-
-        // display the line of the error
-        System.err.println(Format.LIGHT_GRAY + line.substring(start, end));
-
-        // display the error pointer
-        System.err.print(Format.CYAN + repeat(" ", lineSize + 1));
-        System.err.println(" | " + repeat(" ", lineSize + (tokenLineIndex - start) - 1) + Format.RED + "^");
-
-        // exit the program with the error code
-        //System.exit(error.code());
     }
 }

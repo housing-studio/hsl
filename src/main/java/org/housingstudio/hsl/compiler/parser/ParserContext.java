@@ -3,6 +3,7 @@ package org.housingstudio.hsl.compiler.parser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.TokenContext;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.value.Annotation;
 import org.housingstudio.hsl.compiler.debug.Format;
@@ -30,7 +31,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class ParserContext {
+public class ParserContext implements TokenContext {
     private final ErrorPrinter errorPrinter = new ErrorPrinter(this);
 
     /**

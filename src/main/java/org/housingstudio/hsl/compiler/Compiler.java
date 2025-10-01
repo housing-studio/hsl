@@ -72,7 +72,7 @@ public class Compiler {
     }
 
     private @NotNull List<Token> tokenizeFile(@NotNull File file, @NotNull String content) {
-        Tokenizer tokenizer = new Tokenizer(file, content);
+        Tokenizer tokenizer = new Tokenizer(file, content, diagnostics, mode);
         List<Token> tokens = new ArrayList<>();
         Token token;
 
