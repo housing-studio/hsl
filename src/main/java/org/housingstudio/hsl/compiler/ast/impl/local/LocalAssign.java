@@ -47,15 +47,7 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
             );
             throw new UnsupportedOperationException("Cannot find variable: " + name.value());
         }
-    }
 
-    /**
-     * Generate an {@link Action} based on the underlying node.
-     *
-     * @return the built action representing this node
-     */
-    @Override
-    public @NotNull Action buildAction() {
         if (!variable.type().matches(Types.ANY) && !variable.type().matches(value.getValueType())) {
             context.errorPrinter().print(
                 Notification.error(Errno.UNEXPECTED_TYPE, "invalid assignment type", this)
@@ -81,7 +73,15 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
             );
             throw new UnsupportedOperationException("Cannot assign to non-constant value: " + name.value());
         }
+    }
 
+    /**
+     * Generate an {@link Action} based on the underlying node.
+     *
+     * @return the built action representing this node
+     */
+    @Override
+    public @NotNull Action buildAction() {
         return new ChangeVariable(
             variable.namespace(), name.value(), Mode.SET, value.asConstantValue(), false
         );
