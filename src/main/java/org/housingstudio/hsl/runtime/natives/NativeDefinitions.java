@@ -6,6 +6,7 @@ import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Constant;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.runtime.natives.impl.io.Print;
+import org.housingstudio.hsl.runtime.natives.impl.lang.Number;
 import org.housingstudio.hsl.runtime.natives.impl.math.Math;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,7 @@ public class NativeDefinitions {
     public void init() {
         register(Print.class);
         register(Math.class);
+        register(Number.class);
     }
 
     public void apply(@NotNull Game game) {
