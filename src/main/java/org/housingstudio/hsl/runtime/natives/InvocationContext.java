@@ -30,6 +30,10 @@ public class InvocationContext {
         frame.returnValue(new ConstantLiteral(Token.of(TokenType.FLOAT, String.valueOf(value))));
     }
 
+    public void returnBoolean(boolean value) {
+        frame.returnValue(new ConstantLiteral(Token.of(TokenType.BOOL, String.valueOf(value))));
+    }
+
     private @NotNull Value get(@NotNull String key) {
         Value value = parent.locals().get(key);
         if (value == null)
