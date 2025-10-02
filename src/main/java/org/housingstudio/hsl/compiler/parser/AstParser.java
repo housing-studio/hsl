@@ -52,8 +52,8 @@ public class AstParser {
      */
     private final @NotNull ParserContext context;
 
-    public @NotNull ConstantDeclare nextConstant() {
-        return parse(ConstantParser.class, ConstantDeclare.class);
+    public @NotNull Constant nextConstant() {
+        return parse(ConstantParser.class, Constant.class);
     }
 
     public @NotNull Method nextMethod() {
@@ -225,7 +225,7 @@ public class AstParser {
             }
 
             else if (context.peek().is(TokenType.EXPRESSION, "const")) {
-                ConstantDeclare constant = nextConstant();
+                Constant constant = nextConstant();
 
                 if (game.constants().containsKey(constant.name().value())) {
                     context.errorPrinter().print(

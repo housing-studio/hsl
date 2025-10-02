@@ -2,7 +2,7 @@ package org.housingstudio.hsl.compiler.debug;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface Constant {
+public interface ConstantValue {
     /**
      * Get the constant string representation of the value.
      * <p>

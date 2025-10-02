@@ -1,4 +1,4 @@
-package org.housingstudio.hsl.runtime.natives;
+package org.housingstudio.hsl.runtime.natives.builder;
 
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
@@ -6,6 +6,8 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
+import org.housingstudio.hsl.runtime.natives.InvocationContext;
+import org.housingstudio.hsl.runtime.natives.NativeMacro;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

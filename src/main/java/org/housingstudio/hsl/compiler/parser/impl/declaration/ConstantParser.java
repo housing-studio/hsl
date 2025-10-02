@@ -1,6 +1,6 @@
 package org.housingstudio.hsl.compiler.parser.impl.declaration;
 
-import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Constant;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
@@ -11,16 +11,16 @@ import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
-public class ConstantParser extends ParserAlgorithm<ConstantDeclare> {
+public class ConstantParser extends ParserAlgorithm<Constant> {
     /**
-     * Parse the next {@link ConstantDeclare} node from the token stream.
+     * Parse the next {@link Constant} node from the token stream.
      *
      * @param parser the AST node parser
      * @param context the token parser context
-     * @return the next {@link ConstantDeclare} node from the token stream
+     * @return the next {@link Constant} node from the token stream
      */
     @Override
-    public @NotNull ConstantDeclare parse(@NotNull AstParser parser, @NotNull ParserContext context) {
+    public @NotNull Constant parse(@NotNull AstParser parser, @NotNull ParserContext context) {
         // skip the `const` specifier
         get(TokenType.EXPRESSION, "const");
 
@@ -47,6 +47,6 @@ public class ConstantParser extends ParserAlgorithm<ConstantDeclare> {
             throw new UnsupportedOperationException("Annotations not allowed for constants");
         }
 
-        return new ConstantDeclare(name, value);
+        return new Constant(name, value);
     }
 }

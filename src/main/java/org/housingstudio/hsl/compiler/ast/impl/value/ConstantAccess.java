@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Constant;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.error.Errno;
@@ -32,7 +32,7 @@ public class ConstantAccess extends Value {
         if (variable != null)
             return;
 
-        ConstantDeclare constant = game.constants().get(name.value());
+        Constant constant = game.constants().get(name.value());
         if (constant != null)
             return;
 
@@ -107,7 +107,7 @@ public class ConstantAccess extends Value {
         if (variable != null)
             return new StatAccess(name, variable);
 
-        ConstantDeclare constant = game.constants().get(name.value());
+        Constant constant = game.constants().get(name.value());
         if (constant == null) {
             context.errorPrinter().print(
                 Notification.error(Errno.UNKNOWN_VARIABLE, "cannot resolve name from scope", this)
@@ -132,7 +132,7 @@ public class ConstantAccess extends Value {
         if (variable != null)
             return false;
 
-        ConstantDeclare constant = game.constants().get(name.value());
+        Constant constant = game.constants().get(name.value());
         return constant != null;
     }
 

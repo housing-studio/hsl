@@ -63,6 +63,8 @@ public class Compiler {
             parsers.add(createParser(tokens, sourceFile, content));
         }
 
+        NativeDefinitions.apply(game);
+
         Node.game(game);
         for (AstParser parser : parsers)
             parser.parseGame(game);

@@ -69,9 +69,6 @@ public class MacroCall extends Value implements ActionListBuilder {
 
     private @NotNull Macro resolveMacro() {
         Macro macro = game.macros().get(name.value());
-        if (macro == null)
-            macro = NativeDefinitions.MACROS.get(name.value());
-
         if (macro == null) {
             context.errorPrinter().print(
                 Notification.error(Errno.UNKNOWN_MACRO, "macro not found", this)

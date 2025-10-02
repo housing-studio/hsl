@@ -17,5 +17,5 @@ public class Game extends Node {
     private final Map<String, Macro> macros = new LinkedHashMap<>();
     private final Map<String, CommandNode> commands = new LinkedHashMap<>();
     private final Map<EventType, List<Event>> events = new LinkedHashMap<>();
-    private final Map<String, ConstantDeclare> constants = new LinkedHashMap<>();
+    private final Map<String, Constant> constants = new LinkedHashMap<>();
 }

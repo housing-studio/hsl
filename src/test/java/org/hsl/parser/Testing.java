@@ -7,7 +7,7 @@ import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
-import org.housingstudio.hsl.compiler.ast.impl.declaration.ConstantDeclare;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Constant;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.parser.AstParser;
@@ -39,7 +39,7 @@ public class Testing {
         NodeVisitor.initHierarchy();
         NodeVisitor.initLifecycle();
 
-        for (ConstantDeclare constant : game.constants().values())
+        for (Constant constant : game.constants().values())
             System.out.println(constant.print());
 
         for (Method method : game.functions().values())

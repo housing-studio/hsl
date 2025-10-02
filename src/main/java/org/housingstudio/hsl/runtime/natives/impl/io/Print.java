@@ -1,10 +1,10 @@
-package org.housingstudio.hsl.runtime.natives.io;
+package org.housingstudio.hsl.runtime.natives.impl.io;
 
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
-import org.housingstudio.hsl.runtime.natives.MacroBuilder;
+import org.housingstudio.hsl.runtime.natives.builder.MacroBuilder;
 import org.housingstudio.hsl.runtime.natives.RegisterNative;
 
 @UtilityClass

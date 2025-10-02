@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.CONSTANT)
-public class ConstantDeclare extends Node implements Printable {
+public class Constant extends Node implements Printable {
     private final @NotNull Token name;
 
     @Children
