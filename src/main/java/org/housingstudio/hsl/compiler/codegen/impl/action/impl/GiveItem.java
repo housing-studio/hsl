@@ -10,6 +10,8 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
 import org.housingstudio.hsl.compiler.codegen.impl.adapter.SlotAdapter;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
 import org.housingstudio.hsl.std.Material;
 import org.housingstudio.hsl.std.slot.Slot;
 import org.jetbrains.annotations.NotNull;
@@ -32,4 +34,18 @@ public class GiveItem implements Action {
 
     @SerializedName("replace-existing-item")
     private boolean replaceExistingItem;
+
+    /**
+     * Retrieve the HTSL representation of this housing action.
+     *
+     * @return the htsl code that represents this action
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        return HTSL.Action.GIVE_ITEM.invoke()
+            .set("item", item)
+            .set("allow_multiple", allowMultiple)
+            .set("slot", slot) // TODO
+            .set("replace_existing_item", replaceExistingItem);
+    }
 }

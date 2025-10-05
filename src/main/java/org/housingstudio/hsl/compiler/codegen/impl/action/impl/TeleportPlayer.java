@@ -10,6 +10,8 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
 import org.housingstudio.hsl.compiler.codegen.impl.adapter.LocationAdapter;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
@@ -34,4 +36,16 @@ public class TeleportPlayer implements Action {
     @DefaultBoolean(false)
     @SerializedName("prevent-teleport-inside-blocks")
     private boolean preventTeleportInsideBlocks;
+
+    /**
+     * Retrieve the HTSL representation of this housing action.
+     *
+     * @return the htsl code that represents this action
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        return HTSL.Action.TP.invoke()
+            .setLocation("location", location)
+            .set("prevent_teleport_inside_blocks", preventTeleportInsideBlocks);
+    }
 }

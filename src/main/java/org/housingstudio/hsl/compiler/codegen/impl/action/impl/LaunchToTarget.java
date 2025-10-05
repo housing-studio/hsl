@@ -10,11 +10,14 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
 import org.housingstudio.hsl.compiler.codegen.impl.adapter.LocationAdapter;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultInt;
 import org.housingstudio.hsl.importer.interaction.defaults.Required;
 import org.housingstudio.hsl.std.location.Location;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @AllArgsConstructor
@@ -35,4 +38,16 @@ public class LaunchToTarget implements Action {
     @DefaultInt(2)
     @SerializedName("launch-strength")
     private int strength;
+
+    /**
+     * Retrieve the HTSL representation of this housing action.
+     *
+     * @return the htsl code that represents this action
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        return HTSL.Action.LAUNCH_TARGET.invoke()
+            .setLocation("target_location", location)
+            .set("launch_strength", strength);
+    }
 }

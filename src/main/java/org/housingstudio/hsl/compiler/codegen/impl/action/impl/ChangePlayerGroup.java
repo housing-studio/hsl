@@ -8,6 +8,8 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
@@ -30,4 +32,16 @@ public class ChangePlayerGroup implements Action {
     @DefaultBoolean(true)
     @SerializedName("demotion-protection")
     private boolean demotionProtection;
+
+    /**
+     * Retrieve the HTSL representation of this housing action.
+     *
+     * @return the htsl code that represents this action
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        return HTSL.Action.CHANGE_PLAYER_GROUP.invoke()
+            .set("group", group)
+            .set("demotion_protection", demotionProtection);
+    }
 }

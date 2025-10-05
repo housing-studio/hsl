@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.Condition;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
@@ -43,4 +44,14 @@ public class Conditional implements Action {
     @DefaultEmpty
     @SerializedName("else-actions")
     private @NotNull List<Action> elseActions;
+
+    /**
+     * Retrieve the HTSL representation of this housing action.
+     *
+     * @return the htsl code that represents this action
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
 }

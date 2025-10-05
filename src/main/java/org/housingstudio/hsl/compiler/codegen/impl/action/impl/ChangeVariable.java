@@ -8,6 +8,8 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
@@ -46,4 +48,36 @@ public class ChangeVariable implements Action {
     @InteractionTarget(type = InteractionType.TOGGLE, offset = 4)
     @DefaultBoolean(false)
     private boolean automaticUnset;
+
+    /**
+     * Retrieve the HTSL representation of this housing action.
+     *
+     * @return the htsl code that represents this action
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        switch (namespace) {
+            case PLAYER:
+                return HTSL.Action.VAR.invoke()
+                    .set("variable", variable)
+                    .setMode("operation", mode)
+                    .set("value", value)
+                    .set("automatic_unset", automaticUnset);
+            case TEAM:
+                return HTSL.Action.TEAM_VAR.invoke()
+                    .set("variable", variable)
+                    .set("team", "TODO")
+                    .setMode("operation", mode)
+                    .set("value", value)
+                    .set("automatic_unset", automaticUnset);
+            case GLOBAL:
+                return HTSL.Action.GLOBAL_VAR.invoke()
+                    .set("variable", variable)
+                    .setMode("operation", mode)
+                    .set("value", value)
+                    .set("automatic_unset", automaticUnset);
+            default:
+                throw new IllegalStateException("Unexpected namespace: " + namespace);
+        }
+    }
 }

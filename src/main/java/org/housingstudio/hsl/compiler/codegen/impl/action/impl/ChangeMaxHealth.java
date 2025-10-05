@@ -8,12 +8,15 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultInt;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultMode;
 import org.housingstudio.hsl.std.Mode;
+import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,4 +39,17 @@ public class ChangeMaxHealth implements Action {
     @DefaultBoolean(true)
     @SerializedName("heal-on-change")
     private boolean healOnChange;
+
+    /**
+     * Retrieve the HTSL representation of this housing action.
+     *
+     * @return the htsl code that represents this action
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        return HTSL.Action.MAX_HEALTH.invoke()
+            .setMode("mode", mode)
+            .set("max_health", maxHealth)
+            .set("heal_on_change", healOnChange);
+    }
 }

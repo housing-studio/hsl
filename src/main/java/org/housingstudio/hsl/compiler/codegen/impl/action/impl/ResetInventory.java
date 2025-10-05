@@ -6,6 +6,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
+import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
 @Accessors(fluent = true)
@@ -13,4 +16,14 @@ import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
 @ToString
 public class ResetInventory implements Action {
     private final ActionType type = ActionType.RESET_INVENTORY;
+
+    /**
+     * Retrieve the HTSL representation of this housing action.
+     *
+     * @return the htsl code that represents this action
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        return HTSL.Action.RESET_INVENTORY.invoke();
+    }
 }

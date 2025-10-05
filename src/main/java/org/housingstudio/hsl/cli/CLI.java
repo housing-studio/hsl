@@ -44,6 +44,8 @@ public class CLI {
         System.err.println(" ");
         System.err.println("  new <project name> - create a new project");
         System.err.println("  export             - compile and export the project");
+        System.err.println("    -v               - toggle verbose mode");
+        System.err.println("    -htsl            - transpile project to HTSL representation");
         System.err.println("  diagnostics        - compile the project and print compiler diagnostics");
     }
 
@@ -102,6 +104,7 @@ public class CLI {
 
     private void export(String[] args) {
         boolean verbose = Arrays.asList(args).contains("-v");
+        boolean htsl = Arrays.asList(args).contains("-htsl");
 
         File workDir = new File(System.getProperty("user.dir"));
         File buildFile = new File(workDir, "build.toml");

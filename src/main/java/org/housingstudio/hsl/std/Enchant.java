@@ -31,7 +31,7 @@ public enum Enchant {
     POWER("Power"),
     PUNCH("Punch"),
     FLAME("Flame"),
-    INFINITY("Infinity"),;
+    INFINITY("Infinity");
 
     private final @NotNull String format;
 }

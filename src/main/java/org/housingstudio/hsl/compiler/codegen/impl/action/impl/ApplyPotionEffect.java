@@ -8,6 +8,8 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
@@ -45,4 +47,19 @@ public class ApplyPotionEffect implements Action {
     @DefaultBoolean(true)
     @SerializedName("show-potion-icon")
     private boolean showPotionIcon;
+
+    /**
+     * Retrieve the HTSL representation of this housing action.
+     *
+     * @return the htsl code that represents this action
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        return HTSL.Action.APPLY_POTION.invoke()
+            .set("effect", effect.format())
+            .set("duration", duration)
+            .set("level", level)
+            .set("override_existing_effects", overrideExistingEffects)
+            .set("show_potion_icon", showPotionIcon);
+    }
 }
