@@ -37,6 +37,14 @@ public class HtslInvocation {
         return set(key, gameMode.format());
     }
 
+    public @NotNull HtslInvocation setComparator(@NotNull String key, @NotNull Comparator comparator) {
+        return set(key, comparator.format());
+    }
+
+    public @NotNull HtslInvocation setPermission(@NotNull String key, @NotNull Permission permission) {
+        return set(key, permission.format());
+    }
+
     public @NotNull HtslInvocation setLobby(@NotNull String key, @NotNull Lobby lobby) {
         String value;
         switch (lobby) {

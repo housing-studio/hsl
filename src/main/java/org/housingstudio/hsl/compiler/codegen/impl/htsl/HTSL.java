@@ -3,6 +3,8 @@ package org.housingstudio.hsl.compiler.codegen.impl.htsl;
 import lombok.experimental.UtilityClass;
 
 /**
+ * Represents a collection of HTSL syntaxes.
+ *
  * @see <a href="https://github.com/BusterBrown1218/HTSL/blob/main/actions/syntax.js">HTSL Syntax</a>
  */
 @UtilityClass
@@ -58,5 +60,38 @@ public class HTSL {
         public final HtslCommand PLAYER_WEATHER = new HtslCommand("playerWeather <weather>");
         public final HtslCommand PLAYER_TIME = new HtslCommand("playerTime <time>");
         public final HtslCommand DISPLAY_NAMETAG = new HtslCommand("displayNametag <display_nametag>");
+    }
+
+    @UtilityClass
+    public class Condition {
+        public final HtslCommand BLOCK_TYPE = new HtslCommand("blockType <item> <match_type_only>");
+        public final HtslCommand DAMAGE_AMOUNT = new HtslCommand("damageAmount <comparator> <compare_value>");
+        public final HtslCommand DAMAGE_CAUSE = new HtslCommand("damageCause <cause>");
+        public final HtslCommand DOING_PARKOUR = new HtslCommand("doingParkour");
+        public final HtslCommand FISHING_ENV = new HtslCommand("fishingEnv <environment>");
+        public final HtslCommand GLOBAL_STAT = new HtslCommand("globalstat <variable> <comparator> <compare_value>");
+        public final HtslCommand GLOBAL_VAR = new HtslCommand("globalvar <variable> <comparator> <compare_value> <fallback_value>");
+        public final HtslCommand HAS_ITEM = new HtslCommand("hasItem <item> <what_to_check> <where_to_check> <required_amount>");
+        public final HtslCommand HAS_POTION = new HtslCommand("hasPotion <effect>");
+        public final HtslCommand IS_ITEM = new HtslCommand("isItem <item> <what_to_check> <where_to_check> <required_amount>");
+        public final HtslCommand IS_SNEAKING = new HtslCommand("isSneaking");
+        public final HtslCommand MAX_HEALTH = new HtslCommand("maxHealth <comparator> <compare_value>");
+        public final HtslCommand PLACEHOLDER = new HtslCommand("placeholder <placeholder> <comparator> <compare_value>");
+        public final HtslCommand IS_FLYING = new HtslCommand("isFlying");
+        public final HtslCommand HEALTH = new HtslCommand("health <comparator> <compare_value>");
+        public final HtslCommand HUNGER = new HtslCommand("hunger <comparator> <compare_value>");
+        public final HtslCommand STAT = new HtslCommand("stat <variable> <comparator> <compare_value>");
+        public final HtslCommand VAR = new HtslCommand("var <variable> <comparator> <compare_value> <fallback_value>");
+        public final HtslCommand PORTAL = new HtslCommand("portal <portal_type>");
+        public final HtslCommand CAN_PVP = new HtslCommand("canPvp");
+        public final HtslCommand GAMEMODE = new HtslCommand("gamemode <required_gamemode>");
+        public final HtslCommand HAS_GROUP = new HtslCommand("hasGroup <required_group> <include_higher_groups>");
+        public final HtslCommand IN_GROUP = new HtslCommand("inGroup <required_group> <include_higher_groups>");
+        public final HtslCommand HAS_PERMISSION = new HtslCommand("hasPermission <required_permission>");
+        public final HtslCommand HAS_TEAM = new HtslCommand("hasTeam <required_team>");
+        public final HtslCommand IN_TEAM = new HtslCommand("inTeam <required_team>");
+        public final HtslCommand TEAM_STAT = new HtslCommand("teamstat <variable> <team> <comparator> <compare_value>");
+        public final HtslCommand TEAM_VAR = new HtslCommand("teamstat <variable> <team> <comparator> <compare_value> <fallback_value>");
+        public final HtslCommand IN_REGION = new HtslCommand("inRegion <region>");
     }
 }

@@ -15,6 +15,7 @@ import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.Condition;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.ConditionType;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.impl.VariableRequirement;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -116,5 +117,15 @@ public class StatComparator extends Node implements ConditionBuilder, Condition 
     @Override
     public @NotNull ConditionType type() {
         return ConditionType.VARIABLE_REQUIREMENT;
+    }
+
+    /**
+     * Retrieve the HTSL representation of this housing condition.
+     *
+     * @return the htsl code that represents this condition
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        return buildCondition().asHTSL();
     }
 }

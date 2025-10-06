@@ -7,6 +7,8 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.Condition;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.ConditionType;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
+import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
 import org.housingstudio.hsl.std.Effect;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,4 +22,15 @@ public class HasPotionEffect implements Condition {
 
     private boolean inverted;
     private @NotNull Effect effect;
+
+    /**
+     * Retrieve the HTSL representation of this housing condition.
+     *
+     * @return the htsl code that represents this condition
+     */
+    @Override
+    public @NotNull HtslInvocation asHTSL() {
+        return HTSL.Condition.HAS_POTION.invoke()
+            .set("effect", effect);
+    }
 }
