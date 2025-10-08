@@ -1,3 +1,7 @@
+import org.apache.commons.io.output.ByteArrayOutputStream
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -68,4 +72,26 @@ tasks.test {
 
 tasks.build {
     dependsOn("shadowJar")
+}
+
+fun getBuildTimestamp(): String = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+
+fun getGitCommit(): String {
+    val stdout = ByteArrayOutputStream()
+    exec {
+        commandLine = listOf("git", "rev-parse", "--short", "HEAD")
+        standardOutput = stdout
+    }
+    return stdout.toString(Charsets.UTF_8).trim()
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes(
+            "Implementation-Title" to project.name,
+            "Implementation-Version" to project.version,
+            "Build-Timestamp" to getBuildTimestamp(),
+            "Git-Commit" to getGitCommit()
+        )
+    }
 }

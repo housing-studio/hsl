@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.jar.Manifest;
 
 @UtilityClass
 public class CLI {
@@ -34,6 +35,9 @@ public class CLI {
             case "diagnostics":
                 diagnostics(args);
                 break;
+            case "version":
+                version(args);
+                break;
             default:
                 sendHelp();
         }
@@ -47,6 +51,7 @@ public class CLI {
         System.err.println("    -v               - toggle verbose mode");
         System.err.println("    -htsl            - transpile project to HTSL representation");
         System.err.println("  diagnostics        - compile the project and print compiler diagnostics");
+        System.err.println("  version            - print debug information about the compiler");
     }
 
     private void newProject(String[] args) {
@@ -159,6 +164,51 @@ public class CLI {
                     " to get more information"
                 );
             System.exit(1);
+        }
+    }
+
+    private void version(String[] args) {
+        String ver = Main.class.getPackage().getImplementationVersion();
+        if (ver == null)
+            ver = "DEV BUILD";
+
+        String commit = getManifestAttribute("Git-Commit");
+        String timestamp = getManifestAttribute("Build-Timestamp");
+
+        System.out.printf("hsl %s (%s %s)\n", ver, commit, timestamp);
+
+        System.out.printf("host: %s %s (%s)\n",
+            System.getProperty("os.name"),
+            System.getProperty("os.version"),
+            System.getProperty("os.arch")
+        );
+
+        System.out.printf("vendor: %s (%s)%n",
+            System.getProperty("java.vendor"),
+            System.getProperty("java.version")
+        );
+
+        System.out.printf("runtime: %s (%s)%n",
+            System.getProperty("java.runtime.name"),
+            System.getProperty("java.runtime.version")
+        );
+
+        System.out.printf("vm: %s (%s)%n",
+            System.getProperty("java.vm.name"),
+            System.getProperty("java.vm.version")
+        );
+    }
+
+    private @NotNull String getManifestAttribute(String name) {
+        try (InputStream is = Main.class.getClassLoader().getResourceAsStream("META-INF/MANIFEST.MF")) {
+            if (is == null)
+                return "unknown";
+
+            Manifest manifest = new Manifest(is);
+            String value = manifest.getMainAttributes().getValue(name);
+            return value != null ? value : "unknown";
+        } catch (IOException e) {
+            return "unknown";
         }
     }
 
