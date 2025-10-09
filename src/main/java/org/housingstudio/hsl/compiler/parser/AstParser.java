@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.parser.impl.operator.*;
 import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.builder.ConditionBuilder;
@@ -23,10 +24,6 @@ import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionalParser;
 import org.housingstudio.hsl.compiler.parser.impl.declaration.*;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalDeclareParser;
-import org.housingstudio.hsl.compiler.parser.impl.operator.AssignmentOperatorParser;
-import org.housingstudio.hsl.compiler.parser.impl.operator.BinaryOperatorTree;
-import org.housingstudio.hsl.compiler.parser.impl.operator.OperatorParser;
-import org.housingstudio.hsl.compiler.parser.impl.operator.PostfixOperatorParser;
 import org.housingstudio.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.housingstudio.hsl.compiler.parser.impl.scope.StatementParser;
 import org.housingstudio.hsl.compiler.parser.impl.value.*;
@@ -156,6 +153,10 @@ public class AstParser {
 
     public @NotNull Value nextConversion() {
         return parse(ConversionParser.class, Value.class);
+    }
+
+    public @NotNull Value nextPrefixOperator() {
+        return parse(PrefixOperatorParser.class, Value.class);
     }
 
     public @NotNull Node nextPostfixOperator() {

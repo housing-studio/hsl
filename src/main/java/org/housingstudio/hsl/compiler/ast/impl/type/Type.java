@@ -6,4 +6,14 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Type extends Matcher<Type>, Printable, TokenContainer {
     @NotNull BaseType base();
+
+    default boolean numeric() {
+        switch (base()) {
+            case INT:
+            case FLOAT:
+                return true;
+            default:
+                return false;
+        }
+    }
 }

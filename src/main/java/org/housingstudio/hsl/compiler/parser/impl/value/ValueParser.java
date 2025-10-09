@@ -31,8 +31,11 @@ public class ValueParser extends ParserAlgorithm<Value> {
         if (peek().isLiteral())
             return parser.nextLiteral();
 
+        else if (peek().is(TokenType.OPERATOR, "-"))
+            return parser.nextPrefixOperator();
+
         // handle explicit type conversion
-        if (
+        else if (
             (
                 // either is a builtin type token
                 peek().is(TokenType.TYPE) ||

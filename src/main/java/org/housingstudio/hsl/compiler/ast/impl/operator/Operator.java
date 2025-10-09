@@ -94,6 +94,18 @@ public enum Operator {
         }
     }
 
+    public boolean prefix() {
+        switch (this) {
+            case NOT:
+            case NEGATE_OR_SUBTRACT:
+            case INCREMENT:
+            case DECREMENT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public boolean comparable() {
         switch (this) {
             case EQUAL:

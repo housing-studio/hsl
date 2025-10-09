@@ -281,7 +281,13 @@ public enum Errno {
     /**
      * `CANNOT_INVOKE_MAIN_MACRO` indicates, that the main macro was attempted to be called.
      */
-    CANNOT_INVOKE_MAIN_MACRO(153);
+    CANNOT_INVOKE_MAIN_MACRO(153),
+
+    /**
+     * `NOT_IMPLEMENTED_FEATURE` indicates, that a compiler feature use was syntactically correct, but the underlying
+     * infrastructure is not implemented yet.
+     */
+    NOT_IMPLEMENTED_FEATURE(154);
 
     /**
      * The error code of the token error.
