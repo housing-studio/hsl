@@ -62,6 +62,7 @@ public class ParserRegistry {
             PrefixOperatorParser.class,
             PostfixOperatorParser.class,
             AssignmentOperatorParser.class,
+            EnumParser.class,
         };
 
         for (Class<?> parser : parsers) {

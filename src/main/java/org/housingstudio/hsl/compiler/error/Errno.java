@@ -287,7 +287,24 @@ public enum Errno {
      * `NOT_IMPLEMENTED_FEATURE` indicates, that a compiler feature use was syntactically correct, but the underlying
      * infrastructure is not implemented yet.
      */
-    NOT_IMPLEMENTED_FEATURE(154);
+    NOT_IMPLEMENTED_FEATURE(154),
+
+    /**
+     * `ENUM_MEMBER_MISMATCH` indicates, that an enum declaration mixed the use of value and sum members.
+     */
+    ENUM_MEMBER_MISMATCH(155),
+
+    /**
+     * `MISSING_ENUM_TYPE_ALIAS` indicates, that an enum member is a value type, but the enum itself does not declare
+     * a type alias.
+     */
+    MISSING_ENUM_TYPE_ALIAS(156),
+
+    /**
+     * `ENUM_MEMBER_VALUE_TYPE_MISMATCH` indicates, that a value enum expected a T type, but the member's value is not
+     * of type T.
+     */
+    ENUM_MEMBER_VALUE_TYPE_MISMATCH(157);
 
     /**
      * The error code of the token error.

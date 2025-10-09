@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Enum;
 import org.housingstudio.hsl.compiler.parser.impl.operator.*;
 import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
@@ -167,6 +168,10 @@ public class AstParser {
         return parse(AssignmentOperatorParser.class, Node.class);
     }
 
+    public @NotNull Enum nextEnum() {
+        return parse(EnumParser.class, Enum.class);
+    }
+
     public void parseGame(@NotNull Game game) {
         while (context.peek().hasNext()) {
             if (context.peek().is(TokenType.EXPRESSION, "fn")) {
@@ -237,6 +242,11 @@ public class AstParser {
                 }
 
                 game.constants().put(constant.name().value(), constant);
+            }
+
+            else if (context.peek().is(TokenType.EXPRESSION, "enum")) {
+                Enum anEnum = nextEnum();
+                System.out.println(anEnum.print());
             }
 
             else if (context.peek().is(TokenType.ANNOTATION)) {

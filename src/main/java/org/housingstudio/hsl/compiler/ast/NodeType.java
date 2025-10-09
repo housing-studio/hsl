@@ -10,6 +10,8 @@ public enum NodeType {
 
     LITERAL,
     CONSTANT,
+    ENUM,
+    ENUM_MEMBER,
     BUILTIN,
 
     LOCAL_DECLARE,
