@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
@@ -16,6 +17,7 @@ import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,7 +25,7 @@ import java.util.List;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.ENUM)
-public class Enum extends Node implements Printable {
+public class Enum extends Node implements Type, Printable {
     private final @NotNull Token name;
     private final @Nullable Type alias;
     private final @NotNull Kind kind;
@@ -34,6 +36,19 @@ public class Enum extends Node implements Printable {
     @Override
     public void init() {
         validateMemberValues();
+    }
+
+    public @NotNull Enum.Member lookupMember(@NotNull Token name) {
+        for (Member member : members) {
+            if (member.name.value().equals(name.value()))
+                return member;
+        }
+
+        context.errorPrinter().print(
+            Notification.error(Errno.MISSING_ENUM_MEMBER, "missing enum member")
+                .error("enum `" + this.name.value() + " has no member `" + name.value() + "`", name)
+        );
+        throw new IllegalStateException("No such enum member '" + name.value() + "'");
     }
 
     private void validateMemberValues() {
@@ -76,6 +91,33 @@ public class Enum extends Node implements Printable {
 
         builder.append("}\n");
         return builder.toString();
+    }
+
+    @Override
+    public @NotNull BaseType base() {
+        return BaseType.ENUM;
+    }
+
+    /**
+     * Indicate, whether the specified node matches the criteria of the matcher.
+     *
+     * @param other the node to compare to
+     * @return {@code true} if the node matches the criteria, {@code false} otherwise
+     */
+    @Override
+    public boolean matches(@NotNull Type other) {
+        if (!(other instanceof Enum))
+            return false;
+
+        Enum o = (Enum) other;
+        // should be a more precise check, but currently everything is one package level
+        // and type names are unique
+        return o.name.value().equals(name.value());
+    }
+
+    @Override
+    public @NotNull List<Token> tokens() {
+        return Collections.singletonList(name);
     }
 
     public enum Kind {

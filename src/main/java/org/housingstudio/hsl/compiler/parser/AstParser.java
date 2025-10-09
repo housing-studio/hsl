@@ -245,8 +245,17 @@ public class AstParser {
             }
 
             else if (context.peek().is(TokenType.EXPRESSION, "enum")) {
-                Enum anEnum = nextEnum();
-                System.out.println(anEnum.print());
+                Enum enumNode = nextEnum();
+
+                if (game.enums().containsKey(enumNode.name().value())) {
+                    context.errorPrinter().print(
+                        Notification.error(Errno.ENUM_ALREADY_DEFINED, "enum already defined")
+                            .error("enum is already declared in this scope", enumNode.name())
+                    );
+                    throw new UnsupportedOperationException("Enum name is already in use: " + enumNode.name().value());
+                }
+
+                game.enums().put(enumNode.name().value(), enumNode);
             }
 
             else if (context.peek().is(TokenType.ANNOTATION)) {

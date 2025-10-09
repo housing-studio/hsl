@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.ChildrenResolver;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
@@ -99,6 +100,19 @@ public abstract class Node {
      */
     public @Nullable Variable resolveName(@NotNull String name) {
         return parent != null ? parent.resolveName(name) : null;
+    }
+
+    /**
+     * Resolve a user-defined type declaration by its specified name.
+     * <p>
+     * If a node does not override this logic, by default it will try to resolve the type from the {@link #parent()}
+     * node.
+     *
+     * @param name the name of the type to resolve
+     * @return the type definition or {@code null} if the type is not found
+     */
+    public @Nullable Type resolveType(@NotNull String name) {
+        return parent != null ? parent.resolveType(name) : null;
     }
 
     /**

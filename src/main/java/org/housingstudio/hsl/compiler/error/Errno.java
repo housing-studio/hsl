@@ -304,7 +304,22 @@ public enum Errno {
      * `ENUM_MEMBER_VALUE_TYPE_MISMATCH` indicates, that a value enum expected a T type, but the member's value is not
      * of type T.
      */
-    ENUM_MEMBER_VALUE_TYPE_MISMATCH(157);
+    ENUM_MEMBER_VALUE_TYPE_MISMATCH(157),
+
+    /**
+     * `ENUM_ALREADY_DEFINED` indicates, that an enum with the specified name is already defined.
+     */
+    ENUM_ALREADY_DEFINED(158),
+
+    /**
+     * `MISSING_ENUM_MEMBER` indicates, that the specified member could not be found for the target enum.
+     */
+    MISSING_ENUM_MEMBER(159),
+
+    /**
+     * `UNKNOWN_TYPE` indicates, that the specified type could not be resolved.
+     */
+    UNKNOWN_TYPE(160);
 
     /**
      * The error code of the token error.

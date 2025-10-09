@@ -19,6 +19,8 @@ public enum BaseType {
     NIL("nil", true, true),
     COORD("coord", true, true),
 
+    ENUM("enum", false, true),
+
     SLOT("Slot", false, true),
     LOCATION("Location", false, true),
     GAME_MODE("GameMode", false, true),

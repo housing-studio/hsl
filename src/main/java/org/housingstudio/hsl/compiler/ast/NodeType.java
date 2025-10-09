@@ -12,6 +12,7 @@ public enum NodeType {
     CONSTANT,
     ENUM,
     ENUM_MEMBER,
+    ENUM_LOOKUP,
     BUILTIN,
 
     LOCAL_DECLARE,

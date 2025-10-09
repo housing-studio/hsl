@@ -1,5 +1,6 @@
 package org.housingstudio.hsl.compiler.parser.impl.value;
 
+import org.housingstudio.hsl.compiler.ast.impl.value.EnumLookup;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.*;
 import org.housingstudio.hsl.compiler.debug.Format;
@@ -24,6 +25,7 @@ import org.housingstudio.hsl.std.slot.impl.InventorySlot;
 import org.housingstudio.hsl.std.slot.impl.StaticSlot;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.stream.Stream;
 
 public class BuiltinValueParser extends ParserAlgorithm<Value> {
@@ -91,16 +93,24 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case "Permission":
                 return parsePermission(context);
             default:
-                context.errorPrinter().print(
-                    Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid builtin type")
-                        .error("unrecognized builtin type skid", type)
-                        .note(
-                            "read about builtin types at " + Format.LIGHT_BLUE +
-                            "https://docs.housing-studio.org/documentation/types"
-                        )
-                );
-                throw new UnsupportedOperationException("Invalid builtin type: " + type);
+                return parseEnumLookup(type, parser, context);
         }
+    }
+
+    private @NotNull Value parseEnumLookup(@NotNull Token type, @NotNull AstParser parser, @NotNull ParserContext context) {
+        Token member = get(TokenType.IDENTIFIER);
+        return new EnumLookup(type, member, Collections.emptyList());
+        /*
+        context.errorPrinter().print(
+            Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid builtin type")
+                .error("unrecognized builtin type", type)
+                .note(
+                    "read about builtin types at " + Format.LIGHT_BLUE +
+                        "https://docs.housing-studio.org/documentation/types"
+                )
+        );
+        throw new UnsupportedOperationException("Invalid builtin type: " + type);
+         */
     }
 
     private @NotNull Value parseSlot(@NotNull AstParser parser, @NotNull ParserContext context) {
