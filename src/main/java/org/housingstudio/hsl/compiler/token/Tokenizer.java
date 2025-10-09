@@ -747,22 +747,22 @@ public class Tokenizer implements TokenContext {
      */
     private boolean isOperator(char c) {
         switch (c) {
-            case '.':
-            case '=':
-            case '+':
-            case '-':
-            case '*':
-            case '/':
-            case '<':
-            case '>':
-            case '?':
-            case '!':
-            case '^':
-            case '&':
-            case '~':
-            case '$':
-            case '|':
-            case '%':
+            case '.': // field lookup
+            case '=': // assign
+            case '+': // add
+            case '-': // subtract/negate
+            case '*': // multiply
+            case '/': // divide
+            case '<': // less than
+            case '>': // more than
+            case '?': // ternary operator
+            case '!': // not operator
+            case '^': // bitwise xor
+            case '&': // bitwise operator
+            case '~': // bitwise not
+            case '$': // template literal
+            case '|': // bitwise or
+            case '%': // modulo
                 return true;
             default:
                 return false;

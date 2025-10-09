@@ -17,6 +17,7 @@ public enum BaseType {
     ANY("any", true, true),
     ARRAY("[]", true, false),
     NIL("nil", true, true),
+    COORD("coord", true, true),
 
     SLOT("Slot", false, true),
     LOCATION("Location", false, true),

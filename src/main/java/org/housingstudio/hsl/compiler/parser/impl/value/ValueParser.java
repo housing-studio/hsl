@@ -1,5 +1,6 @@
 package org.housingstudio.hsl.compiler.parser.impl.value;
 
+import org.housingstudio.hsl.compiler.ast.impl.value.Coordinate;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
@@ -31,8 +32,17 @@ public class ValueParser extends ParserAlgorithm<Value> {
         if (peek().isLiteral())
             return parser.nextLiteral();
 
+        // handle prefix operators
+        // stat player foo: -10
         else if (peek().is(TokenType.OPERATOR, "-"))
             return parser.nextPrefixOperator();
+
+        // handle relative coordinate sign
+        else if (peek().is(TokenType.IDENTIFIER, "r") && at(cursor() + 1).is(TokenType.COLON)) {
+            get(TokenType.IDENTIFIER, "r");
+            get(TokenType.COLON);
+            return new Coordinate(Coordinate.Kind.RELATIVE, parser.nextValue());
+        }
 
         // handle explicit type conversion
         else if (
@@ -81,7 +91,7 @@ public class ValueParser extends ParserAlgorithm<Value> {
 
         context.errorPrinter().print(
             Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected value")
-                .error("token " + peek().print() + " is not a value", peek())
+                .error("token " + peek().value() + " is not a value", peek())
         );
         throw new UnsupportedOperationException("Unsupported value type: " + peek());
     }
