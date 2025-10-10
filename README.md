@@ -1,4 +1,4 @@
-# Hypixel Scripting Language (HSL)
+# Housing Scripting Language (HSL)
 
 **Hypixel Housing editor with superpowers.**
 

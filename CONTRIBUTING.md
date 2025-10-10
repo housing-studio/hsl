@@ -1,4 +1,4 @@
-# Contributing to HSL (Hypixel Scripting Language)
+# Contributing to HSL (Housing Scripting Language)
 
 Thanks for considering contributing to **HSL**! We're excited to have you involved. Please take a moment to read through this guide to help streamline your contributions.
 
