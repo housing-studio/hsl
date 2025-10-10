@@ -18,7 +18,8 @@ import java.util.Map;
 @UtilityClass
 public class ArgumentParser {
     public @NotNull Map<String, Value> parseArguments(
-        @NotNull ParserContext context, @NotNull Token name, @NotNull List<Parameter> parameters, @NotNull List<Argument> arguments
+        @NotNull ParserContext context, @NotNull Token name, @NotNull List<Parameter> parameters,
+        @NotNull List<Argument> arguments
     ) {
         Map<String, Value> result = new LinkedHashMap<>(); // preserve parameter order
         Map<String, Integer> paramIndex = new HashMap<>();
@@ -47,7 +48,7 @@ public class ArgumentParser {
 
                 if (nextPosParam >= parameters.size()) {
                     context.errorPrinter().print(
-                        Notification.error(Errno.TOO_MANY_POSITIONAL_ARGUMENTS, "too many positional arguments")
+                        Notification.error(Errno.TOO_MANY_POSITIONAL_ARGUMENTS, "too many positional arguments (max: " + parameters.size() + ", given: " + arguments.size() + ")")
                             .error("expected " + parameters.size() + " positional arguments, but found " + arguments.size(), name)
                     );
                     throw new IllegalArgumentException("Too many positional arguments.");
@@ -61,7 +62,7 @@ public class ArgumentParser {
                 seenNamed = true;
                 if (!paramIndex.containsKey(arg.name().value())) {
                     context.errorPrinter().print(
-                        Notification.error(Errno.UNKNOWN_NAMED_ARGUMENT, "unknown named argument")
+                        Notification.error(Errno.UNKNOWN_NAMED_ARGUMENT, "unknown named argument: " + arg.name().value())
                             .error("unknown named argument: `" + arg.name().value() + "`", name)
                     );
                     throw new IllegalArgumentException("Unknown named argument: " + arg.name().value());
@@ -69,7 +70,7 @@ public class ArgumentParser {
 
                 if (namedArgs.containsKey(arg.name().value())) {
                     context.errorPrinter().print(
-                        Notification.error(Errno.DUPLICATE_NAMED_ARGUMENT, "duplicate named argument")
+                        Notification.error(Errno.DUPLICATE_NAMED_ARGUMENT, "duplicate named argument: " + arg.name().value())
                             .error("duplicate named argument: `" + arg.name().value() + "`", name)
                     );
                     throw new IllegalArgumentException("Duplicate named argument: " + arg.name().value());
@@ -83,7 +84,7 @@ public class ArgumentParser {
         for (Map.Entry<String, Value> e : namedArgs.entrySet()) {
             if (result.containsKey(e.getKey())) {
                 context.errorPrinter().print(
-                    Notification.error(Errno.MULTIPLE_ARGUMENT_VALUES, "multiple argument values")
+                    Notification.error(Errno.MULTIPLE_ARGUMENT_VALUES, "multiple argument values for parameter: " + e.getKey())
                         .error("parameter `" + e.getKey() + "` received multiple arguments", name)
                 );
                 throw new IllegalArgumentException("Multiple values for argument: " + e.getKey());
@@ -99,7 +100,7 @@ public class ArgumentParser {
                     result.put(p.name().value(), p.defaultValue());
                 else {
                     context.errorPrinter().print(
-                        Notification.error(Errno.MISSING_REQUIRED_ARGUMENT, "missing required argument")
+                        Notification.error(Errno.MISSING_REQUIRED_ARGUMENT, "missing required argument: " + p.name().value())
                             .error("missing required argument: " + p.name().value(), name)
                     );
                     throw new IllegalArgumentException("Missing required argument: " + p.name().value());
