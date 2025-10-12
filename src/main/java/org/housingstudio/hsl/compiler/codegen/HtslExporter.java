@@ -17,9 +17,8 @@ public class HtslExporter {
         while (functions.hasNext()) {
             Function function = functions.next();
             builder.append(exportFunction(function));
-            if (functions.hasNext()) {
+            if (functions.hasNext())
                 builder.append("\n");
-            }
         }
 
         builder.append("\n");
@@ -31,13 +30,11 @@ public class HtslExporter {
         StringBuilder builder = new StringBuilder();
         builder.append("goto function \"").append(function.name()).append("\"").append("\n");
 
-        Iterator<Action> actions = function.actions().iterator();
-        while (actions.hasNext()) {
-            Action action = actions.next();
-            builder.append(action.asHTSL().build());
-            if (actions.hasNext())
-                builder.append("\n");
-        }
+        for (Action action : function.actions())
+            builder.append(action.asHTSL().build()).append("\n");
+
+        if (function.actions().isEmpty())
+            builder.append("// empty function");
 
         return builder.toString();
     }

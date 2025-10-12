@@ -81,9 +81,8 @@ public class Conditional implements Action {
         if (!elseActions.isEmpty()) {
             builder.append(" else {\n");
 
-            for (Action elseAction : elseActions) {
+            for (Action elseAction : elseActions)
                 builder.append("\t").append(elseAction.asHTSL().build()).append("\n");
-            }
 
             builder.append("}");
         }
