@@ -12,6 +12,8 @@ import org.housingstudio.hsl.compiler.error.ErrorMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.jar.Manifest;
 
@@ -142,10 +144,14 @@ public class CLI {
 
             House export = compiler.export();
             if (htsl) {
+                String header = loadResource("htsl.header")
+                    .replace("%project.name%", metadata.id())
+                    .replace("%project.author%", metadata.author() != null ? metadata.author() : "N/A")
+                    .replace("%build.timestamp%", DateTimeFormatter.ISO_INSTANT.format(Instant.now()));
                 String htslData = HtslExporter.export(export);
 
                 exportFile = new File(targetDir, metadata.id() + ".htsl");
-                writeFile(exportFile, htslData);
+                writeFile(exportFile, header + htslData);
             } else {
                 String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);
                 exportFile = new File(targetDir, metadata.id() + ".json");
