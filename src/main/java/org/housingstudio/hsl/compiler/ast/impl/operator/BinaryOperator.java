@@ -11,6 +11,8 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +43,8 @@ public class BinaryOperator extends Value {
      */
     private final @NotNull Operator operator;
 
+    private final @NotNull Token operatorToken;
+
     /**
      * The right-hand side value of the operation.
      */
@@ -56,6 +60,39 @@ public class BinaryOperator extends Value {
     @Override
     public @NotNull Type getValueType() {
         return lhs.getValueType();
+    }
+
+    @Override
+    public void init() {
+        if (!lhs.getValueType().matches(rhs.getValueType())) {
+            context.errorPrinter().print(
+                Notification.error(Errno.OPERATOR_TYPE_MISMATCH, "operator type mismatch")
+                    .error(
+                        String.format(
+                            "operator type mismatch (lhs: %s, rhs: %s)", lhs.getValueType().print(),
+                            rhs.getValueType().print()
+                        ),
+                        operatorToken
+                    )
+                    .note("make sure LHS and RHS are the same type")
+            );
+            throw new UnsupportedOperationException(
+                String.format(
+                    "Operator type mismatch (lhs: %s, rhs: %s)",
+                    lhs.getValueType().print(), rhs.getValueType().print()
+                )
+            );
+        }
+
+        if (!supported()) {
+            context.errorPrinter().print(
+                Notification.error(Errno.UNEXPECTED_OPERAND, "unexpected operand")
+                    .error("operator not supported for type: " + lhs.getValueType().print(), operatorToken)
+            );
+            throw new UnsupportedOperationException(
+                "Operator not supported for type: " + lhs.getValueType().print()
+            );
+        }
     }
 
     /**

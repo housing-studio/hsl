@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.Enum;
 import org.housingstudio.hsl.compiler.parser.impl.control.ForLoopParser;
 import org.housingstudio.hsl.compiler.parser.impl.control.WhileLoopParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.*;
+import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.builder.ConditionBuilder;
@@ -134,8 +135,8 @@ public class AstParser {
         return parse(AnnotationParser.class, Annotation.class);
     }
 
-    public @NotNull Value nextBinaryOperation(@NotNull Value lhs, @NotNull Operator operator, @NotNull Value rhs) {
-        return BinaryOperatorTree.makeBinaryOperator(lhs, operator, rhs);
+    public @NotNull Value nextBinaryOperation(@NotNull Value lhs, @NotNull Operator operator, @NotNull Token operatorToken, @NotNull Value rhs) {
+        return BinaryOperatorTree.makeBinaryOperator(lhs, operator, operatorToken, rhs);
     }
 
     public @NotNull Value nextInterpolation() {

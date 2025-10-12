@@ -3,6 +3,7 @@ package org.housingstudio.hsl.compiler.parser.impl.operator;
 import org.housingstudio.hsl.compiler.ast.impl.operator.BinaryOperator;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,9 +34,9 @@ public class BinaryOperatorTree {
      * @return a new binary operation node
      */
     public static @NotNull Value makeBinaryOperator(
-        @NotNull Value lhs, @NotNull Operator operator, @NotNull Value rhs
+        @NotNull Value lhs, @NotNull Operator operator, @NotNull Token operatorToken, @NotNull Value rhs
     ) {
-        return updateOperationTree(new BinaryOperator(lhs, operator, rhs));
+        return updateOperationTree(new BinaryOperator(lhs, operator, operatorToken, rhs));
     }
 
     /**

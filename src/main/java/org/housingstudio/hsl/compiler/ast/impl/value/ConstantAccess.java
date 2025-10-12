@@ -53,12 +53,6 @@ public class ConstantAccess extends Value {
      */
     @Override
     public @NotNull Type getValueType() {
-        // During parsing, the parent hierarchy hasn't been set up yet, so we can't resolve names.
-        // In this case, return ANY type to defer type checking until later.
-        if (parent() == null) {
-            return Types.ANY;
-        }
-
         Value value = load();
         if (accessStack.contains(value)) {
             context.errorPrinter().print(

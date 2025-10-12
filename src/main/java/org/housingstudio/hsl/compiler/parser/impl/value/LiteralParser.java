@@ -55,46 +55,13 @@ public class LiteralParser extends ParserAlgorithm<Value> {
                 return literal;
 
             // parse the target operator of the operation
+            Token operatorToken  = peek(TokenType.OPERATOR);
             Operator operator = parser.nextOperator();
 
             // TODO handle non-binary operators
             Value rhs = parser.nextValue();
 
-            if (!literal.getValueType().matches(rhs.getValueType())) {
-                context.errorPrinter().print(
-                    Notification.error(Errno.OPERATOR_TYPE_MISMATCH, "operator type mismatch")
-                        .error(
-                            String.format(
-                                "operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType().print(),
-                                rhs.getValueType().print()
-                            ),
-                            token
-                        )
-                        .note(
-                            "consider explicit type conversion",
-                            "\"total balance: \" + string(balance)"
-                        )
-                );
-                throw new UnsupportedOperationException(
-                    String.format(
-                        "Operator type mismatch (lhs: %s, rhs: %s)", literal.getValueType().print(),
-                        rhs.getValueType().print()
-                    )
-                );
-            }
-
-            BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(literal, operator, rhs);
-            if (!operation.supported()) {
-                context.errorPrinter().print(
-                    Notification.error(Errno.UNEXPECTED_OPERAND, "unexpected operand")
-                        .error("operator not supported for type: " + literal.getValueType().print(), token)
-                );
-                throw new UnsupportedOperationException(
-                    "Operator not supported for type: " + literal.getValueType().print()
-                );
-            }
-
-            return operation;
+            return parser.nextBinaryOperation(literal, operator, operatorToken, rhs);
         }
 
         // handle group closing

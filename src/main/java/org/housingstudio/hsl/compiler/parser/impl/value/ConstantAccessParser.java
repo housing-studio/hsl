@@ -55,43 +55,13 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
                 return access;
 
             // parse the target operator of the operation
+            Token operatorToken = peek(TokenType.OPERATOR);
             Operator operator = parser.nextOperator();
 
             // TODO handle non-binary operators
             Value rhs = parser.nextValue();
 
-            if (!access.getValueType().matches(rhs.getValueType())) {
-                context.errorPrinter().print(
-                    Notification.error(Errno.OPERATOR_TYPE_MISMATCH, "operator type mismatch")
-                        .error(
-                            String.format(
-                                "operator type mismatch (lhs: %s, rhs: %s)", access.getValueType().print(),
-                                rhs.getValueType().print()
-                            ),
-                            first
-                        )
-                        .note("make sure LHS and RHS are the same type")
-                );
-                throw new UnsupportedOperationException(
-                    String.format(
-                        "Operator type mismatch (lhs: %s, rhs: %s)",
-                        access.getValueType().print(), rhs.getValueType().print()
-                    )
-                );
-            }
-
-            BinaryOperator operation = (BinaryOperator) parser.nextBinaryOperation(access, operator, rhs);
-            if (!operation.supported()) {
-                context.errorPrinter().print(
-                    Notification.error(Errno.UNEXPECTED_OPERAND, "unexpected operand")
-                        .error("operator not supported for type: " + access.getValueType(), first)
-                );
-                throw new UnsupportedOperationException(
-                    "Operator not supported for type: " + access.getValueType().print()
-                );
-            }
-
-            return operation;
+            return parser.nextBinaryOperation(access, operator, operatorToken, rhs);
         }
 
         return access;
