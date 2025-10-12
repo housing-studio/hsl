@@ -36,7 +36,7 @@ public class RequiredGroup implements Condition {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Condition.HAS_GROUP.invoke()
-            .set("required_group", requiredGroup)
+            .setString("required_group", requiredGroup)
             .set("include_higher_groups", requireHigherGroups);
     }
 }

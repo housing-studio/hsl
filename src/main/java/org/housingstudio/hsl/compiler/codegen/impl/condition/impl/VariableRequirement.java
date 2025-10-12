@@ -60,7 +60,7 @@ public class VariableRequirement implements Condition {
                     throw new IllegalStateException("Unexpected namespace: " + namespace);
             }
             return base.invoke()
-                .set("variable", variable)
+                .setString("variable", variable)
                 .setComparator("comparator", comparator)
                 .set("compare_value", value)
                 .set("fallback_value", fallback);
@@ -79,7 +79,7 @@ public class VariableRequirement implements Condition {
                     throw new IllegalStateException("Unexpected namespace: " + namespace);
             }
             return base.invoke()
-                .set("variable", variable)
+                .setString("variable", variable)
                 .setComparator("comparator", comparator)
                 .set("compare_value", value);
         }

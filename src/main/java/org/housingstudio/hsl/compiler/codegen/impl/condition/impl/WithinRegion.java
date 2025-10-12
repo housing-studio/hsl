@@ -31,6 +31,6 @@ public class WithinRegion implements Condition {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Condition.IN_REGION.invoke()
-            .set("region", region);
+            .setString("region", region);
     }
 }

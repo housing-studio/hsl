@@ -31,6 +31,6 @@ public class RequiredTeam implements Condition {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Condition.HAS_TEAM.invoke()
-            .set("required_team", requiredTeam);
+            .setString("required_team", requiredTeam);
     }
 }

@@ -36,7 +36,7 @@ public class PlaceholderNumberRequirement implements Condition {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Condition.PLACEHOLDER.invoke()
-            .set("placeholder", placeholder)
+            .setString("placeholder", placeholder)
             .setComparator("comparator", comparator)
             .set("compare_value", compareValue);
     }

@@ -45,7 +45,7 @@ public class HasItem implements Condition {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Condition.HAS_ITEM.invoke()
-            .set("item", material)
+            .setMaterial("item", material)
             .set("what_to_check", whatToCheck)
             .set("where_to_check", whereToCheck)
             .set("required_amount", requiredAmount);
