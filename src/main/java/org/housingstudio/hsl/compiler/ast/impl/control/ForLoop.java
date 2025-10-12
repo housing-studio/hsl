@@ -6,6 +6,9 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.CommandNode;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Event;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
@@ -26,12 +29,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.FOR_LOOP)
 public class ForLoop extends ScopeContainer implements ActionBuilder, Printable {
+    private static final AtomicInteger COUNTER = new AtomicInteger(0);
+
+    private final int id = COUNTER.incrementAndGet();
+
     @Children
     private final @Nullable Node decl;
 
@@ -48,16 +56,20 @@ public class ForLoop extends ScopeContainer implements ActionBuilder, Printable 
 
     private boolean created;
 
+    private String initName, tickName, mergeName;
     private @Nullable Method initFn, tickFn, mergeFn;
 
     @Override
     public void init() {
+        initName = magnleName("init");
+        tickName = magnleName("tick");
+        mergeName = magnleName("merge");
         createFunctions();
     }
 
     @Override
     public @NotNull Action buildAction() {
-        return new TriggerFunction("for:init", false);
+        return new TriggerFunction(initName, false);
     }
 
     private void createFunctions() {
@@ -75,11 +87,28 @@ public class ForLoop extends ScopeContainer implements ActionBuilder, Printable 
         created = true;
     }
 
+    private @NotNull String magnleName(@NotNull String name) {
+        ScopeContainer node = getUnderlyingMethod();
+        String prefix = "";
+        String nodeName = "";
+        if (node instanceof Method) {
+            prefix = "method";
+            nodeName = ((Method) node).name().value();
+        } else if (node instanceof Macro) {
+            prefix = "macro";
+            nodeName = ((Macro) node).name().value();
+        } else if (node instanceof CommandNode) {
+            prefix = "command";
+            nodeName = ((CommandNode) node).name().value();
+        }
+        return String.format("%s:%s:for:%d:%s", prefix, nodeName, id, name);
+    }
+
     private @NotNull Method createInitFn() {
         if (!(decl instanceof ActionBuilder))
             throw new IllegalStateException("For loop declaration must build actions");
 
-        return createGenericFn("for:init", new Scope(Collections.singletonList(decl)));
+        return createGenericFn(initName, new Scope(Collections.singletonList(decl)));
     }
 
     private @NotNull Method createTickFn() {
@@ -96,12 +125,12 @@ public class ForLoop extends ScopeContainer implements ActionBuilder, Printable 
 
         // then call the next loop iteration
         iteration.add(new StaticActionBuilder(new PauseExecution(5))); // hacky workaround for function spam filter
-        iteration.add(new StaticActionBuilder(new TriggerFunction("fn:tick", false)));
+        iteration.add(new StaticActionBuilder(new TriggerFunction(tickName, false)));
 
         // finally, if the for statement has a condition, wrap this logic into an if-else action
         if (conditions != null) {
             Scope elseScope = new Scope(Collections.singletonList(
-                new StaticActionBuilder(new TriggerFunction("fn:merge", false))
+                new StaticActionBuilder(new TriggerFunction(mergeName, false))
             ));
 
             ConditionalNode conditional = new ConditionalNode(
@@ -110,7 +139,7 @@ public class ForLoop extends ScopeContainer implements ActionBuilder, Printable 
             iteration = Collections.singletonList(conditional);
         }
 
-        return createGenericFn("for:tick", new Scope(iteration));
+        return createGenericFn(tickName, new Scope(iteration));
     }
 
     @RequiredArgsConstructor
@@ -125,7 +154,7 @@ public class ForLoop extends ScopeContainer implements ActionBuilder, Printable 
     }
 
     private @NotNull Method createMergeFn() {
-        return createGenericFn("fn:merge", Scope.EMPTY);
+        return createGenericFn(mergeName, Scope.EMPTY);
     }
 
     private @NotNull Method createGenericFn(@NotNull String name, @NotNull Scope scope) {
@@ -136,6 +165,18 @@ public class ForLoop extends ScopeContainer implements ActionBuilder, Printable 
 
     private void registerFn(@NotNull Method fn) {
         game.functions().put(fn.name().value(), fn);
+    }
+
+    private @NotNull ScopeContainer getUnderlyingMethod() {
+        Node parent = parent();
+        while (parent != null) {
+            if (parent instanceof Method || parent instanceof Macro || parent instanceof CommandNode)
+                return (ScopeContainer) parent;
+            if (parent instanceof Event || parent instanceof Random)
+                break;
+            parent = parent.parent();
+        }
+        throw new IllegalStateException("Unable to resolve underlying method");
     }
 
     /**
