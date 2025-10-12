@@ -1,6 +1,6 @@
 package org.housingstudio.hsl.compiler.codegen.impl.condition;
 
-import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.interop.htsl.HtslInvocation;
 import org.jetbrains.annotations.NotNull;
 
 public interface Condition {

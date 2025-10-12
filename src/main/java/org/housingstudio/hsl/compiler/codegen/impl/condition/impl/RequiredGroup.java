@@ -8,8 +8,8 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.Condition;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.ConditionType;
-import org.housingstudio.hsl.compiler.codegen.impl.htsl.HTSL;
-import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.interop.htsl.HTSL;
+import org.housingstudio.hsl.compiler.codegen.interop.htsl.HtslInvocation;
 import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor

@@ -1,4 +1,4 @@
-package org.housingstudio.hsl.compiler.codegen;
+package org.housingstudio.hsl.compiler.codegen.interop.htsl;
 
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;

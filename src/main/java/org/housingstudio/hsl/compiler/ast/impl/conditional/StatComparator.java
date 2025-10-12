@@ -15,7 +15,7 @@ import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.Condition;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.ConditionType;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.impl.VariableRequirement;
-import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.interop.htsl.HtslInvocation;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;

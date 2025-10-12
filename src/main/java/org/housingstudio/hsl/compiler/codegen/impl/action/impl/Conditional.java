@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.Condition;
-import org.housingstudio.hsl.compiler.codegen.impl.htsl.HtslInvocation;
+import org.housingstudio.hsl.compiler.codegen.interop.htsl.HtslInvocation;
 import org.housingstudio.hsl.importer.interaction.InteractionTarget;
 import org.housingstudio.hsl.importer.interaction.InteractionType;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;

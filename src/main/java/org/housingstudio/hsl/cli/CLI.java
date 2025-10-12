@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder;
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.Main;
 import org.housingstudio.hsl.compiler.Compiler;
-import org.housingstudio.hsl.compiler.codegen.HtslExporter;
+import org.housingstudio.hsl.compiler.codegen.interop.htsl.HtslExporter;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.codegen.impl.house.House;
 import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;

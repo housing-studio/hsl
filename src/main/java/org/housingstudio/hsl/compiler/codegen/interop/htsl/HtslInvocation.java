@@ -1,4 +1,4 @@
-package org.housingstudio.hsl.compiler.codegen.impl.htsl;
+package org.housingstudio.hsl.compiler.codegen.interop.htsl;
 
 import lombok.RequiredArgsConstructor;
 import org.housingstudio.hsl.std.*;
