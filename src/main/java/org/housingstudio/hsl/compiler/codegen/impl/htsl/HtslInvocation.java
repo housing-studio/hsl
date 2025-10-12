@@ -49,7 +49,27 @@ public class HtslInvocation {
     }
 
     public @NotNull HtslInvocation setComparator(@NotNull String key, @NotNull Comparator comparator) {
-        return set(key, comparator.format());
+        String value;
+        switch (comparator) {
+            case LESS_THAN:
+                value = "<";
+                break;
+            case LESS_THAN_OR_EQUAL:
+                value = "<=";
+                break;
+            case EQUAL:
+                value = "=";
+                break;
+            case GREATER_THAN:
+                value = ">";
+                break;
+            case GREATER_THAN_OR_EQUAL:
+                value = ">=";
+                break;
+            default:
+                return this;
+        }
+        return set(key, value);
     }
 
     public @NotNull HtslInvocation setPermission(@NotNull String key, @NotNull Permission permission) {

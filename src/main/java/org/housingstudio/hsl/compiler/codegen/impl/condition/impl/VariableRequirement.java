@@ -45,7 +45,7 @@ public class VariableRequirement implements Condition {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         HtslCommand base;
-        if (fallback != null) {
+        if (fallback != null && !fallback.isEmpty()) {
             switch (namespace) {
                 case GLOBAL:
                     base = HTSL.Condition.GLOBAL_VAR;
@@ -73,7 +73,7 @@ public class VariableRequirement implements Condition {
                     base = HTSL.Condition.TEAM_STAT;
                     break;
                 case PLAYER:
-                    base = HTSL.Condition.VAR;
+                    base = HTSL.Condition.STAT;
                     break;
                 default:
                     throw new IllegalStateException("Unexpected namespace: " + namespace);

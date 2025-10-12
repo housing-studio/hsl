@@ -16,6 +16,7 @@ import org.housingstudio.hsl.importer.interaction.defaults.DefaultBoolean;
 import org.housingstudio.hsl.importer.interaction.defaults.DefaultEmpty;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.List;
 
 @AllArgsConstructor
@@ -52,6 +53,41 @@ public class Conditional implements Action {
      */
     @Override
     public @NotNull HtslInvocation asHTSL() {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        StringBuilder builder = new StringBuilder();
+        builder.append("if ");
+        if (!conditions.isEmpty()) {
+            if (matchAnyCondition)
+                builder.append("or ");
+            else
+                builder.append("and ");
+        }
+        builder.append("(");
+
+        Iterator<Condition> conditions = this.conditions.iterator();
+        while (conditions.hasNext()) {
+            Condition condition = conditions.next();
+            builder.append(condition.asHTSL().build());
+            if (conditions.hasNext())
+                builder.append(", ");
+        }
+
+        builder.append(") {\n");
+
+        for (Action ifAction : this.ifActions)
+            builder.append("\t").append(ifAction.asHTSL().build()).append("\n");
+
+        builder.append("}");
+
+        if (!elseActions.isEmpty()) {
+            builder.append(" else {\n");
+
+            for (Action elseAction : elseActions) {
+                builder.append("\t").append(elseAction.asHTSL().build()).append("\n");
+            }
+
+            builder.append("}");
+        }
+
+        return new HtslInvocation(builder.toString());
     }
 }
