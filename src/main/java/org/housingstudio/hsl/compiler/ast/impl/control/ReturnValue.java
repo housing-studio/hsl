@@ -6,7 +6,11 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
+import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.runtime.vm.Frame;
 import org.housingstudio.hsl.runtime.vm.Instruction;
@@ -17,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @NodeInfo(type = NodeType.RETURN_VALUE)
 public class ReturnValue extends Node implements Instruction, Printable {
+    @Children
     private final @NotNull Value value;
 
     /**
@@ -31,6 +36,18 @@ public class ReturnValue extends Node implements Instruction, Printable {
 
     @Override
     public void execute(@NotNull Frame frame) {
-        frame.returnValue(value);
+        // For macros, evaluate the value to a constant and create a new ConstantLiteral
+        // This ensures macro parameters are resolved before the frame is destroyed
+        if (frame.target() instanceof Macro) {
+            String constantValue = value.asConstantValue();
+            // Parse the constant value based on the value type
+            if (value.getValueType().matches(Types.INT))
+                frame.returnValue(ConstantLiteral.ofInt(Integer.parseInt(constantValue)));
+            else if (value.getValueType().matches(Types.FLOAT))
+                frame.returnValue(ConstantLiteral.ofFloat(Float.parseFloat(constantValue)));
+            else
+                frame.returnValue(ConstantLiteral.ofString(constantValue));
+        } else
+            frame.returnValue(value);
     }
 }

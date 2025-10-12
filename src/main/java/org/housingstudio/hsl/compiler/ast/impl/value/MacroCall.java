@@ -96,13 +96,20 @@ public class MacroCall extends Value implements ActionListBuilder {
     @Override
     public @NotNull Value load() {
         Macro macro = resolveMacro();
-        Frame mainFrame = invoke(macro);
+        
+        // Set the current frame before invoking the macro
+        Frame previousFrame = Frame.current();
+        try {
+            Frame mainFrame = invoke(macro);
 
-        // pull return value from the call stack, if the macro returns a value
-        if (!macro.returnType().matches(Types.VOID))
-            return mainFrame.stack().pop();
+            // pull return value from the call stack, if the macro returns a value
+            if (!macro.returnType().matches(Types.VOID))
+                return mainFrame.stack().pop();
 
-        return new NullValue();
+            return new NullValue();
+        } finally {
+            Frame.setCurrent(previousFrame);
+        }
     }
 
     @Override

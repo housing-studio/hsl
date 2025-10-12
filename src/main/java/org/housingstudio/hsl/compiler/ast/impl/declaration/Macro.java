@@ -10,8 +10,11 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
+import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
+import org.housingstudio.hsl.compiler.ast.impl.value.MacroParameterAccessor;
+import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.NamingConvention;
 import org.housingstudio.hsl.compiler.error.Warning;
@@ -46,14 +49,29 @@ public class Macro extends ScopeContainer implements Invocable {
 
         Frame frame = new Frame(parent, name.value(), 0, 0, length, this);
 
-        for (; frame.cursor().get() < length; frame.cursor().incrementAndGet()) {
-            Node statement = statements.get(frame.cursor().get());
-            if (statement instanceof Instruction)
-                ((Instruction) statement).execute(frame);
-            else if (statement instanceof ActionBuilder)
-                frame.actions().add(((ActionBuilder) statement).buildAction());
-            else if (statement instanceof ActionListBuilder)
-                frame.actions().addAll(((ActionListBuilder) statement).buildActionList());
+        // Copy macro parameter values from parent frame's locals to this frame's locals
+        for (Parameter parameter : parameters) {
+            Value argValue = parent.locals().get(parameter.name().value());
+            if (argValue != null)
+                frame.locals().set(parameter.name().value(), argValue);
+        }
+
+        // Set this frame as the current frame for macro parameter resolution
+        Frame previousFrame = Frame.current();
+        try {
+            Frame.setCurrent(frame);
+
+            for (; frame.cursor().get() < length; frame.cursor().incrementAndGet()) {
+                Node statement = statements.get(frame.cursor().get());
+                if (statement instanceof Instruction)
+                    ((Instruction) statement).execute(frame);
+                else if (statement instanceof ActionBuilder)
+                    frame.actions().add(((ActionBuilder) statement).buildAction());
+                else if (statement instanceof ActionListBuilder)
+                    frame.actions().addAll(((ActionListBuilder) statement).buildActionList());
+            }
+        } finally {
+            Frame.setCurrent(previousFrame);
         }
 
         parent.actions().addAll(frame.actions());
@@ -92,5 +110,26 @@ public class Macro extends ScopeContainer implements Invocable {
     @Override
     public @NotNull List<ScopeContainer> getChildrenScopes() {
         return Collections.singletonList(scope);
+    }
+
+    /**
+     * Resolve a local variable or a global constant by its specified name.
+     * <p>
+     * For macros, this method first checks if the name matches any of the macro parameters,
+     * and if so, returns a MacroParameterAccessor. Otherwise, it delegates to the parent scope.
+     *
+     * @param name the name of the variable or constant to resolve
+     * @return the value of the variable or constant, or {@code null} if the name is not found
+     */
+    @Override
+    public @Nullable Variable resolveName(@NotNull String name) {
+        // first check if this is a macro parameter
+        for (Parameter parameter : parameters) {
+            if (parameter.name().value().equals(name))
+                return new MacroParameterAccessor(name, parameter.type());
+        }
+
+        // if not a parameter, delegate to parent scope
+        return super.resolveName(name);
     }
 }

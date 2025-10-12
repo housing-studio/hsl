@@ -133,6 +133,10 @@ public class BinaryOperator extends Value {
     public boolean supported() {
         BaseType type = lhs.getValueType().base();
 
+        // ANY type is considered supported for all operations (will be validated later)
+        if (type == BaseType.ANY)
+            return true;
+
         switch (operator) {
             case ADD:
                 return type.isNumber() || type == BaseType.STRING;

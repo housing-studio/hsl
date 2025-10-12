@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Accessors(fluent = true)
 @Getter
 public class Frame {
+    private static final ThreadLocal<Frame> CURRENT_FRAME = new ThreadLocal<>();
+
     private final List<Action> actions = new ArrayList<>();
 
     private final @Nullable Frame parent;
@@ -44,5 +46,16 @@ public class Frame {
         cursor.set(length);
         if (parent != null)
             parent.stack.push(value);
+    }
+
+    public static @Nullable Frame current() {
+        return CURRENT_FRAME.get();
+    }
+
+    public static void setCurrent(@Nullable Frame frame) {
+        if (frame == null)
+            CURRENT_FRAME.remove();
+        else
+            CURRENT_FRAME.set(frame);
     }
 }

@@ -3,11 +3,13 @@ package org.housingstudio.hsl.compiler.ast.impl.value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Constant;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -51,6 +53,12 @@ public class ConstantAccess extends Value {
      */
     @Override
     public @NotNull Type getValueType() {
+        // During parsing, the parent hierarchy hasn't been set up yet, so we can't resolve names.
+        // In this case, return ANY type to defer type checking until later.
+        if (parent() == null) {
+            return Types.ANY;
+        }
+
         Value value = load();
         if (accessStack.contains(value)) {
             context.errorPrinter().print(
@@ -103,20 +111,29 @@ public class ConstantAccess extends Value {
         //  To achieve this, you might want to make resolveName "generic" for both variables and constants.
         //  The current implementation of prioritizing variables is invalid - however you need to support anonymous
         //  constants first, as they are currently package-level only.
-        Variable variable = resolveName(name.value());
-        if (variable != null)
-            return new StatAccess(name, variable);
 
-        Constant constant = game.constants().get(name.value());
-        if (constant == null) {
-            context.errorPrinter().print(
-                Notification.error(Errno.UNKNOWN_VARIABLE, "cannot resolve name from scope", this)
-                    .error("unknown variable, stat or constant", name)
-            );
-            throw new UnsupportedOperationException("Cannot find constant: " + name.value());
+        // Try to resolve as a variable (including macro parameters)
+        Variable variable = resolveName(name.value());
+        if (variable != null) {
+            // If it's a macro parameter, return it directly
+            if (variable instanceof MacroParameterAccessor) {
+                return (MacroParameterAccessor) variable;
+            }
+            // Otherwise, create a StatAccess for regular variables
+            return new StatAccess(name, variable);
         }
 
-        return constant.value();
+        // Try to resolve as a constant
+        Constant constant = game.constants().get(name.value());
+        if (constant != null)
+            return constant.value();
+
+        // If we can't resolve it, throw an error
+        context.errorPrinter().print(
+            Notification.error(Errno.UNKNOWN_VARIABLE, "cannot resolve name from scope", this)
+                .error("unknown variable, stat or constant", name)
+        );
+        throw new UnsupportedOperationException("Cannot find constant: " + name.value());
     }
 
     /**
