@@ -59,20 +59,20 @@ public class ChangeVariable implements Action {
         switch (namespace) {
             case PLAYER:
                 return HTSL.Action.VAR.invoke()
-                    .set("variable", variable)
+                    .setString("variable", variable)
                     .setMode("operation", mode)
                     .set("value", value)
                     .set("automatic_unset", automaticUnset);
             case TEAM:
                 return HTSL.Action.TEAM_VAR.invoke()
-                    .set("variable", variable)
-                    .set("team", "TODO")
+                    .setString("variable", variable)
+                    .setString("team", "TODO")
                     .setMode("operation", mode)
                     .set("value", value)
                     .set("automatic_unset", automaticUnset);
             case GLOBAL:
                 return HTSL.Action.GLOBAL_VAR.invoke()
-                    .set("variable", variable)
+                    .setString("variable", variable)
                     .setMode("operation", mode)
                     .set("value", value)
                     .set("automatic_unset", automaticUnset);

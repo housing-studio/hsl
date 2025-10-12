@@ -51,8 +51,8 @@ public class DisplayTitle implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.TITLE.invoke()
-            .set("title", title)
-            .set("subtitle", subtitle)
+            .setString("title", title)
+            .setString("subtitle", subtitle)
             .set("fadein", fadein)
             .set("stay", stay)
             .set("fadeout", fadeout);

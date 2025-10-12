@@ -41,7 +41,7 @@ public class TriggerFunction implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.FUNCTION.invoke()
-            .set("function", function)
+            .setString("function", function)
             .set("trigger_for_all_players", triggerForAllPlayers);
     }
 }

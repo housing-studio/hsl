@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.housingstudio.hsl.std.*;
 import org.housingstudio.hsl.std.location.Location;
 import org.housingstudio.hsl.std.location.impl.CustomLocation;
+import org.housingstudio.hsl.std.slot.Slot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class HtslInvocation {
@@ -21,8 +24,16 @@ public class HtslInvocation {
         return this;
     }
 
+    public @NotNull HtslInvocation setString(@NotNull String key, @NotNull String value) {
+        return set(key, "\"" + value + "\"");
+    }
+
     public @NotNull HtslInvocation setWeather(@NotNull String key, @NotNull Weather weather) {
-        return set(key, weather.format());
+        return setString(key, weather.format());
+    }
+
+    public @NotNull HtslInvocation setEffect(@NotNull String key, @NotNull Effect effect) {
+        return setString(key, effect.format());
     }
 
     public @NotNull HtslInvocation setTime(@NotNull String key, @NotNull Time time) {
@@ -30,11 +41,11 @@ public class HtslInvocation {
     }
 
     public @NotNull HtslInvocation setMode(@NotNull String key, @NotNull Mode mode) {
-        return set(key, mode.format());
+        return set(key, mode.format().toLowerCase());
     }
 
     public @NotNull HtslInvocation setGameMode(@NotNull String key, @NotNull GameMode gameMode) {
-        return set(key, gameMode.format());
+        return setString(key, gameMode.format());
     }
 
     public @NotNull HtslInvocation setComparator(@NotNull String key, @NotNull Comparator comparator) {
@@ -111,7 +122,7 @@ public class HtslInvocation {
             default:
                 return this;
         }
-        return set(key, value);
+        return setString(key, value);
     }
 
     public @NotNull HtslInvocation setEnchant(@NotNull String key, @NotNull Enchant enchant) {
@@ -190,25 +201,49 @@ public class HtslInvocation {
                 return this;
         }
 
-        return set(key, value);
+        return setString(key, value);
+    }
+
+    public @NotNull HtslInvocation setMaterial(@NotNull String key, @NotNull Material material) {
+        return setString(key, material.format());
+    }
+
+    public @NotNull HtslInvocation setSlot(@NotNull String key, @NotNull Slot slot) {
+        String value;
+        switch (slot.type()) {
+            case FIRST_AVAILABLE:
+                value = "First Slot";
+                break;
+            default:
+                return this;
+        }
+        return setString(key, value);
+    }
+
+    public @NotNull HtslInvocation setSound(@NotNull String key, @NotNull Sound sound) {
+        String name = Stream.of(sound.name().split("_"))
+            .map(part -> part.substring(0, 1).toUpperCase() + part.substring(1).toLowerCase())
+            .collect(Collectors.joining(" "));
+
+        return setString(key, name);
     }
 
     public @NotNull HtslInvocation setLocation(@NotNull String key, @NotNull Location location) {
         String value;
         switch (location.type()) {
             case SPAWN:
-                value = "house_spawn";
+                value = "\"house_spawn\"";
                 break;
             case CURRENT:
-                value = "current_location";
+                value = "\"current_location\"";
                 break;
             case INVOKER:
-                value = "invokers_location";
+                value = "\"invokers_location\"";
                 break;
             case CUSTOM:
                 CustomLocation loc = (CustomLocation) location;
                 value = String.format(
-                    "custom_coordinates %s %s %s",
+                    "\"custom_coordinates\" \"%s %s %s\"",
                     loc.x().load().asConstantValue(), loc.y().load().asConstantValue(), loc.z().load().asConstantValue()
                 );
                 break;

@@ -34,6 +34,6 @@ public class SendChatMessage implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.CHAT.invoke()
-            .set("message", message);
+            .setString("message", message);
     }
 }

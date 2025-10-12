@@ -34,6 +34,6 @@ public class ApplyInventoryLayout implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.APPLY_LAYOUT.invoke()
-            .set("layout", layout);
+            .setString("layout", layout);
     }
 }

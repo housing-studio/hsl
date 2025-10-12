@@ -41,7 +41,7 @@ public class ChangePlayerGroup implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.CHANGE_PLAYER_GROUP.invoke()
-            .set("group", group)
+            .setString("group", group)
             .set("demotion_protection", demotionProtection);
     }
 }

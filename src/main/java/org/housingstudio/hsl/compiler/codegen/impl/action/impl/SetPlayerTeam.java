@@ -34,6 +34,6 @@ public class SetPlayerTeam implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.SET_TEAM.invoke()
-            .set("team", team);
+            .setString("team", team);
     }
 }

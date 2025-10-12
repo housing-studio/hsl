@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.Main;
 import org.housingstudio.hsl.compiler.Compiler;
+import org.housingstudio.hsl.compiler.codegen.HtslExporter;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.codegen.impl.house.House;
 import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
@@ -133,15 +134,23 @@ public class CLI {
             compiler.compileSources();
             compiler.invokeMain();
 
-            House export = compiler.export();
-            String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);
-
             File targetDir = new File(workDir, "target");
             if (!targetDir.exists())
                 targetDir.mkdirs();
 
-            File exportFile = new File(targetDir, metadata.id() + ".json");
-            writeFile(exportFile, json);
+            File exportFile;
+
+            House export = compiler.export();
+            if (htsl) {
+                String htslData = HtslExporter.export(export);
+
+                exportFile = new File(targetDir, metadata.id() + ".htsl");
+                writeFile(exportFile, htslData);
+            } else {
+                String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);
+                exportFile = new File(targetDir, metadata.id() + ".json");
+                writeFile(exportFile, json);
+            }
 
             if (verbose)
                 System.out.println(

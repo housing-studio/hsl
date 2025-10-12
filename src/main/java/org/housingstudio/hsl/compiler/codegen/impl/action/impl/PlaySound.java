@@ -54,7 +54,7 @@ public class PlaySound implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.SOUND.invoke()
-            .set("sound", sound)
+            .setSound("sound", sound)
             .set("volume", volume)
             .set("pitch", pitch)
             .setLocation("location", location);

@@ -43,9 +43,9 @@ public class GiveItem implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.GIVE_ITEM.invoke()
-            .set("item", item)
+            .setMaterial("item", item)
             .set("allow_multiple", allowMultiple)
-            .set("slot", slot) // TODO
+            .setSlot("inventory_slot", slot) // TODO
             .set("replace_existing_item", replaceExistingItem);
     }
 }

@@ -56,7 +56,7 @@ public class ApplyPotionEffect implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.APPLY_POTION.invoke()
-            .set("effect", effect.format())
+            .setString("effect", effect.format())
             .set("duration", duration)
             .set("level", level)
             .set("override_existing_effects", overrideExistingEffects)

@@ -50,8 +50,8 @@ public class DropItem implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.DROP_ITEM.invoke()
-            .set("item", item) // TODO
-            .set("location", location)
+            .setMaterial("item", item) // TODO
+            .setLocation("location", location)
             .set("drop_naturally", dropNaturally)
             .set("disable_item_merging", disableItemMerging)
             .set("prioritize_player", prioritizePlayer)

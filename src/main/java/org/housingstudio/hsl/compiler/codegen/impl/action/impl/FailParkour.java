@@ -34,6 +34,6 @@ public class FailParkour implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.FAIL_PARKOUR.invoke()
-            .set("reason", reason);
+            .setString("reason", reason);
     }
 }

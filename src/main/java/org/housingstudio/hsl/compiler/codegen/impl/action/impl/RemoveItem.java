@@ -30,6 +30,6 @@ public class RemoveItem implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.REMOVE_ITEM.invoke()
-            .set("item", item);
+            .setMaterial("item", item);
     }
 }
