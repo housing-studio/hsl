@@ -6,6 +6,7 @@ import org.housingstudio.hsl.compiler.parser.impl.action.MethodCallParser;
 import org.housingstudio.hsl.compiler.parser.impl.annotation.AnnotationParser;
 import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionParser;
 import org.housingstudio.hsl.compiler.parser.impl.conditional.ConditionalParser;
+import org.housingstudio.hsl.compiler.parser.impl.control.ForLoopParser;
 import org.housingstudio.hsl.compiler.parser.impl.declaration.*;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalAssignParser;
 import org.housingstudio.hsl.compiler.parser.impl.local.LocalDeclareParser;
@@ -63,6 +64,7 @@ public class ParserRegistry {
             PostfixOperatorParser.class,
             AssignmentOperatorParser.class,
             EnumParser.class,
+            ForLoopParser.class,
         };
 
         for (Class<?> parser : parsers) {

@@ -114,6 +114,10 @@ public class StatementParser extends ParserAlgorithm<Node> {
             return new Random(scope);
         }
 
+        // handle for loop
+        else if (peek().is(TokenType.EXPRESSION, "for"))
+            return parser.nextForLoop();
+
         context.errorPrinter().print(
             Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected statement")
                 .error("token " + peek().print() + " is not a statement", peek())

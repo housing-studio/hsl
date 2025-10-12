@@ -810,6 +810,7 @@ public class Tokenizer implements TokenContext {
             case "stat":
             case "if":
             case "else":
+            case "for":
             case "return":
             case "random":
             case "enum":

@@ -35,7 +35,7 @@ public class EnumLookup extends Value {
         if (type == null) {
             context.errorPrinter().print(
                 Notification.error(Errno.UNKNOWN_TYPE, "cannot resolve name from scope")
-                    .error("cannot find enum in this scope", typeName)
+                    .error("cannot find enum `" + typeName.value() + "` in this scope", typeName)
                     .note("did you misspell the name, or forgot to declare the enum?")
             );
             throw new IllegalStateException("Cannot resolve type " + typeName.value());

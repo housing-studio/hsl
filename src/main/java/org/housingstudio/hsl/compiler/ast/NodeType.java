@@ -46,6 +46,7 @@ public enum NodeType {
     GAME,
 
     CONDITIONAL,
+    FOR_LOOP,
     ANNOTATION,
 
     EMPTY,
