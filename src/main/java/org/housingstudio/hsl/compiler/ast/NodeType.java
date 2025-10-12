@@ -47,6 +47,7 @@ public enum NodeType {
 
     CONDITIONAL,
     FOR_LOOP,
+    WHILE_LOOP,
     ANNOTATION,
 
     EMPTY,

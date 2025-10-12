@@ -811,6 +811,7 @@ public class Tokenizer implements TokenContext {
             case "if":
             case "else":
             case "for":
+            case "while":
             case "return":
             case "random":
             case "enum":

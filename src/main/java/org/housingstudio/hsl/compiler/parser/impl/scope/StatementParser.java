@@ -118,6 +118,10 @@ public class StatementParser extends ParserAlgorithm<Node> {
         else if (peek().is(TokenType.EXPRESSION, "for"))
             return parser.nextForLoop();
 
+        // handle while loop
+        else if (peek().is(TokenType.EXPRESSION, "while"))
+            return parser.nextWhileLoop();
+
         context.errorPrinter().print(
             Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected statement")
                 .error("token " + peek().print() + " is not a statement", peek())

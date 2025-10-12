@@ -1,5 +1,6 @@
 package org.housingstudio.hsl.compiler.ast.impl.control;
 
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -10,7 +11,6 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.CommandNode;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Event;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
-import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
@@ -34,98 +34,86 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-@NodeInfo(type = NodeType.FOR_LOOP)
-public class ForLoop extends ScopeContainer implements ActionBuilder, Printable {
+@NodeInfo(type = NodeType.WHILE_LOOP)
+public class WhileLoop extends ScopeContainer implements ActionBuilder, Printable {
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
     private final int id = COUNTER.incrementAndGet();
 
     @Children
-    private final @Nullable Node decl;
-
-    @Children
-    private final @Nullable List<ConditionBuilder> conditions;
+    private final @NotNull List<ConditionBuilder> conditions;
 
     private final boolean matchAny;
-
-    @Children
-    private final @Nullable Node step;
 
     @Children
     private final @NotNull Scope body;
 
     private boolean created;
 
-    private String initName, tickName, mergeName;
-    private @Nullable Method initFn, tickFn, mergeFn;
+    private String tickName, mergeName;
+    private @Nullable Method tickFn, mergeFn;
 
     /**
      * Initialize node logic before the nodes are visited and the code is generated.
      */
     @Override
     public void init() {
-        initName = mangleName("init");
         tickName = mangleName("tick");
         mergeName = mangleName("merge");
         createFunctions();
-    }
-
-    @Override
-    public @NotNull Action buildAction() {
-        return new TriggerFunction(initName, false);
     }
 
     private void createFunctions() {
         if (created)
             return;
 
-        initFn = createInitFn();
         tickFn = createTickFn();
         mergeFn = createMergeFn();
 
-        registerFn(initFn);
         registerFn(tickFn);
         registerFn(mergeFn);
 
         created = true;
     }
 
-    private @NotNull Method createInitFn() {
-        if (!(decl instanceof ActionBuilder))
-            throw new IllegalStateException("For loop declaration must build actions");
-
-        return createGenericFn(initName, new Scope(Collections.singletonList(decl)));
+    @Override
+    public @NotNull Action buildAction() {
+        return new TriggerFunction(tickName, false);
     }
 
     private @NotNull Method createTickFn() {
         // first run the loop's body
-        List<Node> iteration = new ArrayList<>();
-        iteration.add(body);
-
-        // then run the "step" stage (for example i++)
-        if (step != null) {
-            if (!(step instanceof ActionBuilder))
-                throw new IllegalStateException("For loop step must build actions");
-            iteration.add(step);
-        }
+        List<Node> bodyNodes = new ArrayList<>();
+        bodyNodes.add(body);
 
         // then call the next loop iteration
-        iteration.add(new StaticActionBuilder(new PauseExecution(5))); // hacky workaround for function spam filter
-        iteration.add(new StaticActionBuilder(new TriggerFunction(tickName, false)));
+        bodyNodes.add(new StaticActionBuilder(new PauseExecution(5))); // hacky workaround for function spam filter
+        bodyNodes.add(new StaticActionBuilder(new TriggerFunction(tickName, false)));
 
-        // finally, if the for statement has a condition, wrap this logic into an if-else action
-        if (conditions != null) {
-            Scope elseScope = new Scope(Collections.singletonList(
-                new StaticActionBuilder(new TriggerFunction(mergeName, false))
-            ));
+        // finally, wrap this logic into an if-else action
+        Scope elseScope = new Scope(Collections.singletonList(
+            new StaticActionBuilder(new TriggerFunction(mergeName, false))
+        ));
 
-            ConditionalNode conditional = new ConditionalNode(
-                conditions, matchAny, new Scope(iteration), elseScope
-            );
-            iteration = Collections.singletonList(conditional);
-        }
+        ConditionalNode conditional = new ConditionalNode(
+            conditions, matchAny, new Scope(bodyNodes), elseScope
+        );
 
-        return createGenericFn(tickName, new Scope(iteration));
+        return createGenericFn(tickName, new Scope(Collections.singletonList(conditional)));
+    }
+
+    private void registerFn(@NotNull Method fn) {
+        game.functions().put(fn.name().value(), fn);
+    }
+
+    private @NotNull Method createMergeFn() {
+        return createGenericFn(mergeName, Scope.EMPTY);
+    }
+
+    private @NotNull Method createGenericFn(@NotNull String name, @NotNull Scope scope) {
+        return new Method(
+            new ArrayList<>(), Token.of(TokenType.IDENTIFIER, name), Types.VOID, Collections.emptyList(), scope
+        );
     }
 
     private @NotNull String mangleName(@NotNull String name) {
@@ -145,20 +133,6 @@ public class ForLoop extends ScopeContainer implements ActionBuilder, Printable 
         return String.format("%s:%s:for:%d:%s", prefix, nodeName, id, name);
     }
 
-    private @NotNull Method createMergeFn() {
-        return createGenericFn(mergeName, Scope.EMPTY);
-    }
-
-    private @NotNull Method createGenericFn(@NotNull String name, @NotNull Scope scope) {
-        return new Method(
-            new ArrayList<>(), Token.of(TokenType.IDENTIFIER, name), Types.VOID, Collections.emptyList(), scope
-        );
-    }
-
-    private void registerFn(@NotNull Method fn) {
-        game.functions().put(fn.name().value(), fn);
-    }
-
     private @NotNull ScopeContainer getUnderlyingMethod() {
         Node parent = parent();
         while (parent != null) {
@@ -169,25 +143,6 @@ public class ForLoop extends ScopeContainer implements ActionBuilder, Printable 
             parent = parent.parent();
         }
         throw new IllegalStateException("Unable to resolve underlying method");
-    }
-
-    /**
-     * Resolve a local variable or a global constant by its specified name.
-     * <p>
-     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent()}
-     * node.
-     * <p>
-     * A {@link Scope} will initially try to resolve the value from itself, and then from the parent scope.
-     *
-     * @param name the name of the variable or constant to resolve
-     * @return the value of the variable or constant, or {@code null} if the name is not found
-     */
-    @Override
-    public @Nullable Variable resolveName(@NotNull String name) {
-        if (decl instanceof Variable && ((Variable) decl).name().equals(name))
-            return (Variable) decl;
-
-        return super.resolveName(name);
     }
 
     /**
@@ -221,6 +176,6 @@ public class ForLoop extends ScopeContainer implements ActionBuilder, Printable 
      */
     @Override
     public @NotNull String print() {
-        return "for (...) { ... }";
+        return "while (...) { ... }";
     }
 }

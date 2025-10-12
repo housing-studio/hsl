@@ -7,6 +7,7 @@ import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Enum;
 import org.housingstudio.hsl.compiler.parser.impl.control.ForLoopParser;
+import org.housingstudio.hsl.compiler.parser.impl.control.WhileLoopParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.*;
 import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
@@ -151,6 +152,10 @@ public class AstParser {
 
     public @NotNull Node nextForLoop() {
         return parse(ForLoopParser.class, Node.class);
+    }
+
+    public @NotNull Node nextWhileLoop() {
+        return parse(WhileLoopParser.class, Node.class);
     }
 
     public @NotNull Value nextGroup() {
