@@ -34,6 +34,6 @@ public class DisplayActionBar implements Action {
     @Override
     public @NotNull HtslInvocation asHTSL() {
         return HTSL.Action.ACTION_BAR.invoke()
-            .set("message", message);
+            .setString("message", message);
     }
 }
