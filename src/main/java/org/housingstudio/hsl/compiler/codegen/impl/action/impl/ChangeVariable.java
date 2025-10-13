@@ -61,20 +61,20 @@ public class ChangeVariable implements Action {
                 return HTSL.Action.VAR.invoke()
                     .setString("variable", variable)
                     .setMode("operation", mode)
-                    .set("value", value)
+                    .setValue("value", value)
                     .set("automatic_unset", automaticUnset);
             case TEAM:
                 return HTSL.Action.TEAM_VAR.invoke()
                     .setString("variable", variable)
                     .setString("team", "TODO")
                     .setMode("operation", mode)
-                    .set("value", value)
+                    .setValue("value", value)
                     .set("automatic_unset", automaticUnset);
             case GLOBAL:
                 return HTSL.Action.GLOBAL_VAR.invoke()
                     .setString("variable", variable)
                     .setMode("operation", mode)
-                    .set("value", value)
+                    .setValue("value", value)
                     .set("automatic_unset", automaticUnset);
             default:
                 throw new IllegalStateException("Unexpected namespace: " + namespace);

@@ -22,7 +22,7 @@ public enum ConditionType {
     MAX_PLAYER_HEALTH             (20, MaxPlayerHealth.class),
     PLAYER_HUNGER                 (20, PlayerHunger.class),
     REQUIRED_GAME_MODE            (20, RequiredGameMode.class),
-    PLACEHOLDER_NUMBER_REQUIREMENT(20, PlaceholderNumberRequirement.class),
+    PLACEHOLDER_REQUIREMENT       (20, PlaceholderRequirement.class),
     REQUIRED_TEAM                 (20, RequiredTeam.class),;
 
     private final int limit;

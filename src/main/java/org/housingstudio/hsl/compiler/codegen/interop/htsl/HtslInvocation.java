@@ -28,6 +28,24 @@ public class HtslInvocation {
         return set(key, "\"" + value + "\"");
     }
 
+    public @NotNull HtslInvocation setValue(@NotNull String key, @NotNull String value) {
+        // yikes
+        try {
+            Integer.parseInt(value);
+            return set(key, value);
+        } catch (NumberFormatException ignored) {}
+
+        try {
+            Float.parseFloat(value);
+            return set(key, value);
+        } catch (NumberFormatException ignored) {}
+
+        if (value.equals("true") || value.equals("false"))
+            return set(key, value);
+
+        return setString(key, value);
+    }
+
     public @NotNull HtslInvocation setWeather(@NotNull String key, @NotNull Weather weather) {
         return setString(key, weather.format());
     }

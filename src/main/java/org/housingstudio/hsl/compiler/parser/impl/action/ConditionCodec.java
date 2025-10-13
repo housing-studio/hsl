@@ -101,7 +101,7 @@ public class ConditionCodec {
     }
 
     public @NotNull Condition comparePlaceholder(@NotNull ArgAccess args) {
-        return new PlaceholderNumberRequirement(
+        return new PlaceholderRequirement(
             args.getBoolean("inverted"),
             args.getString("placeholder"),
             args.getComparator("comparator"),

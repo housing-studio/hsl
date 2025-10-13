@@ -1,7 +1,6 @@
 package org.housingstudio.hsl.compiler.ast.impl.value;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
@@ -10,7 +9,6 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.runtime.vm.Frame;
 import org.housingstudio.hsl.std.Namespace;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Accessors(fluent = true)
 @Getter

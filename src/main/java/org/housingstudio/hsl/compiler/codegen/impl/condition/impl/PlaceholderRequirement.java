@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @Getter
 @ToString
-public class PlaceholderNumberRequirement implements Condition {
-    private final ConditionType type = ConditionType.PLACEHOLDER_NUMBER_REQUIREMENT;
+public class PlaceholderRequirement implements Condition {
+    private final ConditionType type = ConditionType.PLACEHOLDER_REQUIREMENT;
 
     private boolean inverted;
 
@@ -38,6 +38,6 @@ public class PlaceholderNumberRequirement implements Condition {
         return HTSL.Condition.PLACEHOLDER.invoke()
             .setString("placeholder", placeholder)
             .setComparator("comparator", comparator)
-            .set("compare_value", compareValue);
+            .setValue("compare_value", compareValue);
     }
 }

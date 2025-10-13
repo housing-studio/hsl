@@ -6,14 +6,20 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
+import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
+import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
+import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinConditions;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
+import org.housingstudio.hsl.compiler.codegen.impl.action.impl.ChangeVariable;
+import org.housingstudio.hsl.compiler.codegen.impl.action.impl.TriggerFunction;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.parser.impl.action.ActionCodec;
@@ -23,8 +29,13 @@ import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.runtime.vm.Frame;
 import org.housingstudio.hsl.runtime.vm.Instruction;
+import org.housingstudio.hsl.std.Mode;
+import org.housingstudio.hsl.std.Namespace;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,7 +45,7 @@ import java.util.stream.Collectors;
 @Getter
 @NodeInfo(type = NodeType.METHOD_CALL)
 @ToString
-public class MethodCall extends Value implements ActionBuilder, Instruction {
+public class MethodCall extends Value implements ActionListBuilder, Instruction {
     /**
      * The name of the method to call.
      */
@@ -149,7 +160,7 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
     }
 
     @Override
-    public @NotNull Action buildAction() {
+    public @NotNull List<Action> buildActionList() {
         if (BuiltinConditions.LOOKUP.containsKey(name.value())) {
             context.errorPrinter().print(
                 Notification.error(Errno.UNEXPECTED_CONDITION_TARGET, "unexpected condition target", this)
@@ -174,9 +185,10 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
         if (BuiltinActions.LOOKUP.containsKey(name.value())) {
             Map<String, Value> args = ArgumentParser.parseArguments(context, name, method.parameters(), arguments);
             validateArgumentTypes(method.parameters(), args);
-            return buildBuiltinAction(new ArgAccess(args));
+            return Collections.singletonList(buildBuiltinAction(new ArgAccess(args)));
         }
 
+        /*
         if (!arguments.isEmpty()) {
             context.errorPrinter().print(
                 Notification.error(Errno.FUNCTION_TRIGGER_WITH_ARGUMENTS, "function triggered with arguments", this)
@@ -184,8 +196,9 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
             );
             throw new UnsupportedOperationException("Function trigger cannot be used with arguments: " + name.value());
         }
+         */
 
-        return buildFunctionTrigger();
+        return buildFunctionTrigger(method);
     }
 
     public void validateArgumentTypes(@NotNull List<Parameter> parameters, @NotNull Map<String, Value> args) {
@@ -211,6 +224,32 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
                 );
             }
         }
+    }
+
+    /**
+     * Resolve a local variable or a global constant by its specified name.
+     * <p>
+     * If a node does not override this logic, by default it will try to resolve the value from the {@link #parent()}
+     * node.
+     * <p>
+     * A {@link Scope} will initially try to resolve the value from itself, and then from the parent scope.
+     *
+     * @param name the name of the variable or constant to resolve
+     * @return the value of the variable or constant, or {@code null} if the name is not found
+     */
+    @Override
+    public @Nullable Variable resolveName(@NotNull String name) {
+        Method method = game.functions().get(name);
+        if (method == null)
+            return super.resolveName(name);
+
+        Map<String, Value> args = ArgumentParser.parseArguments(context, this.name, method.parameters(), arguments);
+        validateArgumentTypes(method.parameters(), args);
+        Value value = args.get(name);
+        if (value != null)
+            return new ArgumentAccessor(name, value.getValueType(), value);
+
+        return super.resolveName(name);
     }
 
     private @NotNull Action buildBuiltinAction(@NotNull ArgAccess args) {
@@ -291,7 +330,20 @@ public class MethodCall extends Value implements ActionBuilder, Instruction {
         }
     }
 
-    private @NotNull Action buildFunctionTrigger() {
-        throw new UnsupportedOperationException("function trigger not implemented yet");
+    private @NotNull List<Action> buildFunctionTrigger(@NotNull Method method) {
+        List<Action> actions = new ArrayList<>();
+
+        Map<String, Value> args = ArgumentParser.parseArguments(context, name, method.parameters(), arguments);
+        validateArgumentTypes(method.parameters(), args);
+        for (Map.Entry<String, Value> entry : args.entrySet()) {
+            String varName = MethodParameterAccessor.encodeName(method, entry.getKey());
+            ChangeVariable changeVariable = new ChangeVariable(
+                Namespace.PLAYER, varName, Mode.SET, entry.getValue().asConstantValue(), false
+            );
+            actions.add(changeVariable);
+        }
+
+        actions.add(new TriggerFunction(name.value(), false));
+        return actions;
     }
 }

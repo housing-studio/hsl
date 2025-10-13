@@ -6,8 +6,11 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
+import org.housingstudio.hsl.compiler.ast.impl.value.MacroParameterAccessor;
+import org.housingstudio.hsl.compiler.ast.impl.value.MethodParameterAccessor;
 import org.housingstudio.hsl.compiler.codegen.ActionLimiter;
 import org.housingstudio.hsl.compiler.codegen.builder.FunctionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
@@ -121,6 +124,27 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
         }
 
         return null;
+    }
+
+    /**
+     * Resolve a local variable or a global constant by its specified name.
+     * <p>
+     * For macros, this method first checks if the name matches any of the macro parameters,
+     * and if so, returns a MacroParameterAccessor. Otherwise, it delegates to the parent scope.
+     *
+     * @param name the name of the variable or constant to resolve
+     * @return the value of the variable or constant, or {@code null} if the name is not found
+     */
+    @Override
+    public @Nullable Variable resolveName(@NotNull String name) {
+        // first check if this is a macro parameter
+        for (Parameter parameter : parameters) {
+            if (parameter.name().value().equals(name))
+                return new MethodParameterAccessor(name, parameter.type(), this);
+        }
+
+        // if not a parameter, delegate to parent scope
+        return super.resolveName(name);
     }
 
     /**

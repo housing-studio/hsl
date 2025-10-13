@@ -62,8 +62,8 @@ public class VariableRequirement implements Condition {
             return base.invoke()
                 .setString("variable", variable)
                 .setComparator("comparator", comparator)
-                .set("compare_value", value)
-                .set("fallback_value", fallback);
+                .setValue("compare_value", value)
+                .setValue("fallback_value", fallback);
         } else {
             switch (namespace) {
                 case GLOBAL:
@@ -81,7 +81,7 @@ public class VariableRequirement implements Condition {
             return base.invoke()
                 .setString("variable", variable)
                 .setComparator("comparator", comparator)
-                .set("compare_value", value);
+                .setValue("compare_value", value);
         }
     }
 }

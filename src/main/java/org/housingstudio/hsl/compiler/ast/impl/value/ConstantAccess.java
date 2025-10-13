@@ -3,13 +3,11 @@ package org.housingstudio.hsl.compiler.ast.impl.value;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Constant;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
-import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -106,13 +104,14 @@ public class ConstantAccess extends Value {
         //  The current implementation of prioritizing variables is invalid - however you need to support anonymous
         //  constants first, as they are currently package-level only.
 
-        // Try to resolve as a variable (including macro parameters)
+        // try to resolve as a variable (including macro parameters)
         Variable variable = resolveName(name.value());
         if (variable != null) {
-            // If it's a macro parameter, return it directly
-            if (variable instanceof MacroParameterAccessor) {
+            // if it's a parameter access, return it directly
+            if (variable instanceof MacroParameterAccessor)
                 return (MacroParameterAccessor) variable;
-            }
+            else if (variable instanceof MethodParameterAccessor)
+                return (MethodParameterAccessor) variable;
             // Otherwise, create a StatAccess for regular variables
             return new StatAccess(name, variable);
         }

@@ -83,7 +83,7 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
     @Override
     public @NotNull Action buildAction() {
         return new ChangeVariable(
-            variable.namespace(), name.value(), Mode.SET, value.asConstantValue(), false
+            variable.namespace(), variable.name(), Mode.SET, value.asConstantValue(), false
         );
     }
 

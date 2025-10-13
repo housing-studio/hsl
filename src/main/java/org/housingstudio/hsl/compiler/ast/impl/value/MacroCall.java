@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
-import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
@@ -96,7 +95,7 @@ public class MacroCall extends Value implements ActionListBuilder {
     @Override
     public @NotNull Value load() {
         Macro macro = resolveMacro();
-        
+
         // Set the current frame before invoking the macro
         Frame previousFrame = Frame.current();
         try {
@@ -137,7 +136,7 @@ public class MacroCall extends Value implements ActionListBuilder {
         validateArgumentTypes(macro.parameters(), args);
         Value value = args.get(name);
         if (value != null)
-            return new ParameterAccessor(name, value.getValueType(), value);
+            return new ArgumentAccessor(name, value.getValueType(), value);
         return super.resolveName(name);
     }
 

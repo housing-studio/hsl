@@ -1,6 +1,7 @@
 package org.housingstudio.hsl.compiler.parser.impl.declaration;
 
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Parameter;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
@@ -16,6 +17,7 @@ import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the parser algorithm for parsing a {@link Method} node from the token stream.
@@ -52,9 +54,8 @@ public class MethodParser extends ParserAlgorithm<Method> {
         // parse the method name
         Token name = context.get(TokenType.IDENTIFIER);
 
-        // skip the parameter list
-        get(TokenType.LPAREN);
-        get(TokenType.RPAREN);
+        // parse the parameter list
+        List<Parameter> parameters = parser.nextParameterList();
 
         Type returnType = Types.VOID;
         if (peek().is(TokenType.OPERATOR, "-") && at(cursor() + 1).is(TokenType.OPERATOR, ">")) {
@@ -75,6 +76,6 @@ public class MethodParser extends ParserAlgorithm<Method> {
         ArrayList<Annotation> annotations = new ArrayList<>(context.currentAnnotations());
         context.currentAnnotations().clear();
 
-        return new Method(annotations, name, returnType, new ArrayList<>(), scope);
+        return new Method(annotations, name, returnType, parameters, scope);
     }
 }

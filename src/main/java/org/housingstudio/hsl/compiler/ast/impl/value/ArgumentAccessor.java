@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.MACRO_CALL)
-public class ParameterAccessor implements Variable {
+public class ArgumentAccessor implements Variable {
     private final @NotNull String name;
     private final @NotNull Type type;
     private final @NotNull Value argument;
