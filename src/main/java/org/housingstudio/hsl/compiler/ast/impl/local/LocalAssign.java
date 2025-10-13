@@ -41,7 +41,7 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
         variable = resolveName(name.value());
         if (variable == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.UNKNOWN_VARIABLE, "unknown variable", this)
+                Notification.error(Errno.UNKNOWN_VARIABLE, "unknown variable: " + name.value(), this)
                     .error("cannot find variable in this scope", name)
                     .note("did you misspell the name, or forgot to declare the variable?")
             );

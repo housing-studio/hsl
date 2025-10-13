@@ -5,10 +5,7 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
-import org.housingstudio.hsl.compiler.token.Token;
-import org.housingstudio.hsl.compiler.token.TokenTransformer;
-import org.housingstudio.hsl.compiler.token.TokenType;
-import org.housingstudio.hsl.compiler.token.Tokenizer;
+import org.housingstudio.hsl.compiler.token.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -88,7 +85,7 @@ public class InterpolationParser extends ParserAlgorithm<Value> {
                 String innerSource = content.substring(exprStart, exprEnd).trim();
 
                 // create a parser for the captured value within the interpolated string
-                AstParser subParser = createSubParser(context, innerSource);
+                AstParser subParser = createSubParser(context, value, innerSource);
 
                 Value capturedValue = subParser.nextValue();
                 parts.add(capturedValue);
@@ -109,7 +106,7 @@ public class InterpolationParser extends ParserAlgorithm<Value> {
         return new InterpolatedString(value, parts);
     }
 
-    private @NotNull AstParser createSubParser(@NotNull ParserContext context, @NotNull String content) {
+    private @NotNull AstParser createSubParser(@NotNull ParserContext context, @NotNull Token base, @NotNull String content) {
         Tokenizer tokenizer = new Tokenizer(context.file(), content, context.diagnostics(), context.mode());
         List<Token> tokens = new ArrayList<>();
         Token token;
@@ -129,8 +126,25 @@ public class InterpolationParser extends ParserAlgorithm<Value> {
         tokens.add(Token.of(TokenType.SEMICOLON, "auto"));
         tokens = new TokenTransformer(tokens).transform();
 
+        for (int i = 0; i < tokens.size(); i++) {
+            Token original = tokens.get(i);
+            // TODO instead of offsetting each token from base token, use base token as an index start,
+            //  and the end indices should handle the token's actual length. For example:
+            //  begin = base.begin + original.begin - 1
+            //  end = (base.begin + original.begin - 1) + (original.end - original.begin)
+            Meta offsetMeta = new Meta(
+                base.meta().beginIndex() + original.meta().beginIndex() - 1,
+                base.meta().endIndex() + original.meta().beginIndex() - 1,
+                base.meta().lineIndex() + original.meta().lineIndex(),
+                base.meta().lineNumber() + original.meta().lineNumber() - 1
+            );
+
+            Token offset = new Token(original.type(), original.value(), offsetMeta);
+            tokens.set(i, offset);
+        }
+
         ParserContext subContext = new ParserContext(
-            tokens, context.file(), content, context.diagnostics(), context.mode()
+            tokens, context.file(), context.data(), context.diagnostics(), context.mode()
         );
         return new AstParser(subContext);
     }

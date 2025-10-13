@@ -40,7 +40,7 @@ public class AssignmentOperator extends Statement implements Printable, ActionBu
         variable = resolveName(lhs.value());
         if (variable == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.UNKNOWN_VARIABLE, "unknown variable", this)
+                Notification.error(Errno.UNKNOWN_VARIABLE, "unknown variable " + lhs.value(), this)
                     .error("cannot find variable in this scope", lhs)
                     .note("did you misspell the name, or forgot to declare the variable?")
             );

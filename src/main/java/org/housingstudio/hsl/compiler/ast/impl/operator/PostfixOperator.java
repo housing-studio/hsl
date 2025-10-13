@@ -30,7 +30,7 @@ public class PostfixOperator extends Statement implements Printable, ActionBuild
         Variable variable = resolveName(operand.value());
         if (variable == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.UNKNOWN_VARIABLE, "unknown variable", this)
+                Notification.error(Errno.UNKNOWN_VARIABLE, "unknown variable: " + operand.value(), this)
                     .error("cannot find variable in this scope", operand)
                     .note("did you misspell the name, or forgot to declare the variable?")
             );
