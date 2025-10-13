@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.ast.impl.local;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
@@ -37,7 +38,8 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
     private final @Nullable Type explicitType;
 
     @Children
-    private final @NotNull Value value;
+    @Setter
+    private @NotNull Value value;
 
     private Type type;
 

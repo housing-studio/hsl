@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.ast.impl.scope;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
@@ -38,7 +39,8 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
      * The list of instructions that are associated with the scope.
      */
     @Children
-    private final @NotNull List<Node> statements;
+    @Setter
+    private @NotNull List<Node> statements;
 
     /**
      * The parent scope container of this scope, that might be a {@link Method} or another {@link Scope}.

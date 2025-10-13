@@ -128,12 +128,21 @@ public class CLI {
             if (verbose)
                 System.out.println(
                     Format.MAGENTA + "" + Format.BOLD + "HSL: " + Format.DEFAULT +
-                    Format.LIGHT_GRAY + "Compiling and exporting project: " + Format.WHITE + metadata.id()
+                    Format.LIGHT_GRAY + "Compiling and exporting project: " + Format.WHITE + metadata.id() +
+                    Format.DEFAULT
                 );
 
             Compiler compiler = Compiler.create(metadata, workDir, ErrorMode.PRETTY_PRINT);
             compiler.init();
             compiler.compileSources();
+
+            if (verbose)
+                System.out.println(
+                    Format.MAGENTA + "" + Format.BOLD + "HSL: " + Format.DEFAULT +
+                    Format.GREEN + "Applied " + Format.WHITE + compiler.optimizations() + Format.GREEN +
+                    " optimization steps" + Format.DEFAULT
+                );
+
             compiler.invokeMain();
 
             File targetDir = new File(workDir, "target");
@@ -161,7 +170,8 @@ public class CLI {
             if (verbose)
                 System.out.println(
                     Format.MAGENTA + "" + Format.BOLD + "HSL: " + Format.DEFAULT +
-                    Format.GREEN + "Compiled and exported project to " + Format.WHITE + exportFile.getName()
+                    Format.GREEN + "Compiled and exported project to " + Format.WHITE + exportFile.getName() +
+                    Format.DEFAULT
                 );
         } catch (Exception e) {
             System.out.println(

@@ -21,6 +21,7 @@ import org.housingstudio.hsl.compiler.token.Tokenizer;
 import org.housingstudio.hsl.compiler.codegen.Exporter;
 import org.housingstudio.hsl.compiler.codegen.impl.house.House;
 import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
+import org.housingstudio.hsl.compiler.optimization.Optimizer;
 import org.housingstudio.hsl.lsp.Diagnostics;
 import org.housingstudio.hsl.runtime.vm.Frame;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +45,8 @@ public class Compiler {
     private final @NotNull List<File> sourceFiles;
     private final @NotNull Game game;
     private final @NotNull ErrorMode mode;
+
+    private int optimizations = 0;
 
     public void init() {
         if (mode == ErrorMode.JSON)
@@ -71,6 +74,8 @@ public class Compiler {
 
         NodeVisitor.initHierarchy();
         NodeVisitor.initLifecycle();
+
+        optimizeAst();
     }
 
     public void invokeMain() {
@@ -84,6 +89,18 @@ public class Compiler {
 
     public @NotNull House export() {
         return Exporter.export(metadata, game);
+    }
+
+    private void optimizeAst() {
+        Optimizer optimizer = new Optimizer();
+        optimizations = optimizer.optimize(game);
+
+        /*
+        // Log optimization results if in debug mode
+        if (mode != ErrorMode.JSON && optimizations > 0) {
+            System.out.println("Applied " + optimizations + " optimizations");
+        }
+         */
     }
 
     private @NotNull List<Token> tokenizeFile(@NotNull File file, @NotNull String content) {
