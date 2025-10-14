@@ -75,6 +75,9 @@ public class ValueParser extends ParserAlgorithm<Value> {
         else if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.OPERATOR, "!"))
             return parser.nextMacroCall();
 
+        else if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.LBRACKET))
+            return parser.nextArrayLoad();
+
         // handle variable access
         // stat player name = otherName
         //            ^^^^^^^^^ the identifier token indicates, that a value is expected

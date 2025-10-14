@@ -4,9 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Coordinate;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
-import org.housingstudio.hsl.compiler.ast.impl.value.builtin.SlotValue;
-import org.housingstudio.hsl.std.slot.SlotType;
-import org.housingstudio.hsl.std.slot.impl.StaticSlot;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a predefined registry of builtin HSL types.
@@ -45,4 +43,69 @@ public class Types {
     public Type COMPARATOR_TARGET = new StaticType(BaseType.COMPARATOR_TARGET);
     public Type COMPARATOR_AMOUNT = new StaticType(BaseType.COMPARATOR_AMOUNT);
     public Type PERMISSION        = new StaticType(BaseType.PERMISSION);
+
+    public static @NotNull Type fromBase(@NotNull BaseType type) {
+        switch (type) {
+            case VOID:
+                return VOID;
+            case INT:
+                return INT;
+            case FLOAT:
+                return FLOAT;
+            case STRING:
+                return STRING;
+            case BOOL:
+                return BOOL;
+            case ANY:
+                return ANY;
+            case NIL:
+                return NIL;
+            case COORD:
+                return COORD;
+            case SLOT:
+                return SLOT;
+            case LOCATION:
+                return LOCATION;
+            case GAME_MODE:
+                return GAME_MODE;
+            case TARGET:
+                return TARGET;
+            case WEATHER:
+                return WEATHER;
+            case TIME:
+                return TIME;
+            case NAMESPACE:
+                return NAMESPACE;
+            case EFFECT:
+                return EFFECT;
+            case ENCHANT:
+                return ENCHANT;
+            case MODE:
+                return MODE;
+            case LOBBY:
+                return LOBBY;
+            case SOUND:
+                return SOUND;
+            case FLAG:
+                return FLAG;
+            case MATERIAL:
+                return MATERIAL;
+            case VECTOR:
+                return VECTOR;
+            case EXECUTOR:
+                return EXECUTOR;
+            case COMPARATOR:
+                return COMPARATOR;
+            case ITEM_COMPARATOR:
+                return ITEM_COMPARATOR;
+            case COMPARATOR_TARGET:
+                return COMPARATOR_TARGET;
+            case COMPARATOR_AMOUNT:
+                return COMPARATOR_AMOUNT;
+            case PERMISSION:
+                return PERMISSION;
+            default:
+                throw new IllegalArgumentException("Unexpected value: " + type);
+        }
+    }
 }

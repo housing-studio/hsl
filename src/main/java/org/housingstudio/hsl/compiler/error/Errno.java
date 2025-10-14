@@ -319,7 +319,12 @@ public enum Errno {
     /**
      * `UNKNOWN_TYPE` indicates, that the specified type could not be resolved.
      */
-    UNKNOWN_TYPE(160);
+    UNKNOWN_TYPE(160),
+
+    /**
+     * `CANNOT_LOAD_ARRAY_DYNAMICALLY` indicates, that the underlying array could not be loaded dynamically.
+     */
+    CANNOT_LOAD_ARRAY_DYNAMICALLY(161);
 
     /**
      * The error code of the token error.

@@ -19,6 +19,7 @@ import org.housingstudio.hsl.compiler.codegen.impl.action.impl.Conditional;
 import org.housingstudio.hsl.compiler.codegen.impl.action.impl.Exit;
 import org.housingstudio.hsl.compiler.codegen.impl.action.impl.SendChatMessage;
 import org.housingstudio.hsl.compiler.codegen.impl.condition.impl.VariableRequirement;
+import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -36,7 +37,7 @@ import java.util.List;
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.ARRAY_STORE)
-public class ArrayStore extends Statement implements ActionListBuilder {
+public class ArrayStore extends Statement implements ActionListBuilder, Printable {
     private final @NotNull Token name;
 
     @Children
@@ -99,7 +100,7 @@ public class ArrayStore extends Statement implements ActionListBuilder {
     }
 
     private @NotNull Action buildConstantLookup() {
-        if (!value.getValueType().matches(Types.INT))
+        if (!index.getValueType().matches(Types.INT))
             throw new IllegalStateException("Expected int");
 
         int index = Integer.parseInt(index().asConstantValue());
@@ -166,5 +167,15 @@ public class ArrayStore extends Statement implements ActionListBuilder {
             ),
             Collections.emptyList()
         );
+    }
+
+    /**
+     * Returns a string representation of the implementing class.
+     *
+     * @return the class debug information
+     */
+    @Override
+    public @NotNull String print() {
+        return name.value() + "[" + index().print() + "] = " + value.print();
     }
 }
