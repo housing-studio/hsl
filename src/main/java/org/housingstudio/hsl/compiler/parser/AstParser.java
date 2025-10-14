@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.ast.impl.declaration.Enum;
 import org.housingstudio.hsl.compiler.parser.impl.control.ForLoopParser;
 import org.housingstudio.hsl.compiler.parser.impl.control.WhileLoopParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.*;
+import org.housingstudio.hsl.compiler.parser.impl.scope.ArrayStoreParser;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
@@ -177,6 +178,10 @@ public class AstParser {
 
     public @NotNull Node nextAssignmentOperator() {
         return parse(AssignmentOperatorParser.class, Node.class);
+    }
+
+    public @NotNull Node nextArrayStore() {
+        return parse(ArrayStoreParser.class, Node.class);
     }
 
     public @NotNull Enum nextEnum() {

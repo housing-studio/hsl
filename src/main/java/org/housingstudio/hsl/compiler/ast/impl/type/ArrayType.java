@@ -3,6 +3,8 @@ package org.housingstudio.hsl.compiler.ast.impl.type;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,11 +17,10 @@ import java.util.List;
 public class ArrayType implements Type {
     private final @NotNull BaseType base = BaseType.ARRAY;
 
+    private final @NotNull Value capacity;
+
     private final @NotNull BaseType elementType;
     private final @NotNull Token elementTypeToken;
-
-    private final int dimensions;
-    private final @NotNull List<Token> dimensionTokens;
 
     /**
      * Indicate, whether the specified node matches the criteria of the matcher.
@@ -33,7 +34,7 @@ public class ArrayType implements Type {
             return false;
 
         ArrayType otherType = (ArrayType) other;
-        return dimensions == otherType.dimensions;
+        return capacity.asConstantValue().equals(otherType.capacity.asConstantValue());
     }
 
     /**
@@ -43,19 +44,18 @@ public class ArrayType implements Type {
      */
     @Override
     public @NotNull String print() {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < dimensions; i++) {
-            builder.append("[");
-            builder.append("]");
-        }
-        return builder.append(elementType.format()).toString();
+        return "[" + capacity.asConstantValue() + "]";
     }
 
     @Override
     public @NotNull List<Token> tokens() {
         List<Token> tokens = new ArrayList<>();
         tokens.add(elementTypeToken);
-        tokens.addAll(dimensionTokens);
         return tokens;
+    }
+
+    @Override
+    public @NotNull Value defaultValue() {
+        return new NullValue();
     }
 }

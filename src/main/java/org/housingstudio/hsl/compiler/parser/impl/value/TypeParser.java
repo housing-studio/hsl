@@ -1,9 +1,8 @@
 package org.housingstudio.hsl.compiler.parser.impl.value;
 
-import org.housingstudio.hsl.compiler.ast.impl.type.ArrayType;
-import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
-import org.housingstudio.hsl.compiler.ast.impl.type.StaticType;
-import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.*;
+import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
@@ -27,12 +26,12 @@ public class TypeParser extends ParserAlgorithm<Type> {
      */
     @Override
     public @NotNull Type parse(@NotNull AstParser parser, @NotNull ParserContext context) {
-        int dimensions = 0;
-        List<Token> dimensionTokens = new ArrayList<>();
-        while (peek().is(TokenType.LBRACKET)) {
-            dimensionTokens.add(get(TokenType.LBRACKET));
-            dimensionTokens.add(get(TokenType.RBRACKET));
-            dimensions++;
+        Value capacity = null;
+
+        if (peek().is(TokenType.LBRACKET)) {
+            get(TokenType.LBRACKET);
+            capacity = parser.nextValue();
+            get(TokenType.RBRACKET);
         }
 
         Token typeToken;
@@ -143,10 +142,22 @@ public class TypeParser extends ParserAlgorithm<Type> {
             throw new UnsupportedOperationException("Invalid type name: " + peek().value());
         }
 
-        if (dimensions > 0)
-            return new ArrayType(type, typeToken, dimensions, dimensionTokens);
+        if (capacity != null)
+            return new ArrayType(capacity, type, typeToken);
 
-        return new StaticType(type, typeToken);
+        return new StaticType(type, typeToken, getDefaultValue(type));
+    }
+
+    private @NotNull Value getDefaultValue(@NotNull BaseType type) {
+        if (type == BaseType.INT)
+            return Types.INT.defaultValue();
+        else if (type == BaseType.FLOAT)
+            return Types.FLOAT.defaultValue();
+        else if (type == BaseType.BOOL)
+            return Types.BOOL.defaultValue();
+        else if (type == BaseType.STRING)
+            return Types.STRING.defaultValue();
+        return new NullValue();
     }
 
     public static boolean isTypeIdentifier(@NotNull String identifier) {

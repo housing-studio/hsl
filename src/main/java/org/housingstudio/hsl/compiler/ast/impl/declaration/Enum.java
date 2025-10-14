@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.BaseType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.error.Errno;
@@ -96,6 +97,11 @@ public class Enum extends Node implements Type, Printable {
     @Override
     public @NotNull BaseType base() {
         return BaseType.ENUM;
+    }
+
+    @Override
+    public @NotNull Value defaultValue() {
+        return new NullValue();
     }
 
     /**

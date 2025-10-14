@@ -15,6 +15,7 @@ import org.housingstudio.hsl.compiler.parser.impl.operator.AssignmentOperatorPar
 import org.housingstudio.hsl.compiler.parser.impl.operator.OperatorParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.PostfixOperatorParser;
 import org.housingstudio.hsl.compiler.parser.impl.operator.PrefixOperatorParser;
+import org.housingstudio.hsl.compiler.parser.impl.scope.ArrayStoreParser;
 import org.housingstudio.hsl.compiler.parser.impl.scope.ScopeParser;
 import org.housingstudio.hsl.compiler.parser.impl.scope.StatementParser;
 import org.housingstudio.hsl.compiler.parser.impl.value.*;
@@ -66,7 +67,8 @@ public class ParserRegistry {
             AssignmentOperatorParser.class,
             EnumParser.class,
             ForLoopParser.class,
-            WhileLoopParser.class
+            WhileLoopParser.class,
+            ArrayStoreParser.class,
         };
 
         for (Class<?> parser : parsers) {

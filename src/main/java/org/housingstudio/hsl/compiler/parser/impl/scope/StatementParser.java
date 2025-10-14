@@ -122,9 +122,13 @@ public class StatementParser extends ParserAlgorithm<Node> {
         else if (peek().is(TokenType.EXPRESSION, "while"))
             return parser.nextWhileLoop();
 
+        // handle array assign
+        else if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.LBRACKET))
+            return parser.nextArrayStore();
+
         context.errorPrinter().print(
             Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected statement")
-                .error("token " + peek().print() + " is not a statement", peek())
+                .error("token " + peek().value() + " is not a statement", peek())
         );
         throw new UnsupportedOperationException("Not implemented statement: " + peek());
     }

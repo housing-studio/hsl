@@ -3,6 +3,8 @@ package org.housingstudio.hsl.compiler.ast.impl.type;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.ast.impl.value.builtin.NullValue;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,10 +18,18 @@ import java.util.List;
 public class StaticType implements Type {
     private final @NotNull BaseType base;
     private final @Nullable Token baseToken;
+    private final @Nullable Value defaultValue;
 
     public StaticType(@NotNull BaseType base) {
         this.base = base;
-        this.baseToken = null;
+        baseToken = null;
+        defaultValue = new NullValue();
+    }
+
+    public StaticType(@NotNull BaseType base, @NotNull Value defaultValue) {
+        this.base = base;
+        baseToken = null;
+        this.defaultValue = defaultValue;
     }
 
     /**
@@ -40,12 +50,17 @@ public class StaticType implements Type {
      */
     @Override
     public @NotNull String print() {
-        return base.format()
-            ;
+        return base.format();
     }
 
     @Override
     public @NotNull List<Token> tokens() {
         return baseToken != null ? Collections.singletonList(baseToken) : Collections.emptyList();
+    }
+
+    @Override
+    public @NotNull Value defaultValue() {
+        assert defaultValue != null : "missing type default value";
+        return defaultValue;
     }
 }
