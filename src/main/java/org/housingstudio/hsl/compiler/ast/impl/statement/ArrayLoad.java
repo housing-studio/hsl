@@ -83,7 +83,7 @@ public class ArrayLoad extends Value {
             return buildConstantLookup();
 
         context.errorPrinter().print(
-            Notification.error(Errno.CANNOT_LOAD_ARRAY_DYNAMICALLY, "cannot load array dynamically: " + name.value(), this)
+            Notification.error(Errno.CANNOT_ACCESS_ARRAY_DYNAMICALLY, "cannot load array dynamically: " + name.value(), this)
                 .error("cannot load array dynamically", name)
                 .note("the compiler could not figure out how to convert this instruction to static load")
         );

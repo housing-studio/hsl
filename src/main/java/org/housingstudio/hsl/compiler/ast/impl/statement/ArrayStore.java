@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.ast.impl.statement;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
@@ -41,7 +42,8 @@ public class ArrayStore extends Statement implements ActionListBuilder, Printabl
     private final @NotNull Token name;
 
     @Children
-    private final @NotNull Value index;
+    @Setter
+    private @NotNull Value index;
 
     @Children
     private final @NotNull Value value;

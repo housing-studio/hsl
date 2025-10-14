@@ -20,6 +20,7 @@ public class Optimizer {
 
     public Optimizer() {
         strategies.add(new DeadAssignmentEliminator());
+        strategies.add(new ArrayStoreIndexConversion());
     }
 
     /**

@@ -322,9 +322,9 @@ public enum Errno {
     UNKNOWN_TYPE(160),
 
     /**
-     * `CANNOT_LOAD_ARRAY_DYNAMICALLY` indicates, that the underlying array could not be loaded dynamically.
+     * `CANNOT_ACCESS_ARRAY_DYNAMICALLY` indicates, that the underlying array could not be stored/loaded dynamically.
      */
-    CANNOT_LOAD_ARRAY_DYNAMICALLY(161);
+    CANNOT_ACCESS_ARRAY_DYNAMICALLY(161);
 
     /**
      * The error code of the token error.
