@@ -84,11 +84,17 @@ public class MacroCall extends Value implements ActionListBuilder {
         Map<String, Value> args = ArgumentParser.parseArguments(context, name, macro.parameters(), arguments);
         validateArgumentTypes(macro.parameters(), args);
 
-        Frame mainFrame = new Frame(null, "main", 0, 0, 0, null);
+        Frame previousFrame = Frame.current();
+        Frame mainFrame = new Frame(previousFrame, macro.name().value(), 0, 0, 0, null, Frame.Kind.MACRO_CALL);
         for (Map.Entry<String, Value> entry : args.entrySet())
             mainFrame.locals().set(entry.getKey(), entry.getValue());
 
-        macro.invoke(mainFrame);
+        try {
+            Frame.setCurrent(mainFrame);
+            macro.invoke(mainFrame);
+        } finally {
+            Frame.setCurrent(previousFrame);
+        }
         return mainFrame;
     }
 

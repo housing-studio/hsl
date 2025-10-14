@@ -31,7 +31,7 @@ public class NativeMacro extends Macro {
 
     @Override
     public void invoke(@NotNull Frame parent) {
-        Frame frame = new Frame(parent, name().value(), 0, 0, 0, this);
+        Frame frame = new Frame(parent, name().value(), 0, 0, 0, this, Frame.Kind.MACRO);
         InvocationContext context = new InvocationContext(parent, frame);
         callback.accept(context);
     }

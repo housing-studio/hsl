@@ -15,6 +15,8 @@ import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.scope.ScopeContainer;
 import org.housingstudio.hsl.compiler.ast.impl.value.MacroParameterAccessor;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.debug.Format;
+import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.NamingConvention;
 import org.housingstudio.hsl.compiler.error.Warning;
@@ -47,8 +49,23 @@ public class Macro extends ScopeContainer implements Invocable {
         List<Node> statements = scope.statements();
         int length = statements.size();
 
-        Frame frame = new Frame(parent, name.value(), 0, 0, length, this);
+        Frame frame = new Frame(parent, name.value(), 0, 0, length, this, Frame.Kind.MACRO);
 
+        if (frame.depth() > Frame.MAX_DEPTH) {
+            try {
+                context.errorPrinter().print(
+                    Notification.error(Errno.STACK_OVERFLOW, "stack overflow", this)
+                        .error("macro `" + name.value() + "` exceeded maximum stack depth of " + Frame.MAX_DEPTH, name)
+                        .note("did you misspell the name, or forgot to declare the macro?")
+                );
+            } finally {
+                System.err.println(
+                    Format.RED + "exception in thread `" + Thread.currentThread().getName() + "`: stack overflow"
+                );
+                frame.printStackTrace();
+            }
+            throw new UnsupportedOperationException("Stack overflow caused by macro call: " + name.value());
+        }
         // Copy macro parameter values from parent frame's locals to this frame's locals
         for (Parameter parameter : parameters) {
             Value argValue = parent.locals().get(parameter.name().value());

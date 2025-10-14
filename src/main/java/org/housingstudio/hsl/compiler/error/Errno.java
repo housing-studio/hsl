@@ -3,6 +3,7 @@ package org.housingstudio.hsl.compiler.error;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.runtime.vm.Frame;
 
 /**
  * Represents an enumeration of token errors that can occur during tokenization.
@@ -324,7 +325,12 @@ public enum Errno {
     /**
      * `CANNOT_ACCESS_ARRAY_DYNAMICALLY` indicates, that the underlying array could not be stored/loaded dynamically.
      */
-    CANNOT_ACCESS_ARRAY_DYNAMICALLY(161);
+    CANNOT_ACCESS_ARRAY_DYNAMICALLY(161),
+
+    /**
+     * `STACK_OVERFLOW` indicates, that the stack frame tree exceeded the maximum depth of {@link Frame#MAX_DEPTH}
+     */
+    STACK_OVERFLOW(162);
 
     /**
      * The error code of the token error.

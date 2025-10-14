@@ -83,7 +83,7 @@ public class Compiler {
         if (macro == null)
             return;
 
-        Frame heap = new Frame(null, "main", 0, 0, 0, null);
+        Frame heap = new Frame(null, "main", 0, 0, 0, null, Frame.Kind.MACRO);
         macro.invoke(heap);
     }
 
