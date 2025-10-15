@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.TokenContext;
-import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.ErrorMode;
 import org.housingstudio.hsl.compiler.error.ErrorPrinter;
@@ -337,7 +336,7 @@ public class Tokenizer implements TokenContext {
         // loop until we reach the end of the number content
         // for example: `123.4D`
         //               ^^^^^^ will loop 6 times
-        while (isNumberContent(peek())) {
+        while (isNumberPart(peek())) {
             // handle floating point number
             // for example: `1.5`, `1.5F`, `1.5D`
             //                ^ this character is checked here
@@ -729,7 +728,7 @@ public class Tokenizer implements TokenContext {
      * @param c the character to test
      * @return {@code true} if the character is a number content
      */
-    private boolean isNumberContent(char c) {
+    private boolean isNumberPart(char c) {
         switch (c) {
             case '.':
             case '_':
