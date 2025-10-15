@@ -113,6 +113,11 @@ public class CLI {
     private void export(String[] args) {
         boolean verbose = Arrays.asList(args).contains("-v");
         boolean htsl = Arrays.asList(args).contains("-htsl");
+        boolean raw = Arrays.asList(args).contains("-raw");
+
+        if (raw) {
+            Format.setEnabled(false);
+        }
 
         File workDir = new File(System.getProperty("user.dir"));
         File buildFile = new File(workDir, "build.toml");
