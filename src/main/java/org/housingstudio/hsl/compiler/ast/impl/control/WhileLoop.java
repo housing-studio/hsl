@@ -130,7 +130,7 @@ public class WhileLoop extends ScopeContainer implements ActionBuilder, Printabl
             prefix = "command";
             nodeName = ((CommandNode) node).name().value();
         }
-        return String.format("%s:%s:for:%d:%s", prefix, nodeName, id, name);
+        return String.format("%s:%s:while:%d:%s", prefix, nodeName, id, name);
     }
 
     private @NotNull ScopeContainer getUnderlyingMethod() {
