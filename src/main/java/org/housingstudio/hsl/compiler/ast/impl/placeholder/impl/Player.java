@@ -116,7 +116,7 @@ public class Player {
     @Fn
     public final Placeholder VERSION = new PlaceholderBuilder()
         .name("version")
-        .returnType(Types.STRING)
+        .returnType(Types.INT)
         .mapper(args -> new Result("%player.version%"))
         .build();
 

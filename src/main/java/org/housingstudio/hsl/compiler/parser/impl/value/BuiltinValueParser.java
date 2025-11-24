@@ -7,7 +7,6 @@ import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.ast.impl.value.EnumLookup;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.*;
-import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
@@ -100,6 +99,8 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
                 return parseComparatorAmount(context);
             case "Permission":
                 return parsePermission(context);
+            case "Protocol":
+                return parseProtocol(context);
             default:
                 return parseEnumLookup(type, parser, context);
         }
@@ -412,8 +413,8 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         if (wrapped == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.INVALID_BUILTIN_TYPE, "sound lobby type")
-                    .error("unrecognized sound type", sound)
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid lobby type")
+                    .error("unrecognized lobby type", sound)
             );
             throw new UnsupportedOperationException("Invalid sound type: " + sound);
         }
@@ -430,7 +431,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         if (wrapped == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.INVALID_BUILTIN_TYPE, "sound flag type")
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid flag type")
                     .error("unrecognized flag type", flag)
             );
             throw new UnsupportedOperationException("Invalid flag type: " + flag);
@@ -448,7 +449,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         if (wrapped == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.INVALID_BUILTIN_TYPE, "sound material type")
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid material type")
                     .error("unrecognized material type", material)
             );
             throw new UnsupportedOperationException("Invalid material type: " + material);
@@ -466,7 +467,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         if (wrapped == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.INVALID_BUILTIN_TYPE, "sound executor type")
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid executor type")
                     .error("unrecognized executor type", executor)
             );
             throw new UnsupportedOperationException("Invalid executor type: " + executor);
@@ -484,7 +485,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         if (wrapped == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.INVALID_BUILTIN_TYPE, "sound comparator type")
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid comparator type")
                     .error("unrecognized comparator type", comparator)
             );
             throw new UnsupportedOperationException("Invalid comparator type: " + comparator);
@@ -502,7 +503,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         if (wrapped == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.INVALID_BUILTIN_TYPE, "sound item comparator type")
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid item comparator type")
                     .error("unrecognized item comparator type", item)
             );
             throw new UnsupportedOperationException("Invalid item comparator type: " + item);
@@ -520,7 +521,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         if (wrapper == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.INVALID_BUILTIN_TYPE, "sound comparator target type")
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid comparator target type")
                     .error("unrecognized comparator target type", comparator)
             );
             throw new UnsupportedOperationException("Invalid comparator target type: " + comparator);
@@ -538,7 +539,7 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         if (wrapped == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.INVALID_BUILTIN_TYPE, "sound comparator amount type")
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid comparator amount type")
                     .error("unrecognized comparator amount type", amount)
             );
             throw new UnsupportedOperationException("Invalid comparator amount type: " + amount);
@@ -556,12 +557,30 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
         if (wrapped == null) {
             context.errorPrinter().print(
-                Notification.error(Errno.INVALID_BUILTIN_TYPE, "sound permission type")
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid permission type")
                     .error("unrecognized permission type", permission)
             );
             throw new UnsupportedOperationException("Invalid permission type: " + permission);
         }
 
         return new PermissionValue(wrapped);
+    }
+
+    private @NotNull Value parseProtocol(@NotNull ParserContext context) {
+        Token protocol = get(TokenType.IDENTIFIER);
+        Protocol wrapped = Stream.of(Protocol.values())
+            .filter(v -> v.format().equals(protocol.value()))
+            .findFirst()
+            .orElse(null);
+
+        if (wrapped == null) {
+            context.errorPrinter().print(
+                Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid protocol type")
+                    .error("unrecognized protocol type", protocol)
+            );
+            throw new UnsupportedOperationException("Invalid protocol type: " + protocol);
+        }
+
+        return new ProtocolValue(wrapped);
     }
 }
