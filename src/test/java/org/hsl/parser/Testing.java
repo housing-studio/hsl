@@ -3,6 +3,7 @@ package org.hsl.parser;
 import com.google.gson.GsonBuilder;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.impl.placeholder.PlaceholderRegistry;
 import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
@@ -30,6 +31,7 @@ public class Testing {
         BuiltinActions.init();
         BuiltinConditions.init();
         NativeDefinitions.init();
+        PlaceholderRegistry.init();
         AstParser parser = Parsers.of(source);
 
         Game game = new Game();

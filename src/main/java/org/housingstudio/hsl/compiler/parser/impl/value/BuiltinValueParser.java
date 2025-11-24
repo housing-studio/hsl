@@ -1,5 +1,9 @@
 package org.housingstudio.hsl.compiler.parser.impl.value;
 
+import org.housingstudio.hsl.compiler.ast.impl.placeholder.Placeholder;
+import org.housingstudio.hsl.compiler.ast.impl.placeholder.PlaceholderRegistry;
+import org.housingstudio.hsl.compiler.ast.impl.placeholder.PlaceholderValue;
+import org.housingstudio.hsl.compiler.ast.impl.value.Argument;
 import org.housingstudio.hsl.compiler.ast.impl.value.EnumLookup;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.ast.impl.value.builtin.*;
@@ -9,6 +13,7 @@ import org.housingstudio.hsl.compiler.parser.AstParser;
 import org.housingstudio.hsl.compiler.parser.ParserAlgorithm;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
 import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.housingstudio.hsl.std.*;
@@ -24,8 +29,11 @@ import org.housingstudio.hsl.std.slot.impl.HotbarSlot;
 import org.housingstudio.hsl.std.slot.impl.InventorySlot;
 import org.housingstudio.hsl.std.slot.impl.StaticSlot;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class BuiltinValueParser extends ParserAlgorithm<Value> {
@@ -99,18 +107,26 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
 
     private @NotNull Value parseEnumLookup(@NotNull Token type, @NotNull AstParser parser, @NotNull ParserContext context) {
         Token member = get(TokenType.IDENTIFIER);
+
+        Value placeholder = parsePlaceholder(type, member, parser, context);
+        if (placeholder != null)
+            return placeholder;
+
         return new EnumLookup(type, member, Collections.emptyList());
-        /*
-        context.errorPrinter().print(
-            Notification.error(Errno.INVALID_BUILTIN_TYPE, "invalid builtin type")
-                .error("unrecognized builtin type", type)
-                .note(
-                    "read about builtin types at " + Format.LIGHT_BLUE +
-                        "https://docs.housing-studio.org/documentation/types"
-                )
+    }
+
+    private @Nullable Value parsePlaceholder(@NotNull Token type, @NotNull Token member, @NotNull AstParser parser, @NotNull ParserContext context) {
+        Placeholder placeholder = PlaceholderRegistry.resolve(type.value(), member.value());
+        if (placeholder == null)
+            return null;
+
+        List<Argument> arguments = parser.nextArgumentList();
+        Map<String, Value> args = ArgumentParser.parseArguments(
+            context, type, placeholder.method().parameters(), arguments
         );
-        throw new UnsupportedOperationException("Invalid builtin type: " + type);
-         */
+        ArgAccess access = new ArgAccess(args);
+
+        return new PlaceholderValue(placeholder, access);
     }
 
     private @NotNull Value parseSlot(@NotNull AstParser parser, @NotNull ParserContext context) {

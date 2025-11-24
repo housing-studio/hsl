@@ -46,6 +46,7 @@ public enum NodeType {
     EVENT,
     RANDOM,
     GAME,
+    PLACEHOLDER,
 
     CONDITIONAL,
     FOR_LOOP,

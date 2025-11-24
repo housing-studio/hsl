@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Game;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
+import org.housingstudio.hsl.compiler.ast.impl.placeholder.PlaceholderRegistry;
 import org.housingstudio.hsl.runtime.natives.NativeDefinitions;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.ast.impl.action.BuiltinActions;
@@ -55,6 +56,7 @@ public class Compiler {
         BuiltinActions.init();
         BuiltinConditions.init();
         NativeDefinitions.init();
+        PlaceholderRegistry.init();
     }
 
     public void compileSources() {

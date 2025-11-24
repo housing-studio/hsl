@@ -10,6 +10,7 @@ import org.housingstudio.hsl.compiler.token.Token;
 import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.function.Function;
 public class PlaceholderBuilder {
     private Token name;
     private Type returnType = Types.VOID;
-    private List<Parameter> parameters;
+    private List<Parameter> parameters = new ArrayList<>();
     private Function<ArgAccess, Result> mapper;
 
     public @NotNull PlaceholderBuilder name(@NotNull String name) {
@@ -43,6 +44,6 @@ public class PlaceholderBuilder {
 
     public @NotNull Placeholder build() {
         Method method = new Method(Collections.emptyList(), name, returnType, parameters, Scope.EMPTY);
-        return new Placeholder(method, mapper);
+        return new Placeholder(name.value(), method, mapper);
     }
 }

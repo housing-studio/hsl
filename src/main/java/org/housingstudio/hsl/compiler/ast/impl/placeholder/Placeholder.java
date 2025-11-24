@@ -13,6 +13,7 @@ import java.util.function.Function;
 @Accessors(fluent = true)
 @Getter
 public class Placeholder {
+    private final @NotNull String name;
     private final @NotNull Method method;
     private final @NotNull Function<ArgAccess, Result> mapper;
 }
