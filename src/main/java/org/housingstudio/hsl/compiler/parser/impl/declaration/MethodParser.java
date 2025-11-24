@@ -64,6 +64,7 @@ public class MethodParser extends ParserAlgorithm<Method> {
             returnType = parser.nextType();
         }
 
+        /*
         if (!returnType.matches(Types.VOID)) {
             context.errorPrinter().print(
                 Notification.error(Errno.UNEXPECTED_TOKEN, "non-void function return type is not supported")
@@ -71,6 +72,7 @@ public class MethodParser extends ParserAlgorithm<Method> {
             );
             throw new UnsupportedOperationException("non-void function return type is currently not supported");
         }
+         */
 
         Scope scope = parser.nextScope();
         ArrayList<Annotation> annotations = new ArrayList<>(context.currentAnnotations());

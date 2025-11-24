@@ -17,7 +17,12 @@ public enum Warning {
     /**
      * `TYPE_CONVERSION_TO_ITSELF` indicates, that the type conversion converts to itself.
      */
-    TYPE_CONVERSION_TO_ITSELF(101);
+    TYPE_CONVERSION_TO_ITSELF(101),
+
+    /**
+     * `DEAD_CODE` indicates, that one or more instructions were defined after a return statement.
+     */
+    DEAD_CODE(102);
 
     /**
      * The error code of the token error.

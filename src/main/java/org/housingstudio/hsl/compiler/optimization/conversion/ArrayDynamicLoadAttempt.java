@@ -1,7 +1,8 @@
-package org.housingstudio.hsl.compiler.optimization;
+package org.housingstudio.hsl.compiler.optimization.conversion;
 
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
+import org.housingstudio.hsl.compiler.optimization.OptimizationStrategy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

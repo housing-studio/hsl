@@ -1,10 +1,11 @@
-package org.housingstudio.hsl.compiler.optimization;
+package org.housingstudio.hsl.compiler.optimization.elimination;
 
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalAssign;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
+import org.housingstudio.hsl.compiler.optimization.OptimizationStrategy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

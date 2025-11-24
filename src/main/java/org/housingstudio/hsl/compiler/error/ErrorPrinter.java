@@ -1,6 +1,6 @@
 package org.housingstudio.hsl.compiler.error;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 import org.housingstudio.hsl.compiler.TokenContext;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.token.Meta;
@@ -12,12 +12,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequiredArgsConstructor
 public class ErrorPrinter {
+    @Getter
+    private static ErrorPrinter instance;
+
     private final Map<Integer, Integer> warnings = new HashMap<>();
     private final Map<Integer, Integer> errors = new HashMap<>();
 
     private final @NotNull TokenContext context;
+
+    public ErrorPrinter(@NotNull TokenContext context) {
+        this.context = context;
+        instance = this;
+    }
 
     private int computePadding(@NotNull List<TokenError> errors) {
         return errors.stream()

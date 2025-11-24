@@ -2,27 +2,44 @@ package org.housingstudio.hsl.compiler.ast.impl.control;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
+import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
+import org.housingstudio.hsl.compiler.codegen.impl.action.impl.ChangeVariable;
+import org.housingstudio.hsl.compiler.codegen.impl.action.impl.Exit;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.runtime.vm.Frame;
 import org.housingstudio.hsl.runtime.vm.Instruction;
+import org.housingstudio.hsl.std.Mode;
+import org.housingstudio.hsl.std.Namespace;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
 @NodeInfo(type = NodeType.RETURN_VALUE)
-public class ReturnValue extends Node implements Instruction, Printable {
+public class ReturnValue extends Node implements Instruction, Printable, ActionListBuilder {
     @Children
-    private final @NotNull Value value;
+    @Setter
+    private @NotNull Value value;
+
+    @Setter
+    private boolean trailing;
 
     /**
      * Returns a string representation of the implementing class.
@@ -49,5 +66,38 @@ public class ReturnValue extends Node implements Instruction, Printable {
                 frame.returnValue(ConstantLiteral.ofString(constantValue));
         } else
             frame.returnValue(value);
+    }
+
+    @Override
+    public @NotNull List<Action> buildActionList() {
+        Method method = resolveParent();
+        if (method == null)
+            return Collections.emptyList();
+
+        String returnName = encodeName(method);
+        ChangeVariable changeVariable = new ChangeVariable(
+            Namespace.PLAYER, returnName, Mode.SET, value.asConstantValue(), false
+        );
+
+        List<Action> actions = new ArrayList<>();
+        actions.add(changeVariable);
+        if (!trailing)
+            actions.add(new Exit());
+
+        return actions;
+    }
+
+    private @Nullable Method resolveParent() {
+        Node node = this;
+        while (node != null) {
+            if (node instanceof Method)
+                return (Method) node;
+            node = node.parent();
+        }
+        return null;
+    }
+
+    public static @NotNull String encodeName(@NotNull Method targetMethod) {
+        return String.format("return:%s", targetMethod.name().value());
     }
 }

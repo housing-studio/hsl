@@ -129,6 +129,11 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
     }
 
     @Override
+    public @Nullable Value load() {
+        return value;
+    }
+
+    @Override
     public @NotNull String name() {
         return name.value();
     }

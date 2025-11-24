@@ -51,11 +51,6 @@ public class MethodParameterAccessor extends Value implements Variable {
         return "%%stat_" + encodeName(method, name) + "%%";
     }
 
-    @Override
-    public @NotNull Value load() {
-        return this;
-    }
-
     /**
      * Returns a string representation of the implementing class.
      *

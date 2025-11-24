@@ -1,9 +1,10 @@
-package org.housingstudio.hsl.compiler.optimization;
+package org.housingstudio.hsl.compiler.optimization.conversion;
 
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalAssign;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.statement.ArrayStore;
+import org.housingstudio.hsl.compiler.optimization.OptimizationStrategy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class ArrayStoreIndexConversion implements OptimizationStrategy {
         if (statements.isEmpty())
             return 0;
 
+        int steps = 0;
         for (int i = 1; i < statements.size(); i++) {
             Node previousStmt = statements.get(i - 1);
             Node currentStmt = statements.get(i);
@@ -49,9 +51,10 @@ public class ArrayStoreIndexConversion implements OptimizationStrategy {
                 continue;
 
             store.index(assign.value());
+            steps++;
         }
 
-        return 0;
+        return steps;
     }
 
     private boolean isDynamicArrayStore(@NotNull Node node) {

@@ -13,12 +13,15 @@ import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.debug.SoftOverride;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
+import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -66,6 +69,8 @@ public abstract class Node {
      */
     private @Nullable Set<@NotNull Node> children;
 
+    private int start, end;
+
     /**
      * Initialize the node and retrieve the type from the annotation.
      */
@@ -78,6 +83,20 @@ public abstract class Node {
 
         // register the node for the node hierarchy
         NodeVisitor.register(this);
+
+        if (context == null)
+            return;
+
+        start = context.pointer() + 1;
+        end = context.cursor();
+        context.pointer(context.cursor());
+    }
+
+    public @NotNull List<Token> tokens() {
+        List<Token> tokens = new ArrayList<>();
+        for (int i = start; i <= end; i++)
+            tokens.add(context.at(i));
+        return tokens;
     }
 
     /**

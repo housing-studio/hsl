@@ -59,4 +59,8 @@ public class Notification {
     public static @NotNull Notification warning(@NotNull Warning warning, @NotNull String title, @NotNull Node node) {
         return new Notification(warning.code(), node.id(), title, ErrorType.WARNING);
     }
+
+    public static @NotNull Notification warning(@NotNull Warning warning, @NotNull String title) {
+        return new Notification(warning.code(), -1, title, ErrorType.WARNING);
+    }
 }

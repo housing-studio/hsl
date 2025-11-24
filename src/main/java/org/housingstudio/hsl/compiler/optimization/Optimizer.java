@@ -5,6 +5,11 @@ import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
+import org.housingstudio.hsl.compiler.optimization.conversion.ArrayStoreIndexConversion;
+import org.housingstudio.hsl.compiler.optimization.conversion.ReturnValueInliner;
+import org.housingstudio.hsl.compiler.optimization.elimination.DeadAssignmentEliminator;
+import org.housingstudio.hsl.compiler.optimization.elimination.TrailingReturnEliminator;
+import org.housingstudio.hsl.compiler.optimization.warning.DeadCodeDetector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -21,6 +26,9 @@ public class Optimizer {
     public Optimizer() {
         strategies.add(new DeadAssignmentEliminator());
         strategies.add(new ArrayStoreIndexConversion());
+        strategies.add(new ReturnValueInliner());
+        strategies.add(new TrailingReturnEliminator());
+        strategies.add(new DeadCodeDetector());
     }
 
     /**

@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.parser;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.TokenContext;
 import org.housingstudio.hsl.compiler.ast.Node;
@@ -57,6 +58,10 @@ public class ParserContext implements TokenContext {
 
     private final @NotNull Diagnostics diagnostics;
     private final @NotNull ErrorMode mode;
+
+    @Getter
+    @Setter
+    private int pointer;
 
     /**
      * The index of the currently parsed token.
