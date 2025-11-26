@@ -63,6 +63,11 @@ public class BinaryOperator extends Value {
     }
 
     @Override
+    public boolean isConstant() {
+        return lhs.isConstant() && rhs.isConstant();
+    }
+
+    @Override
     public void init() {
         if (!lhs.getValueType().matches(rhs.getValueType())) {
             context.errorPrinter().print(

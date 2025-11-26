@@ -66,4 +66,9 @@ public class StatAccess extends Value {
     public @NotNull String print() {
         return "load " + name.value();
     }
+
+    @Override
+    public boolean isConstant() {
+        return false;
+    }
 }

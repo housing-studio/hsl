@@ -51,4 +51,9 @@ public class Argument extends Value {
     public @NotNull String print() {
         return (name != null ? name.value() + " = " : "") + value.print();
     }
+
+    @Override
+    public boolean isConstant() {
+        return value.isConstant();
+    }
 }
