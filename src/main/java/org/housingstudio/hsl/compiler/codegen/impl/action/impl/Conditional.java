@@ -55,7 +55,7 @@ public class Conditional implements Action {
     public @NotNull HtslInvocation asHTSL() {
         StringBuilder builder = new StringBuilder();
         builder.append("if ");
-        if (!conditions.isEmpty()) {
+        if (conditions.size() > 1) {
             if (matchAnyCondition)
                 builder.append("or ");
             else
