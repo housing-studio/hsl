@@ -17,7 +17,7 @@ public class Math {
         )
         .returnType(Types.INT)
         .mapper(
-            args -> new Result("%random.int/{min} {max}%")
+            args -> new Result("%random.whole/{min} {max}%")
                 .set("min", args.getInt("min"))
                 .set("max", args.getInt("max"))
         )
