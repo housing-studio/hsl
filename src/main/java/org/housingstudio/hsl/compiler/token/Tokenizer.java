@@ -814,6 +814,7 @@ public class Tokenizer implements TokenContext {
             case "return":
             case "random":
             case "enum":
+            case "as":
                 return true;
             default:
                 return false;

@@ -35,6 +35,8 @@ import java.util.List;
 public class LocalDeclareAssign extends Node implements Variable, Printable, ActionBuilder {
     private final @NotNull Namespace namespace;
     private final @NotNull Token name;
+    private final @Nullable Token alias;
+    private final @Nullable Token team;
     private final @Nullable Type explicitType;
 
     @Children

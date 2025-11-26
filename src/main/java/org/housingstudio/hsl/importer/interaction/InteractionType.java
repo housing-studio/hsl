@@ -9,6 +9,7 @@ public enum InteractionType {
     MODE_WITH_UNSET,
     LOBBY,
     NAMESPACE,
+    NAMESPACE_TEAM,
     GAME_MODE,
     WEATHER,
     TIME,

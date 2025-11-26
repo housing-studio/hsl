@@ -16,6 +16,7 @@ import org.housingstudio.hsl.std.Namespace;
 import org.housingstudio.hsl.compiler.debug.Format;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -24,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 public class LocalDeclare extends Node implements Variable, Printable {
     private final @NotNull Namespace namespace;
     private final @NotNull Token name;
+    private final @Nullable Token alias;
+    private final @Nullable Token team;
     private final @NotNull Type type;
 
     /**

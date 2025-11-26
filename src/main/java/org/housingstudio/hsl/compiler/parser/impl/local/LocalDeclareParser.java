@@ -31,34 +31,34 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         // ^^^ the `stat` keyword indicates, that a local variable is being declared
         get(TokenType.EXPRESSION, "stat");
 
-        // parse the stat namespace
-        // stat team kills: int
-        //      ^^^^ the identifier after `stat` describes the namespace of the stat
-        Namespace namespace;
-        switch (peek(TokenType.IDENTIFIER).value()) {
+        Namespace namespace = Namespace.PLAYER;
+
+        Token name = null;
+        Token alias = null;
+        Token team = null;
+
+        Token identifier = get(TokenType.IDENTIFIER);
+        switch (identifier.value()) {
             case "player":
-                namespace = Namespace.PLAYER;
-                break;
-            case "team":
-                namespace = Namespace.TEAM;
                 break;
             case "global":
                 namespace = Namespace.GLOBAL;
                 break;
+            case "team":
+                namespace = Namespace.TEAM;
+                team = get(TokenType.STRING);
+                break;
             default:
-                context.errorPrinter().print(
-                    Notification.error(Errno.UNEXPECTED_NAMESPACE, "invalid namespace `" + peek().value() + "` for stat")
-                        .error("unexpected stat namespace", peek())
-                        .note("use `player`, `team` or `global`")
-                );
-                throw new UnsupportedOperationException("Invalid stat namespace: " + peek());
+                name = identifier;
         }
-        get();
 
-        // parse the local variable name
-        // stat global msg: string
-        //             ^^^ the name of the local variable
-        Token name = get(TokenType.IDENTIFIER);
+        if (name == null)
+            name = get(TokenType.IDENTIFIER);
+
+        if (peek().is(TokenType.EXPRESSION, "as")) {
+            get(TokenType.EXPRESSION, "as");
+            alias = get(TokenType.STRING);
+        }
 
         // parse the local variable type
         Type type = null; // if null, infer type
@@ -92,10 +92,10 @@ public class LocalDeclareParser extends ParserAlgorithm<Variable> {
         // handle local declaration without assignment
         if (value == null) {
             assert type != null;
-            return new LocalDeclare(namespace, name, type);
+            return new LocalDeclare(namespace, name, alias, team, type);
         }
 
         // handle local declaration with assignment
-        return new LocalDeclareAssign(namespace, name, type, value);
+        return new LocalDeclareAssign(namespace, name, alias, team, type, value);
     }
 }
