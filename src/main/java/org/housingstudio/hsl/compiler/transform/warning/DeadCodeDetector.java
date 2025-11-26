@@ -1,4 +1,4 @@
-package org.housingstudio.hsl.compiler.optimization.warning;
+package org.housingstudio.hsl.compiler.transform.warning;
 
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.control.Return;
@@ -7,13 +7,13 @@ import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.error.ErrorPrinter;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.error.Warning;
-import org.housingstudio.hsl.compiler.optimization.OptimizationStrategy;
+import org.housingstudio.hsl.compiler.transform.ScopeVisitor;
 import org.housingstudio.hsl.compiler.token.Token;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class DeadCodeDetector implements OptimizationStrategy {
+public class DeadCodeDetector implements ScopeVisitor {
     /**
      * Apply this optimization strategy to a scope.
      *
@@ -21,7 +21,7 @@ public class DeadCodeDetector implements OptimizationStrategy {
      * @return the number of optimizations applied
      */
     @Override
-    public int optimize(@NotNull Scope scope) {
+    public int visit(@NotNull Scope scope) {
         List<Node> statements = scope.statements();
         if (statements.isEmpty())
             return 0;
@@ -34,7 +34,7 @@ public class DeadCodeDetector implements OptimizationStrategy {
             }
 
             if (statement instanceof Scope)
-                optimize((Scope) statement);
+                visit((Scope) statement);
 
             if (!returnCalled)
                 continue;

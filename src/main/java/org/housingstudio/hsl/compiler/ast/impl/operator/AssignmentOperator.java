@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.ast.impl.operator;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
@@ -30,6 +31,7 @@ public class AssignmentOperator extends Statement implements Printable, ActionBu
     @Children
     private final @NotNull Value rhs;
 
+    @Setter
     private Variable variable;
 
     /**
@@ -62,6 +64,7 @@ public class AssignmentOperator extends Statement implements Printable, ActionBu
         else
             throw new UnsupportedOperationException("Unexpected assignment operator: " + operator);
 
+        /*
         if (!rhs.isConstant()) {
             context.errorPrinter().print(
                 Notification.error(Errno.EXPECTED_CONSTANT_VALUE, "cannot assign to non-constant value", this)
@@ -73,6 +76,7 @@ public class AssignmentOperator extends Statement implements Printable, ActionBu
             );
             throw new UnsupportedOperationException("Cannot assign to non-constant value: " + lhs.value());
         }
+         */
 
         return new ChangeVariable(
             variable.namespace(), variable.name(), mode, rhs.asConstantValue(), false

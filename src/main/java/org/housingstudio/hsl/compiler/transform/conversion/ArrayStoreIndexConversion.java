@@ -1,10 +1,10 @@
-package org.housingstudio.hsl.compiler.optimization.conversion;
+package org.housingstudio.hsl.compiler.transform.conversion;
 
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalAssign;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.statement.ArrayStore;
-import org.housingstudio.hsl.compiler.optimization.OptimizationStrategy;
+import org.housingstudio.hsl.compiler.transform.ScopeVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * Represents an optimization strategy that tries to convert dynamic array store instructions to static
  * array store instructions by checking if the previous instruction assigns to the dynamic index.
  */
-public class ArrayStoreIndexConversion implements OptimizationStrategy {
+public class ArrayStoreIndexConversion implements ScopeVisitor {
     // TODO this would not work until array store's lowering would be moved here
     //  basically the AST parse flow already converts dynamic stores to if statements, so this
     //  condition will never be true.
@@ -25,7 +25,7 @@ public class ArrayStoreIndexConversion implements OptimizationStrategy {
      * @return the number of optimizations applied
      */
     @Override
-    public int optimize(@NotNull Scope scope) {
+    public int visit(@NotNull Scope scope) {
         List<Node> statements = scope.statements();
         if (statements.isEmpty())
             return 0;

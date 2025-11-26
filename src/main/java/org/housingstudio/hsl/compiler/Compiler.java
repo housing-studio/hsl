@@ -22,7 +22,7 @@ import org.housingstudio.hsl.compiler.token.Tokenizer;
 import org.housingstudio.hsl.compiler.codegen.Exporter;
 import org.housingstudio.hsl.compiler.codegen.impl.house.House;
 import org.housingstudio.hsl.compiler.codegen.impl.house.Metadata;
-import org.housingstudio.hsl.compiler.optimization.Optimizer;
+import org.housingstudio.hsl.compiler.transform.TransformerEngine;
 import org.housingstudio.hsl.lsp.Diagnostics;
 import org.housingstudio.hsl.runtime.vm.Frame;
 import org.jetbrains.annotations.NotNull;
@@ -94,8 +94,8 @@ public class Compiler {
     }
 
     private void optimizeAst() {
-        Optimizer optimizer = new Optimizer();
-        optimizations = optimizer.optimize(game);
+        TransformerEngine transformer = new TransformerEngine();
+        optimizations = transformer.process(game);
 
         /*
         // Log optimization results if in debug mode

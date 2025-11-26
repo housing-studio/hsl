@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.ast.impl.local;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
@@ -31,6 +32,7 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
     @Children
     private final @NotNull Value value;
 
+    @Setter
     private Variable variable;
 
     /**
@@ -53,8 +55,8 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
                 Notification.error(Errno.UNEXPECTED_TYPE, "invalid assignment type", this)
                     .error(
                         "cannot assign " + value.getValueType().print() + " value to " +
-                            variable.type().print() + " stat",
-                        name
+                        variable.type().print() + " stat",
+                        operator
                     )
                     .note("make sure the stat's type matches the assigned value's type")
             );
@@ -62,6 +64,7 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
             throw new IllegalStateException("Explicit type does not match inferred type");
         }
 
+        /*
         if (!value.isConstant()) {
             context.errorPrinter().print(
                 Notification.error(Errno.EXPECTED_CONSTANT_VALUE, "cannot assign to non-constant value", this)
@@ -73,6 +76,7 @@ public class LocalAssign extends Statement implements Printable, ActionBuilder {
             );
             throw new UnsupportedOperationException("Cannot assign to non-constant value: " + name.value());
         }
+        */
     }
 
     /**

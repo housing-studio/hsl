@@ -1,16 +1,16 @@
-package org.housingstudio.hsl.compiler.optimization.conversion;
+package org.housingstudio.hsl.compiler.transform.conversion;
 
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.impl.control.ReturnValue;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
-import org.housingstudio.hsl.compiler.optimization.OptimizationStrategy;
+import org.housingstudio.hsl.compiler.transform.ScopeVisitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ReturnValueInliner implements OptimizationStrategy {
+public class ReturnValueInliner implements ScopeVisitor {
     /**
      * Apply this optimization strategy to a scope.
      *
@@ -18,7 +18,7 @@ public class ReturnValueInliner implements OptimizationStrategy {
      * @return the number of optimizations applied
      */
     @Override
-    public int optimize(@NotNull Scope scope) {
+    public int visit(@NotNull Scope scope) {
         List<Node> statements = scope.statements();
         if (statements.isEmpty())
             return 0;

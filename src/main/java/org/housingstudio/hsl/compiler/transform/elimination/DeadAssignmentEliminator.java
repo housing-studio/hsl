@@ -1,11 +1,11 @@
-package org.housingstudio.hsl.compiler.optimization.elimination;
+package org.housingstudio.hsl.compiler.transform.elimination;
 
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalAssign;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
-import org.housingstudio.hsl.compiler.optimization.OptimizationStrategy;
+import org.housingstudio.hsl.compiler.transform.ScopeVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +40,7 @@ import java.util.List;
  * x = 200 // This is kept (something in between)
  * </pre>
  */
-public class DeadAssignmentOptimizer implements OptimizationStrategy {
+public class DeadAssignmentEliminator implements ScopeVisitor {
     /**
      * Apply this optimization strategy to a scope.
      *
@@ -48,7 +48,7 @@ public class DeadAssignmentOptimizer implements OptimizationStrategy {
      * @return the number of optimizations applied
      */
     @Override
-    public int optimize(@NotNull Scope scope) {
+    public int visit(@NotNull Scope scope) {
         List<Node> statements = scope.statements();
         if (statements.isEmpty())
             return 0;
