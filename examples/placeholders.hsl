@@ -1,0 +1,23 @@
+event join() {
+    if (Player::protocol() != Protocol::V1_8) {
+        chat("&cYou must use version &71.8 &cto enter this house!")
+        sendToLobby()
+    }
+}
+
+const COOKIE_GOAL = 20
+
+@loop(10s)
+fn checkCookieCount() {
+    if (House::cookies() >= COOKIE_GOAL) {
+        triggerFunction("cookieAlert", target=Target::AllPlayers)
+    }
+}
+
+command wtfdate() {
+    stat year = Date::year()
+    stat month = Date::month()
+    stat day = Date::day()
+
+    chat($"&bCurrent date: &f{month}/{day}/{year}")
+}

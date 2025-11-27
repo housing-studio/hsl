@@ -1,0 +1,10 @@
+macro sum(a: int, b: int) -> int {
+    return a + b
+}
+
+fn macros() {
+    // `sum(10, 5)` is calculated during compile time, so the value `15` will be
+    // embedded to the interpolated string
+    stat sum = sum!(10, 5)
+    chat($"10 + 5 = {sum}")
+}

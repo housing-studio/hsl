@@ -1,0 +1,21 @@
+command sayhello() {
+    chat("hello") // prints hello to the player that executed the command
+}
+
+@executor(Executor::Self)
+command sayhello2() {
+    chat("hello") // prints hello the the player that is the argument after /sayhello2
+}
+
+// specify group priorities so only players with a certain group can execute the command
+@priority(3)
+command secretcommand() {
+    chat("Top Secret!")
+}
+
+// specify whether the command should be visible for all players or only those who have permission for the command
+@priority(3)
+@listed(false)
+command othersecretcommand() {
+    chat("Even more Top Secret!")
+}

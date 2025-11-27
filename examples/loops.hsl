@@ -1,0 +1,38 @@
+fn myLoop() {
+    for (stat i = 0; i < 10; i++) {
+        chat($"current iteration: {i}")
+    }
+}
+
+const WIDTH = 0.3
+const HEIGHT = 1.8
+
+fn epicGeometry() {
+    stat posX = Player::posX()
+    stat posY = Player::posY()
+    stat posZ = Player::posZ()
+
+    stat minX = posX - WIDTH
+    stat maxX = posX + WIDTH
+
+    stat minY = posY
+    stat maxY = posY + HEIGHT
+
+    stat minZ = posZ - WIDTH
+    stat maxZ = posZ + WIDTH
+
+    for (stat x = minX; x < maxX; x++) {
+        for (stat y = minY; y < maxY; y++) {
+            for (stat z = minZ; z < maxZ; z++) {
+                // point on AABB
+            }
+        }
+    }
+}
+
+fn checkRegions() {
+    while (withinRegion("Toxic Waste")) {
+        changeHealth(1, Mode::Decrement)
+        sleep(5s)
+    }
+}

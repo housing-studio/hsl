@@ -1,0 +1,12 @@
+enum Spawn: Location {
+    Red = Location::Custom(10, 10, 10),
+    Blue = Location::Custom(20, 20, 20)
+}
+
+event join() {
+    if (hasTeam("red")) {
+        teleport(Spawn::Red)
+    } else {
+        teleport(Spawn::Blue)
+    }
+}
