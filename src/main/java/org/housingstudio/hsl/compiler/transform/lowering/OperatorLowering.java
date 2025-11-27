@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.transform.lowering;
 
 import lombok.RequiredArgsConstructor;
 import org.housingstudio.hsl.compiler.ast.Node;
+import org.housingstudio.hsl.compiler.ast.impl.control.ReturnValue;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalAssign;
 import org.housingstudio.hsl.compiler.ast.impl.local.LocalDeclareAssign;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
@@ -54,6 +55,10 @@ public class OperatorLowering implements ScopeVisitor {
                 boolean changed = lowerDeclareAssign((LocalDeclareAssign) node, lowered);
                 if (changed)
                     transforms++;
+            } else if (node instanceof ReturnValue) {
+                boolean changed = lowerReturnValue((ReturnValue) node, lowered);
+                if (changed)
+                    transforms++;
             } else
                 lowered.add(node);
         }
@@ -87,6 +92,34 @@ public class OperatorLowering implements ScopeVisitor {
      */
     private boolean lowerDeclareAssign(@NotNull LocalDeclareAssign assign, @NotNull List<Node> out) {
         return lowerAssignment(assign.value(), assign, assign, out);
+    }
+
+    /**
+     * Lowers the value returned by a {@link ReturnValue} node.
+     * <p>
+     * Any complex expression in the return statement is evaluated into temporary
+     * variables before the {@code return} executes, leaving the {@link ReturnValue}
+     * itself holding only an atomic value.
+     *
+     * @param returnValue the return statement to lower
+     * @param out the list to append lowered statements to
+     *
+     * @return {@code true} if the return statement was transformed, {@code false} otherwise
+     */
+    private boolean lowerReturnValue(@NotNull ReturnValue returnValue, @NotNull List<Node> out) {
+        Value value = returnValue.value();
+
+        // nothing to do for atomic values
+        if (isAtomic(value)) {
+            out.add(returnValue);
+            return false;
+        }
+
+        // compute the value into temporaries and replace the return expression with a simple load
+        Value simple = ensureSimple(value, Namespace.PLAYER, out);
+        returnValue.value(simple);
+        out.add(returnValue);
+        return true;
     }
 
     /**
