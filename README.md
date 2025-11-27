@@ -25,7 +25,7 @@ Instead of fighting with the in-game UI, write expressive scripts that generate 
 fn myTimerTask() {
   giveItem(Material::Stone, slot=Slot::Hand)
 
-  stat player stones: int
+  stat stones: int
   stones++
 
   chat($"You have total {stones} stone blocks")
@@ -80,10 +80,10 @@ Hypixel Housing offers powerful in-game logic tools, but the experience can be l
 
 We're currently focusing on:
 
-- [ ] Core syntax & parser
-- [ ] Compiler backend to Hypixel actions
-- [ ] Robust error messages
-- [ ] Testing & documentation
+- [x] Core syntax & parser
+- [x] Compiler backend to Hypixel actions
+- [x] Robust error messages
+- [x] Testing & documentation
 
 ---
 
