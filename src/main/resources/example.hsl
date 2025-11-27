@@ -1,11 +1,11 @@
 // send a message and actionbar to the player upon join
 event join() {
     chat("Welcome to my house")
-    actionbar("Powered by HSL")
+    actionbar("Powered by Housing Studio's HSL")
 }
 
 event kill() {
-    stat player streak: int
+    stat streak: int
     streak++
 
     // apply strength effect when the player reaches a kill streak of 5
@@ -17,6 +17,5 @@ event kill() {
 
 // reset kill streak on death
 event death() {
-    stat player streak: int
-    streak = 0
+    stat streak = 0
 }
