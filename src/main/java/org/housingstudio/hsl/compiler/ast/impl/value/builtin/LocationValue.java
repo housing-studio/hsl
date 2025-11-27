@@ -9,7 +9,8 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.std.location.Location;
-import org.housingstudio.hsl.std.location.impl.CustomLocation;
+import org.housingstudio.hsl.std.location.impl.PosLocation;
+import org.housingstudio.hsl.std.location.impl.PosLookLocation;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
@@ -53,9 +54,16 @@ public class LocationValue extends Value {
             case INVOKER:
             case CURRENT:
                 return "Location::" + location.type().format();
-            case CUSTOM:
-                CustomLocation loc = (CustomLocation) location;
-                return String.format("Location::Custom(%s, %s, %s)", loc.x().print(), loc.y().print(), loc.z().print());
+            case POSITION:
+                PosLocation pos = (PosLocation) location;
+                return String.format("Location::Pos(%s, %s, %s)", pos.x().print(), pos.y().print(), pos.z().print());
+            case POSITION_LOOK:
+                PosLookLocation posLook = (PosLookLocation) location;
+                return String.format(
+                    "Location::PosLook(%s, %s, %s, %s, %s)",
+                    posLook.x().print(), posLook.y().print(), posLook.z().print(),
+                    posLook.yaw(), posLook.pitch()
+                );
             default:
                 throw new UnsupportedOperationException("Unexpected location type: " + location.type());
         }

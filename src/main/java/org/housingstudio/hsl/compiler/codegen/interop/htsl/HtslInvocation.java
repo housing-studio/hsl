@@ -3,7 +3,8 @@ package org.housingstudio.hsl.compiler.codegen.interop.htsl;
 import lombok.RequiredArgsConstructor;
 import org.housingstudio.hsl.std.*;
 import org.housingstudio.hsl.std.location.Location;
-import org.housingstudio.hsl.std.location.impl.CustomLocation;
+import org.housingstudio.hsl.std.location.impl.PosLocation;
+import org.housingstudio.hsl.std.location.impl.PosLookLocation;
 import org.housingstudio.hsl.std.slot.Slot;
 import org.jetbrains.annotations.NotNull;
 
@@ -278,11 +279,19 @@ public class HtslInvocation {
             case INVOKER:
                 value = "\"invokers_location\"";
                 break;
-            case CUSTOM:
-                CustomLocation loc = (CustomLocation) location;
+            case POSITION:
+                PosLocation pos = (PosLocation) location;
                 value = String.format(
                     "\"custom_coordinates\" \"%s %s %s\"",
-                    loc.x().load().asConstantValue(), loc.y().load().asConstantValue(), loc.z().load().asConstantValue()
+                    pos.x().load().asConstantValue(), pos.y().load().asConstantValue(), pos.z().load().asConstantValue()
+                );
+                break;
+            case POSITION_LOOK:
+                PosLookLocation posLook = (PosLookLocation) location;
+                value = String.format(
+                    "\"custom_coordinates\" \"%s %s %s %s %s\"",
+                    posLook.x().load().asConstantValue(), posLook.y().load().asConstantValue(), posLook.z().load().asConstantValue(),
+                    posLook.yaw().load().asConstantValue(),  posLook.pitch().load().asConstantValue()
                 );
                 break;
             default:

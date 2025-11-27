@@ -11,10 +11,10 @@ import org.jetbrains.annotations.NotNull;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-public class CustomLocation implements Location {
-    private final LocationType type = LocationType.CUSTOM;
+public class PosLookLocation implements Location {
+    private final LocationType type = LocationType.POSITION;
 
-    private final @NotNull Value x, y, z;
+    private final @NotNull Value x, y, z, yaw, pitch;
 
     /**
      * Get the constant string representation of the value.
@@ -25,13 +25,17 @@ public class CustomLocation implements Location {
      */
     @Override
     public @NotNull String asConstantValue() {
-        return type.format() + " " + x.asConstantValue() + " " + y.asConstantValue() + " " + z.asConstantValue();
+        return type.format() + " " +
+            x.asConstantValue() + " " + y.asConstantValue() + " " + z.asConstantValue() + " " +
+            yaw.asConstantValue() + " " + pitch.asConstantValue();
     }
 
     @Override
     public String toString() {
         return String.format(
-            "CustomLocation(x=%s, y=%s, z=%s)", x.asConstantValue(), y.asConstantValue(), z.asConstantValue()
+            "PosLookLocation(x=%s, y=%s, z=%s, yaw=%s, pitch=%s)",
+            x.asConstantValue(), y.asConstantValue(), z.asConstantValue(),
+            yaw.asConstantValue(), pitch.asConstantValue()
         );
     }
 }

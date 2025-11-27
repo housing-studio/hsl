@@ -12,7 +12,8 @@ public enum LocationType {
     SPAWN("Spawn", 0),
     INVOKER("Invoker", 1),
     CURRENT("Current", 2),
-    CUSTOM("Custom", 3);
+    POSITION("Pos", 3),
+    POSITION_LOOK("PosLook", 3);
 
     private final @NotNull String format;
     private final int offset;

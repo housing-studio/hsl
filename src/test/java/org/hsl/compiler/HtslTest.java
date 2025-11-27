@@ -5,7 +5,7 @@ import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.impl.*;
 import org.housingstudio.hsl.std.*;
 import org.housingstudio.hsl.std.location.LocationType;
-import org.housingstudio.hsl.std.location.impl.CustomLocation;
+import org.housingstudio.hsl.std.location.impl.PosLocation;
 import org.housingstudio.hsl.std.location.impl.StaticLocation;
 import org.housingstudio.hsl.std.slot.SlotType;
 import org.housingstudio.hsl.std.slot.impl.StaticSlot;
@@ -69,7 +69,7 @@ public class HtslTest {
         expect.put(new SendToLobby(Lobby.MAIN), "lobby \"Main Lobby\"");
         expect.put(
             new SetCompassTarget(
-                new CustomLocation(ConstantLiteral.ofInt(0), ConstantLiteral.ofInt(0), ConstantLiteral.ofInt(0))
+                new PosLocation(ConstantLiteral.ofInt(0), ConstantLiteral.ofInt(0), ConstantLiteral.ofInt(0))
             ),
             "compassTarget \"custom_coordinates\" \"0 0 0\""
         );
@@ -77,7 +77,7 @@ public class HtslTest {
         expect.put(new SetPlayerTeam("Blue"), "setTeam \"Blue\"");
         expect.put(
             new TeleportPlayer(
-                new CustomLocation(
+                new PosLocation(
                     ConstantLiteral.ofInt(0), ConstantLiteral.ofInt(0), ConstantLiteral.ofInt(0)
                 ),
                 true
@@ -92,7 +92,7 @@ public class HtslTest {
         expect.put(new ChangeVelocity(1F, 2F, 3F), "changeVelocity 1.0 2.0 3.0");
         expect.put(
             new LaunchToTarget(
-                new CustomLocation(
+                new PosLocation(
                     ConstantLiteral.ofInt(0), ConstantLiteral.ofInt(0), ConstantLiteral.ofInt(0)
                 ),
                 3

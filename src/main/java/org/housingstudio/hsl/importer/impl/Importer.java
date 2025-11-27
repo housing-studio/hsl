@@ -14,7 +14,7 @@ import org.housingstudio.hsl.importer.platform.*;
 import org.housingstudio.hsl.std.*;
 import org.housingstudio.hsl.std.location.Location;
 import org.housingstudio.hsl.std.location.LocationType;
-import org.housingstudio.hsl.std.location.impl.CustomLocation;
+import org.housingstudio.hsl.std.location.impl.PosLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -216,8 +216,8 @@ public class Importer {
                     waitAndClick(Interaction.START_INDEX + location.type().offset());
                     Thread.sleep(3000);
                     // enter values for custom location
-                    if (location.type() == LocationType.CUSTOM) {
-                        CustomLocation loc = (CustomLocation) value;
+                    if (location.type() == LocationType.POSITION) {
+                        PosLocation loc = (PosLocation) value;
                         String format = String.format(
                             "%s %s %s", loc.x().asConstantValue(), loc.y().asConstantValue(), loc.z().asConstantValue()
                         );

@@ -18,7 +18,8 @@ import org.housingstudio.hsl.compiler.token.TokenType;
 import org.housingstudio.hsl.std.*;
 import org.housingstudio.hsl.std.location.Location;
 import org.housingstudio.hsl.std.location.LocationType;
-import org.housingstudio.hsl.std.location.impl.CustomLocation;
+import org.housingstudio.hsl.std.location.impl.PosLocation;
+import org.housingstudio.hsl.std.location.impl.PosLookLocation;
 import org.housingstudio.hsl.std.location.impl.StaticLocation;
 import org.housingstudio.hsl.std.ComparatorTarget;
 import org.housingstudio.hsl.std.slot.Slot;
@@ -209,15 +210,27 @@ public class BuiltinValueParser extends ParserAlgorithm<Value> {
             case CURRENT:
                 value = new StaticLocation(wrapped);
                 break;
-            case CUSTOM:
+            case POSITION:
+            case POSITION_LOOK:
                 get(TokenType.LPAREN);
+
                 Value x = parser.nextValue();
                 get(TokenType.COMMA);
                 Value y = parser.nextValue();
                 get(TokenType.COMMA);
                 Value z = parser.nextValue();
+
+                if (wrapped == LocationType.POSITION)
+                    value = new PosLocation(x, y, z);
+                else {
+                    get(TokenType.COMMA);
+                    Value yaw = parser.nextValue();
+                    get(TokenType.COMMA);
+                    Value pitch = parser.nextValue();
+                    value = new PosLookLocation(x, y, z, yaw, pitch);
+                }
+
                 get(TokenType.RPAREN);
-                value = new CustomLocation(x, y, z);
                 break;
             default:
                 context.errorPrinter().print(

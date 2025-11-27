@@ -2,8 +2,8 @@ package org.housingstudio.hsl.std.location.impl;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.std.location.Location;
 import org.housingstudio.hsl.std.location.LocationType;
 import org.jetbrains.annotations.NotNull;
@@ -11,9 +11,10 @@ import org.jetbrains.annotations.NotNull;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
-@ToString
-public class StaticLocation implements Location {
-    private final @NotNull LocationType type;
+public class PosLocation implements Location {
+    private final LocationType type = LocationType.POSITION;
+
+    private final @NotNull Value x, y, z;
 
     /**
      * Get the constant string representation of the value.
@@ -24,6 +25,13 @@ public class StaticLocation implements Location {
      */
     @Override
     public @NotNull String asConstantValue() {
-        return type.format();
+        return type.format() + " " + x.asConstantValue() + " " + y.asConstantValue() + " " + z.asConstantValue();
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "PosLocation(x=%s, y=%s, z=%s)", x.asConstantValue(), y.asConstantValue(), z.asConstantValue()
+        );
     }
 }
