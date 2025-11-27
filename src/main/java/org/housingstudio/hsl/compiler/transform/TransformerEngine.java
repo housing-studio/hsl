@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.transform.conversion.ArrayStoreIndexConver
 import org.housingstudio.hsl.compiler.transform.conversion.ReturnValueInliner;
 import org.housingstudio.hsl.compiler.transform.elimination.DeadAssignmentEliminator;
 import org.housingstudio.hsl.compiler.transform.elimination.TrailingReturnEliminator;
+import org.housingstudio.hsl.compiler.transform.lowering.OperatorLowering;
 import org.housingstudio.hsl.compiler.transform.warning.DeadCodeDetector;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +30,7 @@ public class TransformerEngine {
         addStrategy(new ReturnValueInliner());
         addStrategy(new TrailingReturnEliminator());
         addStrategy(new DeadCodeDetector());
+        addStrategy(new OperatorLowering());
     }
 
     /**
