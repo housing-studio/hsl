@@ -53,4 +53,14 @@ public class Group extends Value {
     public @NotNull String print() {
         return content.print();
     }
+
+    @Override
+    public @NotNull Value load() {
+        return content;
+    }
+
+    @Override
+    public boolean isConstant() {
+        return content.isConstant();
+    }
 }

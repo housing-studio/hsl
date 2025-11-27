@@ -12,6 +12,7 @@ import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantAccess;
+import org.housingstudio.hsl.compiler.ast.impl.value.Group;
 import org.housingstudio.hsl.compiler.ast.impl.value.StatAccess;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -79,7 +80,7 @@ public class OperatorLowering implements ScopeVisitor {
      * @return {@code true} if the assignment was transformed, {@code false} if left unchanged
      */
     private boolean lowerAssign(@NotNull LocalAssign assign, @NotNull List<Node> out) {
-        return lowerAssignment(assign.value(), assign.variable(), assign, out);
+        return lowerAssignment(unwrap(assign.value()), assign.variable(), assign, out);
     }
 
     /**
@@ -91,7 +92,7 @@ public class OperatorLowering implements ScopeVisitor {
      * @return {@code true} if the assignment was transformed, {@code false} if left unchanged
      */
     private boolean lowerDeclareAssign(@NotNull LocalDeclareAssign assign, @NotNull List<Node> out) {
-        return lowerAssignment(assign.value(), assign, assign, out);
+        return lowerAssignment(unwrap(assign.value()), assign, assign, out);
     }
 
     /**
@@ -107,7 +108,8 @@ public class OperatorLowering implements ScopeVisitor {
      * @return {@code true} if the return statement was transformed, {@code false} otherwise
      */
     private boolean lowerReturnValue(@NotNull ReturnValue returnValue, @NotNull List<Node> out) {
-        Value value = returnValue.value();
+        Value value = unwrap(returnValue.value());
+        returnValue.value(value);
 
         // nothing to do for atomic values
         if (isAtomic(value)) {
@@ -139,6 +141,7 @@ public class OperatorLowering implements ScopeVisitor {
     private boolean lowerAssignment(
         @NotNull Value rhs, @NotNull Variable target, @NotNull Node originalNode, @NotNull List<Node> out
     ) {
+        rhs = unwrap(rhs);
         // if RHS is already atomic (constant or variable access), no lowering needed
         if (isAtomic(rhs)) {
             out.add(originalNode);
@@ -171,8 +174,10 @@ public class OperatorLowering implements ScopeVisitor {
      * @param out the list to append lowered statements to
      */
     private void lowerBinaryTop(@NotNull Variable target, @NotNull BinaryOperator bin, @NotNull List<Node> out) {
-        Value left = bin.lhs();
-        Value right = bin.rhs();
+        Value left = unwrap(bin.lhs());
+        Value right = unwrap(bin.rhs());
+        bin.lhs(left);
+        bin.rhs(right);
         Operator op = bin.operator();
 
         // check if the RHS reads the target variable - if so, we need to use a temp
@@ -225,8 +230,10 @@ public class OperatorLowering implements ScopeVisitor {
     private @NotNull Value ensureSimple(
         @NotNull Value value, @NotNull Namespace namespace, @NotNull List<Node> out
     ) {
+        value = unwrap(value);
+
         // treat StatAccess, ConstantAccess, and constant as atomic/simple
-        if (value.isConstant() || value instanceof StatAccess || value instanceof ConstantAccess)
+        if (isAtomic(value))
             return value;
 
         // if it's a binary op, compute subtree into a single temp
@@ -260,8 +267,10 @@ public class OperatorLowering implements ScopeVisitor {
      * @param out the list to append lowered statements to
      */
     private void lowerBinaryIntoTemp(Variable temp, BinaryOperator bin, List<Node> out) {
-        Value left = bin.lhs();
-        Value right = bin.rhs();
+        Value left = unwrap(bin.lhs());
+        Value right = unwrap(bin.rhs());
+        bin.lhs(left);
+        bin.rhs(right);
         Operator op = bin.operator();
 
         // handle nested binary operators recursively to avoid redundant temps
@@ -292,7 +301,8 @@ public class OperatorLowering implements ScopeVisitor {
      * @return {@code true} if the value is atomic, {@code false} otherwise
      */
     private boolean isAtomic(@NotNull Value value) {
-        return value.isConstant() || value instanceof StatAccess || value instanceof ConstantAccess;
+        Value unwrapped = unwrap(value);
+        return unwrapped.isConstant() || unwrapped instanceof StatAccess || unwrapped instanceof ConstantAccess;
     }
 
     /**
@@ -307,6 +317,7 @@ public class OperatorLowering implements ScopeVisitor {
      * @return {@code true} if the value reads the target variable, {@code false} otherwise
      */
     private boolean readsVariable(@NotNull Value value, @NotNull Variable target) {
+        value = unwrap(value);
         if (value instanceof StatAccess) {
             StatAccess sa = (StatAccess) value;
             return sa.variable().name().equals(target.name());
@@ -360,6 +371,7 @@ public class OperatorLowering implements ScopeVisitor {
     private @NotNull Node makeInitialAssign(
         @NotNull Variable target, @Nullable Node originalNode, @NotNull Value value
     ) {
+        value = unwrap(value);
         // use originalNode to determine the type of assignment to create
         if (originalNode instanceof LocalDeclareAssign) {
             LocalDeclareAssign original = (LocalDeclareAssign) originalNode;
@@ -441,6 +453,19 @@ public class OperatorLowering implements ScopeVisitor {
             default:
                 throw new IllegalArgumentException("Cannot map operator: " + source);
         }
+    }
+
+    /**
+     * Recursively unwrap {@link Group} nodes to access their underlying value.
+     *
+     * @param value the value to unwrap
+     * @return the innermost non-group value
+     */
+    private @NotNull Value unwrap(@NotNull Value value) {
+        Value current = value;
+        while (current instanceof Group)
+            current = current.load();
+        return current;
     }
 
     /**
