@@ -65,9 +65,7 @@ public class OperatorLowering implements ScopeVisitor {
         }
 
         // replace scope statements with lowered ones
-        original.clear();
-        original.addAll(lowered);
-
+        scope.statements(lowered);
         return transforms;
     }
 
