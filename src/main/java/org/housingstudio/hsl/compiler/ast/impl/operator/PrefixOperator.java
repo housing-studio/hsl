@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
+import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -20,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @NodeInfo(type = NodeType.PREFIX_UNARY_OPERATOR)
 public class PrefixOperator extends Value {
     private final @NotNull Operator operator;
+
+    @Children
     private final @NotNull Value operand;
 
     /**
