@@ -60,6 +60,10 @@ public class OperatorLowering implements ScopeVisitor {
                 boolean changed = lowerReturnValue((ReturnValue) node, lowered);
                 if (changed)
                     transforms++;
+            } else if (node instanceof AssignmentOperator) {
+                boolean changed = lowerAssignmentOperator((AssignmentOperator) node, lowered);
+                if (changed)
+                    transforms++;
             } else
                 lowered.add(node);
         }
@@ -119,6 +123,34 @@ public class OperatorLowering implements ScopeVisitor {
         Value simple = ensureSimple(value, Namespace.PLAYER, out);
         returnValue.value(simple);
         out.add(returnValue);
+        return true;
+    }
+
+    /**
+     * Lowers an assignment operator statement (e.g., {@code x += y}, {@code x -= a + b}).
+     * <p>
+     * Handles lowering the right-hand side value while preserving the update operation.
+     * If the RHS reads the target variable, it's computed into a temporary first to avoid clobbering.
+     *
+     * @param assignOp the assignment operator to lower
+     * @param out the list to append lowered statements to
+     *
+     * @return {@code true} if the assignment operator was transformed, {@code false} if left unchanged
+     */
+    private boolean lowerAssignmentOperator(@NotNull AssignmentOperator assignOp, @NotNull List<Node> out) {
+        Value rhs = unwrap(assignOp.rhs());
+        Variable target = assignOp.variable();
+
+        // if RHS is already atomic, no lowering needed
+        if (isAtomic(rhs)) {
+            out.add(assignOp);
+            return false;
+        }
+
+        // for complex values (binary operators, function calls, etc.), compute into a temporary first
+        // ensureSimple handles cases where RHS reads the target by computing into a temp first
+        Value simple = ensureSimple(rhs, target.namespace(), out);
+        out.add(makeUpdate(target, assignOp.operator(), simple));
         return true;
     }
 
