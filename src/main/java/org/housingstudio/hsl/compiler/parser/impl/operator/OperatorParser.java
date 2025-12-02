@@ -131,9 +131,15 @@ public class OperatorParser extends ParserAlgorithm<Operator> {
                 return !next.equals(".") && !next.equals("?");
             case "=":
             case "!":
+            case "*":
+            case "/":
                 return !next.equals("=");
             case "&":
                 return !next.equals("&");
+            case "+":
+                return !next.equals("+") && !next.equals("=");
+            case "-":
+                return !next.equals("-") && !next.equals("=");
             default:
                 return false;
         }
