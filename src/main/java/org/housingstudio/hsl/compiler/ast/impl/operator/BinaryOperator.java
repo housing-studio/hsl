@@ -167,6 +167,19 @@ public class BinaryOperator extends Value {
                     float rhs = Float.parseFloat(this.rhs.asConstantValue());
                     return String.valueOf(lhs / rhs);
                 }
+
+            case REMAINDER:
+                if (lhs.getValueType().matches(Types.INT)) {
+                    int lhs = Integer.parseInt(this.lhs.asConstantValue());
+                    int rhs = Integer.parseInt(this.rhs.asConstantValue());
+                    return String.valueOf(lhs % rhs);
+                }
+
+                else if (lhs.getValueType().matches(Types.FLOAT)) {
+                    float lhs = Float.parseFloat(this.lhs.asConstantValue());
+                    float rhs = Float.parseFloat(this.rhs.asConstantValue());
+                    return String.valueOf(lhs % rhs);
+                }
         }
 
         throw new IllegalStateException("Unsupported operator type: " + operator);
@@ -185,6 +198,7 @@ public class BinaryOperator extends Value {
             case NEGATE_OR_SUBTRACT:
             case DIVIDE:
             case MULTIPLY:
+            case REMAINDER:
                 return type.isNumber();
             case AND:
             case OR:
@@ -213,6 +227,7 @@ public class BinaryOperator extends Value {
             case "-":
             case "*":
             case "/":
+            case "%":
                 return true;
             default:
                 return false;

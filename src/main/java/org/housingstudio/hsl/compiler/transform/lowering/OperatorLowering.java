@@ -141,6 +141,18 @@ public class OperatorLowering implements ScopeVisitor {
         Value rhs = unwrap(assignOp.rhs());
         Variable target = assignOp.variable();
 
+        // transform modulo assignment: x %= m -> x = x % m
+        // then the regular assignment lowering will transform x % m to x - (x / m) * m
+        if (assignOp.operator() == Operator.REMAINDER_EQUAL) {
+            // Create x % m
+            Token modToken = Token.of(TokenType.OPERATOR, "%");
+            Value targetLoad = makeLoad(target);
+            BinaryOperator modulo = new BinaryOperator(targetLoad, Operator.REMAINDER, modToken, rhs);
+
+            // Lower as regular assignment: x = x % m
+            return lowerAssignment(modulo, target, null, out);
+        }
+
         // if RHS is already atomic, no lowering needed
         if (isAtomic(rhs)) {
             out.add(assignOp);
@@ -210,6 +222,24 @@ public class OperatorLowering implements ScopeVisitor {
         bin.rhs(right);
         Operator op = bin.operator();
 
+        // transform modulo operator: x % m -> x - (x / m) * m
+        if (op == Operator.REMAINDER) {
+            // create: (x / m) * m
+            Token divToken = Token.of(TokenType.OPERATOR, "/");
+            BinaryOperator div = new BinaryOperator(left, Operator.DIVIDE, divToken, right);
+
+            Token mulToken = Token.of(TokenType.OPERATOR, "*");
+            BinaryOperator mul = new BinaryOperator(div, Operator.MULTIPLY, mulToken, right);
+
+            // create: x - ((x / m) * m)
+            Token subToken = Token.of(TokenType.OPERATOR, "-");
+            BinaryOperator moduloReplacement = new BinaryOperator(left, Operator.NEGATE_OR_SUBTRACT, subToken, mul);
+
+            // recursively process the transformed expression
+            lowerBinaryTop(target, moduloReplacement, out);
+            return;
+        }
+
         // check if the RHS reads the target variable - if so, we need to use a temp
         boolean rhsReadsTarget = readsVariable(bin, target);
 
@@ -266,10 +296,35 @@ public class OperatorLowering implements ScopeVisitor {
         if (isAtomic(value))
             return value;
 
-        // if it's a binary op, compute subtree into a single temp
+        // if it's a binary op, handle modulo transformation and compute subtree into a single temp
         if (value instanceof BinaryOperator) {
+            BinaryOperator bin = (BinaryOperator) value;
+
+            // transform modulo operator: x % m -> x - (x / m) * m
+            if (bin.operator() == Operator.REMAINDER) {
+                Value lhs = bin.lhs();
+                Value rhs = bin.rhs();
+
+                // create: (x / m) * m
+                Token divToken = Token.of(TokenType.OPERATOR, "/");
+                BinaryOperator div = new BinaryOperator(lhs, Operator.DIVIDE, divToken, rhs);
+
+                Token mulToken = Token.of(TokenType.OPERATOR, "*");
+                BinaryOperator mul = new BinaryOperator(div, Operator.MULTIPLY, mulToken, rhs);
+
+                // create: x - ((x / m) * m)
+                Token subToken = Token.of(TokenType.OPERATOR, "-");
+                BinaryOperator moduloReplacement = new BinaryOperator(lhs, Operator.NEGATE_OR_SUBTRACT, subToken, mul);
+
+                // recursively process the transformed expression
+                Variable tmp = newTempVar(value.getValueType(), namespace);
+                lowerBinaryIntoTemp(tmp, moduloReplacement, out);
+                return makeLoad(tmp);
+            }
+
+            // for other binary operators, compute subtree into a single temp
             Variable tmp = newTempVar(value.getValueType(), namespace);
-            lowerBinaryIntoTemp(tmp, (BinaryOperator) value, out);
+            lowerBinaryIntoTemp(tmp, bin, out);
             return makeLoad(tmp);
         }
 
@@ -302,6 +357,24 @@ public class OperatorLowering implements ScopeVisitor {
         bin.lhs(left);
         bin.rhs(right);
         Operator op = bin.operator();
+
+        // transform modulo operator: x % m -> x - (x / m) * m
+        if (op == Operator.REMAINDER) {
+            // create: (x / m) * m
+            Token divToken = Token.of(TokenType.OPERATOR, "/");
+            BinaryOperator div = new BinaryOperator(left, Operator.DIVIDE, divToken, right);
+
+            Token mulToken = Token.of(TokenType.OPERATOR, "*");
+            BinaryOperator mul = new BinaryOperator(div, Operator.MULTIPLY, mulToken, right);
+
+            // create: x - ((x / m) * m)
+            Token subToken = Token.of(TokenType.OPERATOR, "-");
+            BinaryOperator moduloReplacement = new BinaryOperator(left, Operator.NEGATE_OR_SUBTRACT, subToken, mul);
+
+            // recursively process the transformed expression
+            lowerBinaryIntoTemp(temp, moduloReplacement, out);
+            return;
+        }
 
         // handle nested binary operators recursively to avoid redundant temps
         if (left instanceof BinaryOperator)

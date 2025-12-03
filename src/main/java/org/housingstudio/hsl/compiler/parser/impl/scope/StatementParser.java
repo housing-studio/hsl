@@ -71,7 +71,7 @@ public class StatementParser extends ParserAlgorithm<Node> {
         //      ^ rhs operand value
         else if (
             peek().is(TokenType.IDENTIFIER) && (
-                isAssigmentOperator(at(cursor() + 1)) && at(cursor() + 2).is(TokenType.OPERATOR, "=")
+                isAssignmentOperator(at(cursor() + 1)) && at(cursor() + 2).is(TokenType.OPERATOR, "=")
             )
         )
             return parser.nextAssignmentOperator();
@@ -137,7 +137,7 @@ public class StatementParser extends ParserAlgorithm<Node> {
         throw new UnsupportedOperationException("Not implemented statement: " + peek());
     }
 
-    private boolean isAssigmentOperator(@NotNull Token token) {
+    private boolean isAssignmentOperator(@NotNull Token token) {
         if (!token.is(TokenType.OPERATOR))
             return false;
 
@@ -146,6 +146,7 @@ public class StatementParser extends ParserAlgorithm<Node> {
             case "-":
             case "*":
             case "/":
+            case "%":
                 return true;
             default:
                 return false;
