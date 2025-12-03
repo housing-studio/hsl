@@ -75,9 +75,8 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
         return actions;
     }
 
-    private boolean isTopLevelScope() {
-        return parent instanceof Method || parent instanceof Macro || parent instanceof CommandNode ||
-            parent instanceof Event;
+    public boolean isTopLevelScope() {
+        return parent != null && parent.isTopLevelNode();
     }
 
     /**

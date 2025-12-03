@@ -13,6 +13,10 @@ import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.impl.Conditional;
+import org.housingstudio.hsl.compiler.error.Errno;
+import org.housingstudio.hsl.compiler.error.Notification;
+import org.housingstudio.hsl.compiler.token.Token;
+import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +38,20 @@ public class ConditionalNode extends ScopeContainer implements ActionBuilder, Pr
 
     @Children
     private final @Nullable Scope elseScope;
+
+    @Override
+    public void init() {
+        if (!(parent() instanceof Scope))
+            return;
+
+        Scope scope = (Scope) parent();
+        if (scope.parent() != null && !scope.parent().isTopLevelNode()) {
+            context.errorPrinter().print(
+                Notification.error(Errno.ILLEGAL_NESTED_CONDITIONAL, "unexpected nested conditional")
+                    .error("conditionals cannot have nested conditionals", context.peek())
+            );
+        }
+    }
 
     @Override
     public @NotNull Action buildAction() {

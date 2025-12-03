@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.CommandNode;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Event;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.ChildrenResolver;
@@ -141,6 +145,10 @@ public abstract class Node {
      */
     public boolean hasNext() {
         return nodeType != NodeType.ERROR && nodeType != NodeType.EOF;
+    }
+
+    public boolean isTopLevelNode() {
+        return this instanceof Method || this instanceof Macro || this instanceof CommandNode || this instanceof Event;
     }
 
     /**

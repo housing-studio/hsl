@@ -20,6 +20,9 @@ public class ActionLimiter {
     private final @NotNull Method function;
     private final @NotNull Map<ActionType, Integer> actions;
 
+    // TODO afaik actions are scope-bound, not function-bound
+    //  use IdentityHashMap<Scope, action count per type>
+
     public void validate() {
         for (Map.Entry<ActionType, Integer> entry : actions.entrySet()) {
             ActionType type = entry.getKey();

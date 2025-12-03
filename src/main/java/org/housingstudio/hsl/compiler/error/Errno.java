@@ -330,7 +330,12 @@ public enum Errno {
     /**
      * `STACK_OVERFLOW` indicates, that the stack frame tree exceeded the maximum depth of {@link Frame#MAX_DEPTH}
      */
-    STACK_OVERFLOW(162);
+    STACK_OVERFLOW(162),
+
+    /**
+     * `ILLEGAL_NESTED_CONDITIONAL` indicates, that a conditional was declared within another conditional.
+     */
+    ILLEGAL_NESTED_CONDITIONAL(163);
 
     /**
      * The error code of the token error.
