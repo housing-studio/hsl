@@ -126,6 +126,10 @@ public class StatementParser extends ParserAlgorithm<Node> {
         else if (peek().is(TokenType.IDENTIFIER) && at(cursor() + 1).is(TokenType.LBRACKET))
             return parser.nextArrayStore();
 
+        // handle nested scope
+        else if (peek().is(TokenType.LBRACE))
+            return parser.nextScope();
+
         context.errorPrinter().print(
             Notification.error(Errno.UNEXPECTED_TOKEN, "unexpected statement")
                 .error("token " + peek().value() + " is not a statement", peek())

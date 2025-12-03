@@ -7,6 +7,9 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.CommandNode;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Event;
+import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
@@ -14,12 +17,14 @@ import org.housingstudio.hsl.compiler.codegen.hierarchy.NodeVisitor;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Parent;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
+import org.housingstudio.hsl.compiler.codegen.impl.action.impl.Conditional;
 import org.housingstudio.hsl.compiler.debug.Printable;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +64,20 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
             else if (statement instanceof ActionListBuilder)
                 actions.addAll(((ActionListBuilder) statement).buildActionList());
         }
+
+        if (!isTopLevelScope()) {
+            Conditional conditional = new Conditional(
+                new ArrayList<>(), false, actions, new ArrayList<>()
+            );
+            actions = Collections.singletonList(conditional);
+        }
+
         return actions;
+    }
+
+    private boolean isTopLevelScope() {
+        return parent instanceof Method || parent instanceof Macro || parent instanceof CommandNode ||
+            parent instanceof Event;
     }
 
     /**
