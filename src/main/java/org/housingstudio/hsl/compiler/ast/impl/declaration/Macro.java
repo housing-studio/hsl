@@ -7,6 +7,7 @@ import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionBuilder;
 import org.housingstudio.hsl.compiler.codegen.builder.ActionListBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
@@ -96,12 +97,37 @@ public class Macro extends ScopeContainer implements Invocable {
 
     @Override
     public void init() {
+        validateName();
+        validateParameters();
+    }
+
+    private void validateName() {
         if (!NamingConvention.FUNCTIONS.test(name.value())) {
             context.errorPrinter().print(
                 Notification.warning(Warning.INVALID_NAMING_CONVENTION, "invalid naming convention", this)
                     .error("not preferred macro name", name)
                     .note("use `lowerCamelCase` style to name macros")
             );
+        }
+    }
+
+
+    private void validateParameters() {
+        for (Parameter parameter : parameters) {
+            Type type = parameter.type();
+            if (type.matches(Types.ANY))
+                continue;
+
+            Value value = parameter.defaultValue();
+            if (value == null)
+                continue;
+
+            if (!type.matches(value.getValueType())) {
+                context.errorPrinter().print(
+                    Notification.error(Errno.INFER_TYPE_MISMATCH, "infer type mismatch", this)
+                        .error("default value does not match parameter type", parameter.name())
+                );
+            }
         }
     }
 
