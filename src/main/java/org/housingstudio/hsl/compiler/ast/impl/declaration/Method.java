@@ -11,6 +11,7 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.MacroParameterAccessor;
 import org.housingstudio.hsl.compiler.ast.impl.value.MethodParameterAccessor;
+import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.codegen.ActionLimiter;
 import org.housingstudio.hsl.compiler.codegen.builder.FunctionBuilder;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
@@ -58,6 +59,7 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
     public void init() {
         validateAnnotations();
         validateName();
+        validateParameters();
     }
 
     private void validateAnnotations() {
@@ -81,6 +83,25 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
                     .error("not preferred function name", name)
                     .note("use `lowerCamelCase` style to name functions")
             );
+        }
+    }
+
+    private void validateParameters() {
+        for (Parameter parameter : parameters) {
+            Type type = parameter.type();
+            if (type.matches(Types.ANY))
+                continue;
+
+            Value value = parameter.defaultValue();
+            if (value == null)
+                continue;
+
+            if (!type.matches(value.getValueType())) {
+                context.errorPrinter().print(
+                    Notification.error(Errno.INFER_TYPE_MISMATCH, "infer type mismatch", this)
+                        .error("default value does not match parameter type", parameter.name())
+                );
+            }
         }
     }
 
