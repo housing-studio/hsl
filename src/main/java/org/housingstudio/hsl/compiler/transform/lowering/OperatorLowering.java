@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.operator.AssignmentOperator;
 import org.housingstudio.hsl.compiler.ast.impl.operator.BinaryOperator;
 import org.housingstudio.hsl.compiler.ast.impl.operator.Operator;
+import org.housingstudio.hsl.compiler.ast.impl.operator.PrefixOperator;
 import org.housingstudio.hsl.compiler.ast.impl.scope.Scope;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantAccess;
@@ -566,7 +567,7 @@ public class OperatorLowering implements ScopeVisitor {
      */
     private @NotNull Value unwrap(@NotNull Value value) {
         Value current = value;
-        while (current instanceof Group)
+        while (current instanceof Group || current instanceof PrefixOperator)
             current = current.load();
         return current;
     }

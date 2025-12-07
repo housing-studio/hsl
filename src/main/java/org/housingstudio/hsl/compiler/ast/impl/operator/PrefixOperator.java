@@ -13,6 +13,7 @@ import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.token.Token;
+import org.housingstudio.hsl.compiler.token.TokenType;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
@@ -46,15 +47,23 @@ public class PrefixOperator extends Value {
     public @NotNull String asConstantValue() {
         return load().asConstantValue();
     }
-    
-    private @NotNull Value negate(@NotNull Value operand) {
-        if (!(operand instanceof ConstantLiteral)) {
-            context.errorPrinter().print(
-                Notification.error(Errno.NOT_IMPLEMENTED_FEATURE, "not implemented prefix operand")
-                    .error("non-constant negations are not implemented yet", context.peek()) // TODO resolve correct token
-            );
-        }
 
+    private @NotNull Value negate(@NotNull Value operand) {
+        if (operand instanceof ConstantLiteral)
+            return buildStaticNegation(operand);
+
+        return buildDynamicNegation(operand);
+    }
+
+    private @NotNull Value buildDynamicNegation(@NotNull Value operand) {
+        return new BinaryOperator(
+            operand,
+            Operator.MULTIPLY, Token.of(TokenType.OPERATOR, "*"),
+            ConstantLiteral.ofInt(-1)
+        );
+    }
+
+    private @NotNull Value buildStaticNegation(@NotNull Value operand) {
         if (!operand.getValueType().numeric()) {
             context.errorPrinter().print(
                 Notification.error(Errno.UNEXPECTED_OPERAND, "unexpected prefix operand")

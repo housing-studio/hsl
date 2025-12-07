@@ -46,7 +46,7 @@ public class LocalDeclareAssign extends Node implements Variable, Printable, Act
     private Type type;
 
     private void inferType() {
-        Type valueType = value.load().getValueType();
+        Type valueType = value.getValueType();
 
         // check if an explicit type is specified and it does not match the inferred type
         if (explicitType != null && !explicitType.matches(Types.ANY) && !valueType.matches(explicitType)) {
