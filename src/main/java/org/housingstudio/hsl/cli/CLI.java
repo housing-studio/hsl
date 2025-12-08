@@ -53,6 +53,7 @@ public class CLI {
         System.err.println("  export             - compile and export the project");
         System.err.println("    -v               - toggle verbose mode");
         System.err.println("    -htsl            - transpile project to HTSL representation");
+        System.err.println("    -json            - transpile project to JSON representation");
         System.err.println("  diagnostics        - compile the project and print compiler diagnostics");
         System.err.println("  version            - print debug information about the compiler");
     }
@@ -112,7 +113,7 @@ public class CLI {
 
     private void export(String[] args) {
         boolean verbose = Arrays.asList(args).contains("-v");
-        boolean htsl = Arrays.asList(args).contains("-htsl");
+        boolean json = Arrays.asList(args).contains("-json");
         boolean raw = Arrays.asList(args).contains("-raw");
 
         if (raw) {
@@ -157,7 +158,7 @@ public class CLI {
             File exportFile;
 
             House export = compiler.export();
-            if (htsl) {
+            if (!json) {
                 String header = loadResource("htsl.header")
                     .replace("%project.name%", metadata.id())
                     .replace("%project.author%", metadata.author() != null ? metadata.author() : "N/A")
@@ -167,9 +168,9 @@ public class CLI {
                 exportFile = new File(targetDir, metadata.id() + ".htsl");
                 writeFile(exportFile, header + htslData);
             } else {
-                String json = new GsonBuilder().setPrettyPrinting().create().toJson(export);
+                String data = new GsonBuilder().setPrettyPrinting().create().toJson(export);
                 exportFile = new File(targetDir, metadata.id() + ".json");
-                writeFile(exportFile, json);
+                writeFile(exportFile, data);
             }
 
             if (verbose)
