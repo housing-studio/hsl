@@ -150,13 +150,15 @@ public class ArrayStore extends Statement implements ActionListBuilder, Printabl
         ArrayType arrayType = (ArrayType) variable.type();
         int capacity = Integer.parseInt(arrayType.capacity().asConstantValue());
 
+        // TODO assert that index is a variable
+
         return new Conditional(
             Arrays.asList(
                 new VariableRequirement(
-                    false, Namespace.PLAYER, variable.name(), Comparator.LESS_THAN, "0", null
+                    false, Namespace.PLAYER, index.asConstantValue(), Comparator.LESS_THAN, "0", null
                 ),
                 new VariableRequirement(
-                    false, Namespace.PLAYER, variable.name(), Comparator.GREATER_THAN_OR_EQUAL, "" + capacity, null
+                    false, Namespace.PLAYER, index.asConstantValue(), Comparator.GREATER_THAN_OR_EQUAL, "" + capacity, null
                 )
             ),
             true,
