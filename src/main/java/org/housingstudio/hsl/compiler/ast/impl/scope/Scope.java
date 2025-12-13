@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
+import org.housingstudio.hsl.compiler.ast.impl.control.ConditionalNode;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.CommandNode;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Event;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
@@ -65,7 +66,7 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
                 actions.addAll(((ActionListBuilder) statement).buildActionList());
         }
 
-        if (!isTopLevelScope()) {
+        if (!isTopLevelScope() && !isConditionalScope()) {
             Conditional conditional = new Conditional(
                 new ArrayList<>(), false, actions, new ArrayList<>()
             );
@@ -77,6 +78,10 @@ public class Scope extends ScopeContainer implements ActionListBuilder, Printabl
 
     public boolean isTopLevelScope() {
         return parent != null && parent.isTopLevelNode();
+    }
+
+    public boolean isConditionalScope() {
+        return parent != null && parent instanceof ConditionalNode;
     }
 
     /**
