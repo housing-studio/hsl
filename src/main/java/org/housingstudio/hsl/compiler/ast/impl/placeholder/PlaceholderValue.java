@@ -47,4 +47,9 @@ public class PlaceholderValue extends Value {
     public @NotNull String print() {
         return "placeholder " + placeholder.name();
     }
+
+    @Override
+    public boolean isConstant() {
+        return false;
+    }
 }
