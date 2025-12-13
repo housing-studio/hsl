@@ -18,7 +18,7 @@ import java.util.function.Function;
 
 public class PlaceholderBuilder {
     private Token name;
-    private Type returnType = Types.VOID;
+    private Type returnType;
     private List<Parameter> parameters = new ArrayList<>();
     private Function<ArgAccess, Result> mapper;
 
@@ -43,6 +43,8 @@ public class PlaceholderBuilder {
     }
 
     public @NotNull Placeholder build() {
+        assert name != null : "Unspecified placeholder name";
+        assert returnType != null : "Unspecified placeholder returnType";
         Method method = new Method(Collections.emptyList(), name, returnType, parameters, Scope.EMPTY);
         return new Placeholder(name.value(), method, mapper);
     }
