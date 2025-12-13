@@ -80,7 +80,7 @@ public class MethodCall extends Value implements ActionListBuilder, Instruction 
             throw new UnsupportedOperationException("Cannot find method: " + name.value());
         }
 
-        return Types.VOID; // TODO resolve method return type
+        return method.returnType();
     }
 
     /**
@@ -98,6 +98,11 @@ public class MethodCall extends Value implements ActionListBuilder, Instruction 
                 .note("do not assign to the return value of functions")
         );
         throw new UnsupportedOperationException("Cannot use method call as an expression: " + name.value());
+    }
+
+    @Override
+    public boolean isConstant() {
+        return false;
     }
 
     /**
