@@ -93,9 +93,9 @@ public class MethodCall extends Value implements ActionListBuilder, Instruction 
     @Override
     public @NotNull String asConstantValue() {
         context.errorPrinter().print(
-            Notification.error(Errno.FUNCTION_TRIGGER_AS_EXPRESSION, "function trigger used as expression", this)
-                .error("function triggers cannot be treated as expressions", name)
-                .note("do not assign to the return value of functions")
+            Notification.error(Errno.FUNCTION_TRIGGER_AS_EXPRESSION, "void function call used as expression", this)
+                .error("void function triggers cannot be treated as expressions", name)
+                .note("do not assign to the return value of void functions")
         );
         throw new UnsupportedOperationException("Cannot use method call as an expression: " + name.value());
     }

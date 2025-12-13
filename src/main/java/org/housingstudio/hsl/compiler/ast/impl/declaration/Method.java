@@ -2,6 +2,7 @@ package org.housingstudio.hsl.compiler.ast.impl.declaration;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.Node;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
@@ -11,6 +12,7 @@ import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.MacroParameterAccessor;
 import org.housingstudio.hsl.compiler.ast.impl.value.MethodParameterAccessor;
+import org.housingstudio.hsl.compiler.ast.impl.value.MethodReturnVariable;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.codegen.ActionLimiter;
 import org.housingstudio.hsl.compiler.codegen.builder.FunctionBuilder;
@@ -53,6 +55,15 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
     private final @NotNull Scope scope;
 
     /**
+     * The reserved variable for storing the return value.
+     * <p>
+     * This is only set if the return type is not void. It represents the variable
+     * where return values are stored when the method is called.
+     */
+    @Setter
+    private @Nullable Variable returnVariable;
+
+    /**
      * Initialize node logic before the nodes are visited and the code is generated.
      */
     @Override
@@ -60,6 +71,10 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
         validateAnnotations();
         validateName();
         validateParameters();
+
+        // reserve a variable for the return value if the return type is not void
+        if (!returnType.matches(Types.VOID))
+            returnVariable = new MethodReturnVariable(this);
     }
 
     private void validateAnnotations() {

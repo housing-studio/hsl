@@ -9,6 +9,7 @@ import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Macro;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
+import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
@@ -74,7 +75,14 @@ public class ReturnValue extends Node implements Instruction, Printable, ActionL
         if (method == null)
             return Collections.emptyList();
 
-        String returnName = encodeName(method);
+        // use the reserved return variable from the method if available
+        // TODO should probably check if return type != void then assert that returnVar != null
+        Variable returnVar = method.returnVariable();
+        if (returnVar == null)
+            // fallback to old behavior for void methods or if returnVariable is not set
+            return Collections.emptyList();
+
+        String returnName = returnVar.name();
         ChangeVariable changeVariable = new ChangeVariable(
             Namespace.PLAYER, returnName, Mode.SET, value.asConstantValue(), false
         );
@@ -95,9 +103,5 @@ public class ReturnValue extends Node implements Instruction, Printable, ActionL
             node = node.parent();
         }
         return null;
-    }
-
-    public static @NotNull String encodeName(@NotNull Method targetMethod) {
-        return String.format("return:%s", targetMethod.name().value());
     }
 }
