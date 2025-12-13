@@ -32,12 +32,6 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
         //                     ^^^^^ the identifier token indicates, that a value access is expected
         Token first = get(TokenType.IDENTIFIER);
 
-        // TODO handle method call
-
-        ConstantAccess access = new ConstantAccess(first);
-
-        // TODO handle operator after access
-
         // handle method call
         // chat("Hello, World!")
         //     ^ the parentheses after an identifier indicates, that a method is being called
@@ -45,6 +39,11 @@ public class ConstantAccessParser extends ParserAlgorithm<Value> {
             List<Argument> arguments = parser.nextArgumentList();
             return new MethodCall(first, arguments);
         }
+
+        // constant lookup node is created after deciding whether it is a method call or not
+        // because in case it is a method call, then an invalid constant access would be made and tracked in the
+        // ast visitor, causing an unknown variable error
+        ConstantAccess access = new ConstantAccess(first);
 
         // handle operation between two expressions
         // stat player var = 100 +
