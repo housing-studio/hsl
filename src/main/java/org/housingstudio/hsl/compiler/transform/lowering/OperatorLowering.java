@@ -479,7 +479,7 @@ public class OperatorLowering implements ScopeVisitor {
         // use originalNode to determine the type of assignment to create
         if (originalNode instanceof LocalDeclareAssign) {
             LocalDeclareAssign original = (LocalDeclareAssign) originalNode;
-            return new LocalDeclareAssign(
+            LocalDeclareAssign modified = new LocalDeclareAssign(
                 original.namespace(),
                 Token.of(TokenType.IDENTIFIER, original.name()),
                 original.alias(),
@@ -487,13 +487,15 @@ public class OperatorLowering implements ScopeVisitor {
                 original.explicitType(),
                 value
             );
+            modified.init();
+            return modified;
         }
 
         // fallback: if originalNode is null or not a LocalDeclareAssign, check target type
         // (this handles cases like temporary variables where we don't have an original node)
         if (target instanceof LocalDeclareAssign) {
             LocalDeclareAssign declareAssign = (LocalDeclareAssign) target;
-            return new LocalDeclareAssign(
+            LocalDeclareAssign modified = new LocalDeclareAssign(
                 declareAssign.namespace(),
                 Token.of(TokenType.IDENTIFIER, declareAssign.name()),
                 declareAssign.alias(),
@@ -501,6 +503,8 @@ public class OperatorLowering implements ScopeVisitor {
                 declareAssign.explicitType(),
                 value
             );
+            modified.init();
+            return modified;
         }
 
         // otherwise, create a regular assignment
