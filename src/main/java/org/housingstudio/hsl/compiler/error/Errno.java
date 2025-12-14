@@ -335,7 +335,12 @@ public enum Errno {
     /**
      * `ILLEGAL_NESTED_CONDITIONAL` indicates, that a conditional was declared within another conditional.
      */
-    ILLEGAL_NESTED_CONDITIONAL(163);
+    ILLEGAL_NESTED_CONDITIONAL(163),
+
+    /**
+     * `NON_TERMINAL_RETURN` indicates, that a `return` instruction was put before the end of a scope.
+     */
+    NON_TERMINAL_RETURN(164);
 
     /**
      * The error code of the token error.
