@@ -10,7 +10,6 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
 import org.housingstudio.hsl.compiler.ast.impl.type.Types;
-import org.housingstudio.hsl.compiler.ast.impl.value.MacroParameterAccessor;
 import org.housingstudio.hsl.compiler.ast.impl.value.MethodParameterAccessor;
 import org.housingstudio.hsl.compiler.ast.impl.value.MethodReturnVariable;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
@@ -131,7 +130,7 @@ public class Method extends ScopeContainer implements Printable, FunctionBuilder
             resolveAutomaticExecution()
         );
         ActionLimiter limiter = ActionLimiter.from(context, this, actions);
-        limiter.validate();
+        limiter.process();
         return function;
     }
 

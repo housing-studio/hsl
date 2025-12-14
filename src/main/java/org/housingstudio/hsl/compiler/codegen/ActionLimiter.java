@@ -1,10 +1,10 @@
 package org.housingstudio.hsl.compiler.codegen;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.codegen.impl.action.Action;
 import org.housingstudio.hsl.compiler.codegen.impl.action.ActionType;
+import org.housingstudio.hsl.compiler.codegen.impl.action.impl.Conditional;
 import org.housingstudio.hsl.compiler.error.Errno;
 import org.housingstudio.hsl.compiler.error.Notification;
 import org.housingstudio.hsl.compiler.parser.ParserContext;
@@ -16,35 +16,47 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 public class ActionLimiter {
+    private final @NotNull Map<ActionType, Integer> count = new HashMap<>();
+
     private final @NotNull ParserContext context;
     private final @NotNull Method function;
-    private final @NotNull Map<ActionType, Integer> actions;
+    private final @NotNull List<Action> actions;
 
-    // TODO afaik actions are scope-bound, not function-bound
-    //  use IdentityHashMap<Scope, action count per type>
+    public void process() {
+        for (Action action : actions) {
+            count.put(action.type(), count.getOrDefault(action.type(), 0) + 1);
 
-    public void validate() {
-        for (Map.Entry<ActionType, Integer> entry : actions.entrySet()) {
-            ActionType type = entry.getKey();
-            if (entry.getValue() > type.limit()) {
+            ActionType type = action.type();
+            int found = count.getOrDefault(type,0);
+
+            if (found > type.limit()) {
                 context.errorPrinter().print(
-                    Notification.error(
-                        Errno.TOO_MANY_ACTIONS, "Function `" + function.name().value() + "` exceeded action limit"
-                    )
-                    .error(
-                        "Action `" + type.functionName() + "` exceeded limit of " + type.limit(), function.name()
-                    )
+                    Notification
+                        .error(Errno.TOO_MANY_ACTIONS, "Function `" + function.name().value() + "` exceeded action limit")
+                        .error("Action `" + type.functionName() + "` exceeded limit of " + type.limit(), function.name())
                 );
             }
+
+            if (action instanceof Conditional)
+                processConditional((Conditional) action);
         }
     }
 
-    public static @NonNull ActionLimiter from(
+    private void processConditional(Conditional conditional) {
+        if (!conditional.ifActions().isEmpty())
+            ActionLimiter
+                .from(context, function, conditional.ifActions())
+                .process();
+
+        if (!conditional.elseActions().isEmpty())
+            ActionLimiter
+                .from(context, function, conditional.elseActions())
+                .process();
+    }
+
+    public static ActionLimiter from(
         @NotNull ParserContext context, @NotNull Method function, @NotNull List<Action> actions
     ) {
-        Map<ActionType, Integer> map = new HashMap<>();
-        for (Action action : actions)
-            map.put(action.type(), map.getOrDefault(action.type(), 0) + 1);
-        return new ActionLimiter(context, function, map);
+        return new ActionLimiter(context, function, actions);
     }
 }
