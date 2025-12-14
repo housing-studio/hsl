@@ -100,6 +100,106 @@ public class BinaryOperator extends Value {
         }
     }
 
+    private float parseFloat(@NotNull Value value) {
+        String constant = value.asConstantValue();
+        try {
+            return Float.parseFloat(constant);
+        } catch (NumberFormatException e) {
+            context.errorPrinter().print(
+                Notification
+                    .error(Errno.INVALID_FLOAT_VALUE, "invalid float value")
+                    .error("invalid float value", context.peek())
+            );
+            return 0;
+        }
+    }
+
+    private int parseInt(@NotNull Value value) {
+        String constant = value.asConstantValue();
+        try {
+            return Integer.parseInt(constant);
+        } catch (NumberFormatException e) {
+            context.errorPrinter().print(
+                Notification
+                    .error(Errno.INVALID_INTEGER_VALUE, "invalid integer value")
+                    .error("invalid integer value", context.peek())
+            );
+            return 0;
+        }
+    }
+
+    private @NotNull String foldIntConstants() {
+        int lhs = parseInt(lhs());
+        int rhs = parseInt(rhs());
+
+        int result;
+        switch (operator) {
+            case ADD:
+                result = lhs + rhs;
+                break;
+            case NEGATE_OR_SUBTRACT:
+                result = lhs - rhs;
+                break;
+            case MULTIPLY:
+                result = lhs * rhs;
+                break;
+            case DIVIDE:
+                result = lhs / rhs;
+                break;
+            case REMAINDER:
+                result = lhs % rhs;
+                break;
+            default:
+                throw new UnsupportedOperationException("Unexpected int binary operator: " + operator);
+        }
+
+        return String.valueOf(result);
+    }
+
+    private @NotNull String foldFloatConstants() {
+        float lhs = parseFloat(lhs());
+        float rhs = parseFloat(rhs());
+
+        float result;
+        switch (operator) {
+            case ADD:
+                result = lhs + rhs;
+                break;
+            case NEGATE_OR_SUBTRACT:
+                result = lhs - rhs;
+                break;
+            case MULTIPLY:
+                result = lhs * rhs;
+                break;
+            case DIVIDE:
+                result = lhs / rhs;
+                break;
+            case REMAINDER:
+                result = lhs % rhs;
+                break;
+            default:
+                throw new UnsupportedOperationException("Unexpected float binary operator: " + operator);
+        }
+
+        return String.valueOf(result);
+    }
+
+    private @NotNull String foldStringConstants() {
+        String lhs = lhs().asConstantValue();
+        String rhs = rhs().asConstantValue();
+
+        String result;
+        switch (operator) {
+            case ADD:
+                result = lhs + rhs;
+                break;
+            default:
+                throw new UnsupportedOperationException("Unexpected string binary operator: " + operator);
+        }
+
+        return result;
+    }
+
     /**
      * Get the constant string representation of the value.
      * <p>
@@ -109,78 +209,12 @@ public class BinaryOperator extends Value {
      */
     @Override
     public @NotNull String asConstantValue() {
-        switch (operator) {
-            case ADD:
-                if (lhs.getValueType().matches(Types.INT)) {
-                    int lhs = Integer.parseInt(this.lhs.asConstantValue());
-                    int rhs = Integer.parseInt(this.rhs.asConstantValue());
-                    return String.valueOf(lhs + rhs);
-                }
-
-                else if (lhs.getValueType().matches(Types.FLOAT)) {
-                    float lhs = Float.parseFloat(this.lhs.asConstantValue());
-                    float rhs = Float.parseFloat(this.rhs.asConstantValue());
-                    return String.valueOf(lhs + rhs);
-                }
-
-                else if (lhs.getValueType().matches(Types.STRING)) {
-                    String lhs = this.lhs.asConstantValue();
-                    String rhs = this.rhs.asConstantValue();
-                    return lhs + rhs;
-                }
-
-            case NEGATE_OR_SUBTRACT:
-                if (lhs.getValueType().matches(Types.INT)) {
-                    int lhs = Integer.parseInt(this.lhs.asConstantValue());
-                    int rhs = Integer.parseInt(this.rhs.asConstantValue());
-                    return String.valueOf(lhs - rhs);
-                }
-
-                else if (lhs.getValueType().matches(Types.FLOAT)) {
-                    float lhs = Float.parseFloat(this.lhs.asConstantValue());
-                    float rhs = Float.parseFloat(this.rhs.asConstantValue());
-                    return String.valueOf(lhs - rhs);
-                }
-
-            case MULTIPLY:
-                if (lhs.getValueType().matches(Types.INT)) {
-                    int lhs = Integer.parseInt(this.lhs.asConstantValue());
-                    int rhs = Integer.parseInt(this.rhs.asConstantValue());
-                    return String.valueOf(lhs * rhs);
-                }
-
-                else if (lhs.getValueType().matches(Types.FLOAT)) {
-                    float lhs = Float.parseFloat(this.lhs.asConstantValue());
-                    float rhs = Float.parseFloat(this.rhs.asConstantValue());
-                    return String.valueOf(lhs * rhs);
-                }
-
-            case DIVIDE:
-                if (lhs.getValueType().matches(Types.INT)) {
-                    int lhs = Integer.parseInt(this.lhs.asConstantValue());
-                    int rhs = Integer.parseInt(this.rhs.asConstantValue());
-                    return String.valueOf(lhs / rhs);
-                }
-
-                else if (lhs.getValueType().matches(Types.FLOAT)) {
-                    float lhs = Float.parseFloat(this.lhs.asConstantValue());
-                    float rhs = Float.parseFloat(this.rhs.asConstantValue());
-                    return String.valueOf(lhs / rhs);
-                }
-
-            case REMAINDER:
-                if (lhs.getValueType().matches(Types.INT)) {
-                    int lhs = Integer.parseInt(this.lhs.asConstantValue());
-                    int rhs = Integer.parseInt(this.rhs.asConstantValue());
-                    return String.valueOf(lhs % rhs);
-                }
-
-                else if (lhs.getValueType().matches(Types.FLOAT)) {
-                    float lhs = Float.parseFloat(this.lhs.asConstantValue());
-                    float rhs = Float.parseFloat(this.rhs.asConstantValue());
-                    return String.valueOf(lhs % rhs);
-                }
-        }
+        if (lhs.getValueType().matches(Types.INT))
+            return foldIntConstants();
+        else if (lhs.getValueType().matches(Types.FLOAT))
+            return foldFloatConstants();
+        else if (lhs.getValueType().matches(Types.STRING))
+            return foldStringConstants();
 
         throw new IllegalStateException("Unsupported operator type: " + operator);
     }
