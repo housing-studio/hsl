@@ -74,6 +74,6 @@ public class MacroParameterAccessor extends Value implements Variable {
 
     @Override
     public @NotNull String print() {
-        return "param:" + name;
+        return "p:" + name;
     }
 }

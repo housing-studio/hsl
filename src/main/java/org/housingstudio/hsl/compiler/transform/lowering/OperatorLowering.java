@@ -579,7 +579,7 @@ public class OperatorLowering implements ScopeVisitor {
     /**
      * Represents a generated temporary variable implementation for use during operator lowering.
      * <p>
-     * Temporary variables are automatically numbered and prefixed with {@code $temp:} to avoid conflicts with
+     * Temporary variables are automatically numbered and prefixed with {@code tmp:} to avoid conflicts with
      * user-defined variables.
      */
     @RequiredArgsConstructor
@@ -596,7 +596,7 @@ public class OperatorLowering implements ScopeVisitor {
 
         @Override
         public @NotNull String name() {
-            return "$temp:" + id;
+            return "tmp:" + id;
         }
 
         @Override

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents the reserved variable for storing a method's return value.
  * <p>
  * This variable is used internally to store return values from method calls. The variable name follows the pattern
- * {@code return:methodName}.
+ * {@code r:methodName}.
  */
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -40,6 +40,6 @@ public class MethodReturnVariable implements Variable {
     }
 
     public static @NotNull String encodeName(@NotNull Method targetMethod) {
-        return String.format("return:%s", targetMethod.name().value());
+        return String.format("r:%s", targetMethod.name().value());
     }
 }

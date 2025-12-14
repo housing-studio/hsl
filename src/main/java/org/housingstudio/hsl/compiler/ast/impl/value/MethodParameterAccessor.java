@@ -62,6 +62,6 @@ public class MethodParameterAccessor extends Value implements Variable {
     }
 
     public static @NotNull String encodeName(@NotNull Method targetMethod, @NotNull String paramName) {
-        return String.format("param:%s:%s", targetMethod.name().value(), paramName);
+        return String.format("p:%s", paramName);
     }
 }
