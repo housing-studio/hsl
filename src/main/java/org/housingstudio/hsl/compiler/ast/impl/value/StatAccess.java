@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.token.Token;
@@ -43,18 +44,23 @@ public class StatAccess extends Value {
         String prefix;
         switch (variable.namespace()) {
             case PLAYER:
-                prefix = "stat";
+                prefix = "player";
                 break;
             case TEAM:
-                prefix = "teamstat";
+                prefix = "team"; // TODO handle team name
                 break;
             case GLOBAL:
-                prefix = "globalstat";
+                prefix = "global";
                 break;
             default:
                 throw new IllegalStateException("Unexpected variable namespace: " + variable.namespace());
         }
-        return "%%" + prefix + "_" + name.value() + "%%";
+        String suffix = "";
+        if (getValueType().matches(Types.FLOAT))
+            suffix = "D";
+        else if (getValueType().matches(Types.INT))
+            suffix = "L";
+        return "%var." + prefix + "/" + name.value() + "%" + suffix;
     }
 
     /**

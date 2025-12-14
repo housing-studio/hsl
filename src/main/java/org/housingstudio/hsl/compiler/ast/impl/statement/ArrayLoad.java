@@ -103,7 +103,7 @@ public class ArrayLoad extends Value {
         if (index >= capacity)
             throw new IllegalStateException("Index out of bounds");
 
-        return "%%stat_" + variable.name() + "_" + index + "%%";
+        return "%var.player/" + variable.name() + "_" + index + "%";
     }
 
     /**

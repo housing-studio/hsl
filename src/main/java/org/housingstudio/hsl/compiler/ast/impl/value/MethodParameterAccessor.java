@@ -8,6 +8,7 @@ import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.declaration.Method;
 import org.housingstudio.hsl.compiler.ast.impl.local.Variable;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.std.Namespace;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +49,12 @@ public class MethodParameterAccessor extends Value implements Variable {
      */
     @Override
     public @NotNull String asConstantValue() {
-        return "%%stat_" + encodeName(method, name) + "%%";
+        String suffix = "";
+        if (type.matches(Types.FLOAT))
+            suffix = "D";
+        else if (type.matches(Types.INT))
+            suffix = "L";
+        return "%var.player/" + encodeName(method, name) + "%" + suffix;
     }
 
     /**

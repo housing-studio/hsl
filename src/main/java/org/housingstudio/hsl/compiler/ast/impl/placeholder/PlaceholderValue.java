@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.parser.impl.action.ArgAccess;
 import org.jetbrains.annotations.NotNull;
@@ -33,9 +34,15 @@ public class PlaceholderValue extends Value {
      */
     @Override
     public @NotNull String asConstantValue() {
-        return placeholder.mapper()
+        String build = placeholder.mapper()
             .apply(args)
             .build();
+        String suffix = "";
+        if (getValueType().matches(Types.FLOAT))
+            suffix = "D";
+        else if (getValueType().matches(Types.INT))
+            suffix = "L";
+        return build + suffix;
     }
 
     /**
