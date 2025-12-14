@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import org.housingstudio.hsl.compiler.ast.NodeInfo;
 import org.housingstudio.hsl.compiler.ast.NodeType;
 import org.housingstudio.hsl.compiler.ast.impl.type.Type;
+import org.housingstudio.hsl.compiler.ast.impl.type.Types;
 import org.housingstudio.hsl.compiler.ast.impl.value.ConstantLiteral;
 import org.housingstudio.hsl.compiler.ast.impl.value.Value;
 import org.housingstudio.hsl.compiler.codegen.hierarchy.Children;
@@ -56,10 +57,18 @@ public class PrefixOperator extends Value {
     }
 
     private @NotNull Value buildDynamicNegation(@NotNull Value operand) {
+        Value multiplier;
+        if (operand.getValueType().matches(Types.INT))
+            multiplier = ConstantLiteral.ofInt(-1);
+        else if (operand.getValueType().matches(Types.FLOAT))
+            multiplier = ConstantLiteral.ofFloat(-1.0F);
+        else {
+            throw new IllegalStateException("Unexpected negated value: " + operand.getValueType().print()); // TODO throw proper error
+        }
         return new BinaryOperator(
             operand,
             Operator.MULTIPLY, Token.of(TokenType.OPERATOR, "*"),
-            ConstantLiteral.ofInt(-1)
+            multiplier
         );
     }
 
