@@ -82,7 +82,7 @@ public class Player {
     public final Placeholder YAW = new PlaceholderBuilder()
         .name("yaw")
         .returnType(Types.FLOAT)
-        .mapper(args -> new Result("%player.pos.yaw"))
+        .mapper(args -> new Result("%player.pos.yaw%"))
         .build();
 
     @Fn
