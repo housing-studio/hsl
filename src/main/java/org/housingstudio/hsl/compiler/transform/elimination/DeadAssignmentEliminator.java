@@ -41,6 +41,9 @@ import java.util.List;
  * </pre>
  */
 public class DeadAssignmentEliminator implements ScopeVisitor {
+    // TODO fix this transformer. Basically, it should only remove reassignments when they do not have dependency either
+    //  of the same variable or another variable. We cannot remove reassigns if they have dynamic values, as they might
+    //  directly or indirectly depend on the original variable. For example: x = 10; x = 3 * x;
     /**
      * Apply this optimization strategy to a scope.
      *

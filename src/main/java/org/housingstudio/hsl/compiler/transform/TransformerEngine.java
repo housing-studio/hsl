@@ -26,7 +26,7 @@ public class TransformerEngine {
     private int totalTransforms = 0;
 
     public TransformerEngine() {
-        addStrategy(new DeadAssignmentEliminator());
+        //addStrategy(new DeadAssignmentEliminator());
         addStrategy(new ArrayStoreIndexConversion());
         addStrategy(new ReturnValueInliner());
         addStrategy(new TrailingReturnEliminator());
